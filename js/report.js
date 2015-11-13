@@ -58,7 +58,7 @@ function prepareTableRow(team, epic, sumForEpic) {
     var devSpoc = epic.fields.customfield_17053 != null ? epic.fields.customfield_17053 : "None";
     tableRow.append("<td><a href='http://jira.swisscom.com/secure/ViewProfile.jspa?name=" + devSpoc.key + "'>" + devSpoc.displayName + "</a></td>");
     var labels = tableRow.append("<td class='labels'><div class='labels-wrap value'><ul id='" + epicKey + "_labels' class='labels'></div></td>");
-    var labelUl = $(labels.find("#" + epicKey + "_labels"));
+    var labelUl = AJS.$(labels.find("#" + epicKey + "_labels"));
     AJS.$.each(epic.fields.labels, function (index, label) {
         labelUl.append("<li><a class='lozenge' href = 'http://jira.swisscom.com/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=labels='" + label + " title='" + label + "'><span>" + label + "</span></a></li>");
     });
@@ -67,7 +67,6 @@ function prepareTableRow(team, epic, sumForEpic) {
 
     tableRow.append("<td><img id='status_" + epicKey + "' src='" + statusIndicatorBaseUrl.replace("{status}", epic.fields.customfield_17554) + "'/></td>");
     AJS.$("#status_" + epicKey).click(epic, function (ev) {
-        console.log(ev.data);
         var element = AJS.$(ev.target);
         var newState;
         if (element.attr("src").indexOf("green") != -1) {
