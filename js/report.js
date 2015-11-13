@@ -9,7 +9,7 @@ var teams = ["Skipper", "Catta", "Yankee", "Private", "Rico", "Kowalski"],
 if (!AJS) {
     onJira = false;
     var AJS = {};
-    AJS.$ = $;
+    $ = $;
 } else {
     onJira = true;
 }
@@ -17,8 +17,8 @@ if (!AJS) {
 
 function init(newBaseEpicFilter) {
     baseEpicFilter = newBaseEpicFilter;
-    AJS.$(document).ajaxStop(function () {
-        AJS.$(this).unbind("ajaxStop");
+    $(document).ajaxStop(function () {
+        $(this).unbind("ajaxStop");
         prepareTable();
     });
     startReportGeneration();
@@ -32,11 +32,11 @@ function startReportGeneration() {
 }
 
 function prepareTable() {
-    if (AJS.$.fn.dataTable.isDataTable('#myTable')) {
+    if ($.fn.dataTable.isDataTable('#myTable')) {
         table.destroy();
     }
 
-    table = AJS.$('#myTable').DataTable({
+    table = $('#myTable').DataTable({
         "order": [[0, "asc"]],
         "iDisplayLength": 50
     });
@@ -47,8 +47,8 @@ function prepareTable() {
 
 function prepareTableRow(team, epic, sumForEpic) {
     var epicKey = epic.key;
-    AJS.$("#myTable tbody").append("<tr id='" + epicKey + "'></tr>");
-    var tableRow = AJS.$("#" + epicKey);
+    $("#myTable tbody").append("<tr id='" + epicKey + "'></tr>");
+    var tableRow = $("#" + epicKey);
     tableRow.append("<td>" + team + "</td>");
     tableRow.append("<td>" + epic.fields.status.name + "</td>");
     tableRow.append("<td><a href='http://jira.swisscom.com/browse/" + epicKey + "'>" + epicKey + "</a></td>");
@@ -58,16 +58,16 @@ function prepareTableRow(team, epic, sumForEpic) {
     var devSpoc = epic.fields.customfield_17053 != null ? epic.fields.customfield_17053 : "None";
     tableRow.append("<td><a href='http://jira.swisscom.com/secure/ViewProfile.jspa?name=" + devSpoc.key + "'>" + devSpoc.displayName + "</a></td>");
     var labels = tableRow.append("<td class='labels'><div class='labels-wrap value'><ul id='" + epicKey + "_labels' class='labels'></div></td>");
-    var labelUl = AJS.$(labels.find("#" + epicKey + "_labels"));
-    AJS.$.each(epic.fields.labels, function (index, label) {
+    var labelUl = $(labels.find("#" + epicKey + "_labels"));
+    $.each(epic.fields.labels, function (index, label) {
         labelUl.append("<li><a class='lozenge' href = 'http://jira.swisscom.com/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=labels='" + label + " title='" + label + "'><span>" + label + "</span></a></li>");
     });
 
     tableRow.append("<td>" + Math.round((sumForEpic / 28800) * 100) / 100 + "</td>");
 
     tableRow.append("<td><img id='status_" + epicKey + "' src='" + statusIndicatorBaseUrl.replace("{status}", epic.fields.customfield_17554) + "'/></td>");
-    AJS.$("#status_" + epicKey).click(epic, function (ev) {
-        var element = AJS.$(ev.target);
+    $("#status_" + epicKey).click(epic, function (ev) {
+        var element = $(ev.target);
         var newState;
         if (element.attr("src").indexOf("green") != -1) {
             element.attr("src", element.attr("src").replace("green", "yellow"));
@@ -91,7 +91,7 @@ function updateEpicState(epic, newState) {
         "singleFieldEdit": "true",
         "fieldsToForcePresent": "customfield_17554"
     };
-    AJS.$.ajax({
+    $.ajax({
         url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none",
         crossDomain: true,
         headers: {
@@ -111,7 +111,7 @@ function resetTable() {
     if (table) {
         table.destroy();
     }
-    AJS.$("tbody").empty();
+    $("tbody").empty();
 }
 
 function fetchRelevantEpicInformations(issues) {
@@ -121,7 +121,7 @@ function fetchRelevantEpicInformations(issues) {
     });
 
 
-    AJS.$.each(_.keys(groupedIssuesByTeam), function (index, currentTeam) {
+    $.each(_.keys(groupedIssuesByTeam), function (index, currentTeam) {
         epicsPerTeam[currentTeam] = {};
         var issueGroup = groupedIssuesByTeam[currentTeam];
 
@@ -135,10 +135,10 @@ function fetchRelevantEpicInformations(issues) {
             return 0;
         });
 
-        AJS.$.each(sortable, function (index, epic) {
+        $.each(sortable, function (index, epic) {
             var getIssuesForEpicsUrl = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql='Epic Link' in (" + epic.key + ") and status != Closed";
 
-            AJS.$.ajax({
+            $.ajax({
                 url: getIssuesForEpicsUrl,
                 contentType: 'application/json',
                 dataType: "json",
@@ -153,14 +153,14 @@ function fetchRelevantEpicInformations(issues) {
 function calculateRemainingEstimateForMileStone(team, epic, issues) {
 
     var sum = 0;
-    AJS.$.each(issues, function (index, issue) {
+    $.each(issues, function (index, issue) {
         sum += issue.fields.timeoriginalestimate;
     });
     prepareTableRow(team, epic, sum);
 }
 
 function ajaxCall(url, successFunction) {
-    return AJS.$.ajax({
+    return $.ajax({
         url: url,
         contentType: 'application/json',
         dataType: "json",
@@ -171,7 +171,7 @@ function ajaxCall(url, successFunction) {
 }
 
 function ajaxCallUnique(url, team, specialIdentifier, successFunction) {
-    return AJS.$.ajax({
+    return $.ajax({
         url: url,
         contentType: 'application/json',
         dataType: "json",
@@ -184,7 +184,7 @@ function ajaxCallUnique(url, team, specialIdentifier, successFunction) {
 function calculateIssueSum(issues) {
     var sumEstimate = 0;
 
-    AJS.$.each(issues, function (index, issue) {
+    $.each(issues, function (index, issue) {
         sumEstimate += issue.fields.timeoriginalestimate / 28800; //from millis to PT
     });
 

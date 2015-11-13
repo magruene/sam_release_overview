@@ -15,8 +15,8 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
     "use strict";
 
     var EditableForm = function (div, options) {
-        this.options = AJS.$.extend({}, AJS.$.fn.editableform.defaults, options);
-        this.$div = AJS.$(div); //div, containing form. Not form tag. Not editable-element.
+        this.options = $.extend({}, $.fn.editableform.defaults, options);
+        this.$div = $(div); //div, containing form. Not form tag. Not editable-element.
         if(!this.options.scope) {
             this.options.scope = this;
         }
@@ -37,11 +37,11 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
             this.input.prerender();
         },
         initTemplate: function() {
-            this.$form = AJS.$(AJS.$.fn.editableform.template);
+            this.$form = $($.fn.editableform.template);
         },
         initButtons: function() {
             var $btn = this.$form.find('.editable-buttons');
-            $btn.append(AJS.$.fn.editableform.buttons);
+            $btn.append($.fn.editableform.buttons);
             if(this.options.showbuttons === 'bottom') {
                 $btn.addClass('editable-buttons-bottom');
             }
@@ -53,7 +53,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
          **/
         render: function() {
             //init loader
-            this.$loading = AJS.$(AJS.$.fn.editableform.loading);
+            this.$loading = $($.fn.editableform.loading);
             this.$div.empty().append(this.$loading);
 
             //init form template and buttons
@@ -88,15 +88,15 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
             this.$div.append(this.$form);
 
             //render input
-            AJS.$.when(this.input.render())
-                .then(AJS.$.proxy(function () {
+            $.when(this.input.render())
+                .then($.proxy(function () {
                 //setup input to submit automatically when no buttons shown
                 if(!this.options.showbuttons) {
                     this.input.autosubmit();
                 }
 
                 //attach 'cancel' handler
-                    this.$form.find('.editable-cancel').click(AJS.$.proxy(this.cancel, this));
+                    this.$form.find('.editable-cancel').click($.proxy(this.cancel, this));
 
                 if(this.input.error) {
                     this.error(this.input.error);
@@ -111,7 +111,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                     var value = (this.value === null || this.value === undefined || this.value === '') ? this.options.defaultValue : this.value;
                     this.input.value2input(value);
                     //attach submit handler
-                    this.$form.submit(AJS.$.proxy(this.submit, this));
+                    this.$form.submit($.proxy(this.submit, this));
                 }
 
                     /**
@@ -180,19 +180,19 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                 lines;
 
             if(msg === false) {
-                $group.removeClass(AJS.$.fn.editableform.errorGroupClass);
-                $block.removeClass(AJS.$.fn.editableform.errorBlockClass).empty().hide();
+                $group.removeClass($.fn.editableform.errorGroupClass);
+                $block.removeClass($.fn.editableform.errorBlockClass).empty().hide();
             } else {
                 //convert newline to <br> for more pretty error display
                 if(msg) {
                     lines = (''+msg).split('\n');
                     for (var i = 0; i < lines.length; i++) {
-                        lines[i] = AJS.$('<div>').text(lines[i]).html();
+                        lines[i] = $('<div>').text(lines[i]).html();
                     }
                     msg = lines.join('<br>');
                 }
-                $group.addClass(AJS.$.fn.editableform.errorGroupClass);
-                $block.addClass(AJS.$.fn.editableform.errorBlockClass).html(msg).show();
+                $group.addClass($.fn.editableform.errorGroupClass);
+                $block.addClass($.fn.editableform.errorBlockClass).html(msg).show();
             }
         },
 
@@ -206,7 +206,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
             //validation: if validate returns string or truthy value - means error
             //if returns object like {newValue: '...'} => submitted value is reassigned to it
             var error = this.validate(newValue);
-            if (AJS.$.type(error) === 'object' && error.newValue !== undefined) {
+            if ($.type(error) === 'object' && error.newValue !== undefined) {
                 newValue = error.newValue;
                 this.input.value2input(newValue);
                 if(typeof error.msg === 'string') {
@@ -239,8 +239,8 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
             this.isSaving = true;
 
             //sending data to server
-            AJS.$.when(this.save(submitValue))
-                .done(AJS.$.proxy(function (response) {
+            $.when(this.save(submitValue))
+                .done($.proxy(function (response) {
                 this.isSaving = false;
 
                 //run success callback
@@ -279,13 +279,13 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                 @param {Object} params.response ajax response
 
                 @example
-                     AJS.$('#form-div').on('save'), function(e, params){
+                     $('#form-div').on('save'), function(e, params){
                     if(params.newValue === 'username') {...}
                 });
                 **/
                 this.$div.triggerHandler('save', {newValue: newValue, submitValue: submitValue, response: response});
             }, this))
-                .fail(AJS.$.proxy(function (xhr) {
+                .fail($.proxy(function (xhr) {
                 this.isSaving = false;
 
                 var msg;
@@ -302,7 +302,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
 
         save: function(submitValue) {
             //try parse composite pk defined as json string in data-pk
-            this.options.pk = AJS.$.fn.editableutils.tryParseJson(this.options.pk, true);
+            this.options.pk = $.fn.editableutils.tryParseJson(this.options.pk, true);
 
             var pk = (typeof this.options.pk === 'function') ? this.options.pk.call(this.options.scope) : this.options.pk,
             /*
@@ -328,15 +328,15 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                     params = this.options.params.call(this.options.scope, params);
                 } else {
                     //try parse json in single quotes (from data-params attribute)
-                    this.options.params = AJS.$.fn.editableutils.tryParseJson(this.options.params, true);
-                    AJS.$.extend(params, this.options.params);
+                    this.options.params = $.fn.editableutils.tryParseJson(this.options.params, true);
+                    $.extend(params, this.options.params);
                 }
 
                 if(typeof this.options.url === 'function') { //user's function
                     return this.options.url.call(this.options.scope, params);
                 } else {
                     //send ajax to server and return deferred object
-                    return AJS.$.ajax(AJS.$.extend({
+                    return $.ajax($.extend({
                         url     : this.options.url,
                         data    : params,
                         type    : 'POST'
@@ -383,10 +383,10 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
     /*
     Initialize editableform. Applied to jQuery object.
 
-     @method AJS.$().editableform(options)
+     @method $().editableform(options)
     @params {Object} options
     @example
-     var $form = AJS.$('&lt;div&gt;').editableform({
+     var $form = $('&lt;div&gt;').editableform({
         type: 'text',
         name: 'username',
         url: '/post',
@@ -396,10 +396,10 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
     //to display form you should call 'render' method
      $form.editableform('render');
     */
-    AJS.$.fn.editableform = function (option) {
+    $.fn.editableform = function (option) {
         var args = arguments;
         return this.each(function () {
-            var $this = AJS.$(this),
+            var $this = $(this),
                 data = $this.data('editableform'),
                 options = typeof option === 'object' && option;
             if (!data) {
@@ -413,10 +413,10 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
     };
 
     //keep link to constructor to allow inheritance
-    AJS.$.fn.editableform.Constructor = EditableForm;
+    $.fn.editableform.Constructor = EditableForm;
 
     //defaults
-    AJS.$.fn.editableform.defaults = {
+    $.fn.editableform.defaults = {
         /* see also defaults for input */
 
         /**
@@ -436,7 +436,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
         @default null
         @example
         url: function(params) {
-            var d = new AJS.$.Deferred;
+            var d = new $.Deferred;
             if(params.value === 'abc') {
                 return d.reject('error message'); //returning error via deferred object
             } else {
@@ -521,7 +521,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
         @default null
         @example
         validate: function(value) {
-            if(AJS.$.trim(value) == '') {
+            if($.trim(value) == '') {
                 return 'This field is required';
             }
         }
@@ -614,7 +614,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
     Note: following params could redefined in engine: bootstrap or jqueryui:
     Classes 'control-group' and 'editable-error-block' must always present!
      */
-    AJS.$.fn.editableform.template = '<form class="form-inline editableform">' +
+    $.fn.editableform.template = '<form class="form-inline editableform">' +
         '<div class="control-group">' +
     '<div><div class="editable-input"></div><div class="editable-buttons"></div></div>'+
         '<div class="editable-error-block"></div>' +
@@ -622,21 +622,21 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
     '</form>';
 
     //loading div
-    AJS.$.fn.editableform.loading = '<div class="editableform-loading"></div>';
+    $.fn.editableform.loading = '<div class="editableform-loading"></div>';
 
     //buttons
-    AJS.$.fn.editableform.buttons = '<button type="submit" class="editable-submit">ok</button>' +
+    $.fn.editableform.buttons = '<button type="submit" class="editable-submit">ok</button>' +
         '<button type="button" class="editable-cancel">cancel</button>';
 
     //error class attached to control-group
-    AJS.$.fn.editableform.errorGroupClass = null;
+    $.fn.editableform.errorGroupClass = null;
 
     //error class attached to editable-error-block
-    AJS.$.fn.editableform.errorBlockClass = 'editable-error';
+    $.fn.editableform.errorBlockClass = 'editable-error';
 
     //engine
-    AJS.$.fn.editableform.engine = 'jquery';
-}(window.$));
+    $.fn.editableform.engine = 'jquery';
+}(window.jQuery));
 
 /**
 * EditableForm utilites
@@ -645,7 +645,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
     "use strict";
 
     //utils
-    AJS.$.fn.editableutils = {
+    $.fn.editableutils = {
         /**
         * classic JS inheritance function
          */
@@ -704,7 +704,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
         sliceObj: function(obj, keys, caseSensitive /* default: false */) {
             var key, keyLower, newObj = {};
 
-            if (!AJS.$.isArray(keys) || !keys.length) {
+            if (!$.isArray(keys) || !keys.length) {
                 return newObj;
             }
 
@@ -718,7 +718,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                     continue;
                 }
 
-                //when getting data-* attributes via AJS.$.data() it's converted to lowercase.
+                //when getting data-* attributes via $.data() it's converted to lowercase.
                 //details: http://stackoverflow.com/questions/7602565/using-data-attributes-with-jquery
                 //workaround is code below.
                 keyLower = key.toLowerCase();
@@ -731,11 +731,11 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
         },
 
         /*
-         exclude complex objects from AJS.$.data() before pass to config
+         exclude complex objects from $.data() before pass to config
         */
         getConfigData: function($element) {
             var data = {};
-            AJS.$.each($element.data(), function (k, v) {
+            $.each($element.data(), function (k, v) {
                 if(typeof v !== 'object' || (v && typeof v === 'object' && (v.constructor === Object || v.constructor === Array))) {
                     data[k] = v;
                 }
@@ -768,7 +768,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
         method to escape html.
        **/
        escape: function(str) {
-           return AJS.$('<div>').text(str).html();
+           return $('<div>').text(str).html();
        },
 
        /*
@@ -784,17 +784,17 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                valueProp = function (e) { return e[idKey]; };
            }
 
-           var isValArray = AJS.$.isArray(value),
+           var isValArray = $.isArray(value),
                result = [],
            that = this;
 
-           AJS.$.each(sourceData, function (i, o) {
+           $.each(sourceData, function (i, o) {
                if(o.children) {
                    result = result.concat(that.itemsByValue(value, o.children, valueProp));
                } else {
                    /*jslint eqeq: true*/
                    if(isValArray) {
-                       if (AJS.$.grep(value, function (v) {
+                       if ($.grep(value, function (v) {
                                return v == (o && typeof o === 'object' ? valueProp(o) : o);
                            }).length) {
                            result.push(o);
@@ -824,22 +824,22 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
            if(type === 'date') {
                //inline
                if(options.mode === 'inline') {
-                   if (AJS.$.fn.editabletypes.datefield) {
+                   if ($.fn.editabletypes.datefield) {
                        type = 'datefield';
-                   } else if (AJS.$.fn.editabletypes.dateuifield) {
+                   } else if ($.fn.editabletypes.dateuifield) {
                        type = 'dateuifield';
                    }
                //popup
                } else {
-                   if (AJS.$.fn.editabletypes.date) {
+                   if ($.fn.editabletypes.date) {
                        type = 'date';
-                   } else if (AJS.$.fn.editabletypes.dateui) {
+                   } else if ($.fn.editabletypes.dateui) {
                        type = 'dateui';
                    }
                }
 
                //if type still `date` and not exist in types, replace with `combodate` that is base input
-               if (type === 'date' && !AJS.$.fn.editabletypes.date) {
+               if (type === 'date' && !$.fn.editabletypes.date) {
                    type = 'combodate';
                }
            }
@@ -850,18 +850,18 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
            }
 
            //change wysihtml5 to textarea for jquery UI and plain versions
-           if (type === 'wysihtml5' && !AJS.$.fn.editabletypes[type]) {
+           if (type === 'wysihtml5' && !$.fn.editabletypes[type]) {
                type = 'textarea';
            }
 
            //create input of specified type. Input will be used for converting value, not in form
-           if (typeof AJS.$.fn.editabletypes[type] === 'function') {
-               TypeConstructor = AJS.$.fn.editabletypes[type];
+           if (typeof $.fn.editabletypes[type] === 'function') {
+               TypeConstructor = $.fn.editabletypes[type];
                typeOptions = this.sliceObj(options, this.objectKeys(TypeConstructor.defaults));
                input = new TypeConstructor(typeOptions);
                return input;
            } else {
-               AJS.$.error('Unknown type: ' + type);
+               $.error('Unknown type: ' + type);
                return false;
            }
        },
@@ -888,11 +888,11 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
        }
 
     };
-}(window.$));
+}(window.jQuery));
 
 /**
 Attaches stand-alone container with editable-form to HTML element. Element is used only for positioning, value is not stored anywhere.<br>
- This method applied internally in <code>AJS.$().editable()</code>. You should subscribe on it's events (save / cancel) to get profit of it.<br>
+ This method applied internally in <code>$().editable()</code>. You should subscribe on it's events (save / cancel) to get profit of it.<br>
 Final realization can be different: bootstrap-popover, jqueryui-tooltip, poshytip, inline-div. It depends on which js file you include.<br>
 Applied as jQuery method.
 
@@ -919,9 +919,9 @@ Applied as jQuery method.
         defaults: {}, //container itself defaults
 
         init: function(element, options) {
-            this.$element = AJS.$(element);
+            this.$element = $(element);
             //since 1.4.1 container do not use data-* directly as they already merged into options.
-            this.options = AJS.$.extend({}, AJS.$.fn.editableContainer.defaults, options);
+            this.options = $.extend({}, $.fn.editableContainer.defaults, options);
             this.splitOptions();
 
             //set scope of form callbacks to element
@@ -933,24 +933,24 @@ Applied as jQuery method.
             this.delayedHide = false;
 
             //bind 'destroyed' listener to destroy container when element is removed from dom
-            this.$element.on('destroyed', AJS.$.proxy(function () {
+            this.$element.on('destroyed', $.proxy(function () {
                 this.destroy();
             }, this));
 
             //attach document handler to close containers on click / escape
-            if (!AJS.$(document).data('editable-handlers-attached')) {
+            if (!$(document).data('editable-handlers-attached')) {
                 //close all on escape
-                AJS.$(document).on('keyup.editable', function (e) {
+                $(document).on('keyup.editable', function (e) {
                     if (e.which === 27) {
-                        AJS.$('.editable-open').editableContainer('hide');
+                        $('.editable-open').editableContainer('hide');
                         //todo: return focus on element
                     }
                 });
 
                 //close containers when click outside
                 //(mousedown could be better than click, it closes everything also on drag drop)
-                AJS.$(document).on('click.editable', function (e) {
-                    var $target = AJS.$(e.target), i,
+                $(document).on('click.editable', function (e) {
+                    var $target = $(e.target), i,
                         exclude_classes = ['.editable-container',
                             '.ui-datepicker-header',
                                            '.datepicker', //in inline mode datepicker is rendered into body
@@ -960,7 +960,7 @@ Applied as jQuery method.
                                            ];
 
                     //check if element is detached. It occurs when clicking in bootstrap datepicker
-                    if (!AJS.$.contains(document.documentElement, e.target)) {
+                    if (!$.contains(document.documentElement, e.target)) {
                       return;
                     }
 
@@ -982,7 +982,7 @@ Applied as jQuery method.
                     Popup.prototype.closeOthers(e.target);
                 });
 
-                AJS.$(document).data('editable-handlers-attached', true);
+                $(document).data('editable-handlers-attached', true);
             }
         },
 
@@ -991,7 +991,7 @@ Applied as jQuery method.
             this.containerOptions = {};
             this.formOptions = {};
 
-            if (!AJS.$.fn[this.containerName]) {
+            if (!$.fn[this.containerName]) {
                 throw new Error(this.containerName + ' not found. Have you included corresponding js file?');
             }
 
@@ -1040,14 +1040,14 @@ Applied as jQuery method.
             this.$form
             .editableform(this.formOptions)
             .on({
-                    save: AJS.$.proxy(this.save, this), //click on submit button (value changed)
-                    nochange: AJS.$.proxy(function () {
+                    save: $.proxy(this.save, this), //click on submit button (value changed)
+                    nochange: $.proxy(function () {
                         this.hide('nochange');
                     }, this), //click on submit button (value NOT changed)
-                    cancel: AJS.$.proxy(function () {
+                    cancel: $.proxy(function () {
                         this.hide('cancel');
                     }, this), //click on calcel button
-                    show: AJS.$.proxy(function () {
+                    show: $.proxy(function () {
                     if(this.delayedHide) {
                         this.hide(this.delayedHide.reason);
                         this.delayedHide = false;
@@ -1055,9 +1055,9 @@ Applied as jQuery method.
                         this.setPosition();
                     }
                 }, this), //re-position container every time form is shown (occurs each time after loading state)
-                    rendering: AJS.$.proxy(this.setPosition, this), //this allows to place container correctly when loading shown
-                    resize: AJS.$.proxy(this.setPosition, this), //this allows to re-position container when form size is changed
-                    rendered: AJS.$.proxy(function () {
+                    rendering: $.proxy(this.setPosition, this), //this allows to place container correctly when loading shown
+                    resize: $.proxy(this.setPosition, this), //this allows to re-position container when form size is changed
+                    rendered: $.proxy(function () {
                     /**
                      Fired when container is shown and form is rendered (for select will wait for loading dropdown options).
                     **Note:** Bootstrap popover has own `shown` event that now cannot be separated from x-editable's one.
@@ -1066,14 +1066,14 @@ Applied as jQuery method.
                      @event shown
                     @param {Object} event event object
                     @example
-                     AJS.$('#username').on('shown', function(e, editable) {
+                     $('#username').on('shown', function(e, editable) {
                         editable.input.$input.val('overwriting value of input..');
                     });
                      **/
                     /*
                      TODO: added second param mainly to distinguish from bootstrap's shown event. It's a hotfix that will be solved in future versions via namespaced events.
                     */
-                        this.$element.triggerHandler('shown', AJS.$(this.options.scope).data('editable'));
+                        this.$element.triggerHandler('shown', $(this.options.scope).data('editable'));
                 }, this)
             })
             .editableform('render');
@@ -1111,7 +1111,7 @@ Applied as jQuery method.
                 //this.$form.destroy();
             }
 
-            this.$form = AJS.$('<div>');
+            this.$form = $('<div>');
 
             //insert form into container body
             if(this.tip().is(this.innerCss)) {
@@ -1155,10 +1155,10 @@ Applied as jQuery method.
             @param {object} event event object
             @param {string} reason Reason caused hiding. Can be <code>save|cancel|onblur|nochange|manual</code>
             @example
-             AJS.$('#username').on('hidden', function(e, reason) {
+             $('#username').on('hidden', function(e, reason) {
                 if(reason === 'save' || reason === 'cancel') {
                     //auto-open next editable
-                    AJS.$(this).closest('tr').next().find('.editable').editable('show');
+                    $(this).closest('tr').next().find('.editable').editable('show');
                 }
             });
             **/
@@ -1198,7 +1198,7 @@ Applied as jQuery method.
 
         save: function(e, params) {
             /**
-             Fired when new value was submitted. You can use <code>AJS.$(this).data('editableContainer')</code> inside handler to access to editableContainer instance
+             Fired when new value was submitted. You can use <code>$(this).data('editableContainer')</code> inside handler to access to editableContainer instance
 
              @event save
             @param {Object} event event object
@@ -1206,9 +1206,9 @@ Applied as jQuery method.
             @param {mixed} params.newValue submitted value
             @param {Object} params.response ajax response
             @example
-             AJS.$('#username').on('save', function(e, params) {
+             $('#username').on('save', function(e, params) {
                 //assuming server response: '{success: true}'
-                var pk = AJS.$(this).data('editableContainer').options.pk;
+                var pk = $(this).data('editableContainer').options.pk;
                 if(params.response && params.response.success) {
                     alert('value: ' + params.newValue + ' with pk: ' + pk + ' saved!');
                 } else {
@@ -1267,14 +1267,14 @@ Applied as jQuery method.
         Other containers can be cancelled or submitted (depends on onblur option)
         */
         closeOthers: function(element) {
-            AJS.$('.editable-open').each(function (i, el) {
+            $('.editable-open').each(function (i, el) {
                 //do nothing with passed element and it's children
-                if (el === element || AJS.$(el).find(element).length) {
+                if (el === element || $(el).find(element).length) {
                     return;
                 }
 
                 //otherwise cancel or submit all open containers
-                var $el = AJS.$(el),
+                var $el = $(el),
                 ec = $el.data('editableContainer');
 
                 if(!ec) {
@@ -1305,20 +1305,20 @@ Applied as jQuery method.
     /**
     jQuery method to initialize editableContainer.
 
-     @method AJS.$().editableContainer(options)
+     @method $().editableContainer(options)
     @params {Object} options
     @example
-     AJS.$('#edit').editableContainer({
+     $('#edit').editableContainer({
         type: 'text',
         url: '/post',
         pk: 1,
         value: 'hello'
     });
      **/
-    AJS.$.fn.editableContainer = function (option) {
+    $.fn.editableContainer = function (option) {
         var args = arguments;
         return this.each(function () {
-            var $this = AJS.$(this),
+            var $this = $(this),
                 dataKey = 'editableContainer',
             data = $this.data(dataKey),
             options = typeof option === 'object' && option,
@@ -1335,11 +1335,11 @@ Applied as jQuery method.
     };
 
     //store constructors
-    AJS.$.fn.editableContainer.Popup = Popup;
-    AJS.$.fn.editableContainer.Inline = Inline;
+    $.fn.editableContainer.Popup = Popup;
+    $.fn.editableContainer.Inline = Inline;
 
     //defaults
-    AJS.$.fn.editableContainer.defaults = {
+    $.fn.editableContainer.defaults = {
         /**
         Initial value of form input
 
@@ -1408,7 +1408,7 @@ Applied as jQuery method.
         }
     };
 
-}(window.$));
+}(window.jQuery));
 
 /**
  * Editable Inline
@@ -1419,14 +1419,14 @@ Applied as jQuery method.
 
     //copy prototype from EditableContainer
     //extend methods
-    AJS.$.extend(AJS.$.fn.editableContainer.Inline.prototype, AJS.$.fn.editableContainer.Popup.prototype, {
+    $.extend($.fn.editableContainer.Inline.prototype, $.fn.editableContainer.Popup.prototype, {
         containerName: 'editableform',
         innerCss: '.editable-inline',
         containerClass: 'editable-container editable-inline', //css class applied to container element
 
         initContainer: function(){
             //container is <span> element
-            this.$tip = AJS.$('<span></span>');
+            this.$tip = $('<span></span>');
 
             //convert anim to miliseconds (int)
             if(!this.options.anim) {
@@ -1450,7 +1450,7 @@ Applied as jQuery method.
         },
 
         innerHide: function () {
-            this.$tip.hide(this.options.anim, AJS.$.proxy(function () {
+            this.$tip.hide(this.options.anim, $.proxy(function () {
                 this.$element.show();
                 this.innerDestroy();
             }, this));
@@ -1463,7 +1463,7 @@ Applied as jQuery method.
         }
     });
 
-}(window.$));
+}(window.jQuery));
 /**
 Makes editable any HTML element on the page. Applied as jQuery method.
 
@@ -1474,9 +1474,9 @@ Makes editable any HTML element on the page. Applied as jQuery method.
     "use strict";
 
     var Editable = function (element, options) {
-        this.$element = AJS.$(element);
+        this.$element = $(element);
         //data-* has more priority over js options: because dynamically created elements may change data-*
-        this.options = AJS.$.extend({}, AJS.$.fn.editable.defaults, options, AJS.$.fn.editableutils.getConfigData(this.$element));
+        this.options = $.extend({}, $.fn.editable.defaults, options, $.fn.editableutils.getConfigData(this.$element));
         if(this.options.selector) {
             this.initLive();
         } else {
@@ -1484,7 +1484,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
         }
 
         //check for transition support
-        if (this.options.highlight && !AJS.$.fn.editableutils.supportsTransitions()) {
+        if (this.options.highlight && !$.fn.editableutils.supportsTransitions()) {
             this.options.highlight = false;
         }
     };
@@ -1501,14 +1501,14 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             //create input of specified type. Input needed already here to convert value for initial display (e.g. show text by id for select)
             //also we set scope option to have access to element inside input specific callbacks (e. g. source as function)
             this.options.scope = this.$element[0];
-            this.input = AJS.$.fn.editableutils.createInput(this.options);
+            this.input = $.fn.editableutils.createInput(this.options);
             if(!this.input) {
                 return;
             }
 
             //set value from settings or by element's text
             if (this.options.value === undefined || this.options.value === null) {
-                this.value = this.input.html2value(AJS.$.trim(this.$element.html()));
+                this.value = this.input.html2value($.trim(this.$element.html()));
                 isValueByText = true;
             } else {
                 /*
@@ -1516,7 +1516,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                  for complext objects value can be set as json string in data-value attribute,
                   e.g. data-value="{city: 'Moscow', street: 'Lenina'}"
                 */
-                this.options.value = AJS.$.fn.editableutils.tryParseJson(this.options.value, true);
+                this.options.value = $.fn.editableutils.tryParseJson(this.options.value, true);
                 if(typeof this.options.value === 'string') {
                     this.value = this.input.str2value(this.options.value);
                 } else {
@@ -1535,7 +1535,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             //attach handler activating editable. In disabled mode it just prevent default action (useful for links)
             if(this.options.toggle !== 'manual') {
                 this.$element.addClass('editable-click');
-                this.$element.on(this.options.toggle + '.editable', AJS.$.proxy(function (e) {
+                this.$element.on(this.options.toggle + '.editable', $.proxy(function (e) {
                     //prevent following link if editable enabled
                     if(!this.options.disabled) {
                         e.preventDefault();
@@ -1570,21 +1570,21 @@ Makes editable any HTML element on the page. Applied as jQuery method.
               break;
               case 'auto':
                 //if element text is empty and value is defined and value not generated by text --> run autotext
-                  doAutotext = !AJS.$.trim(this.$element.text()).length && this.value !== null && this.value !== undefined && !isValueByText;
+                  doAutotext = !$.trim(this.$element.text()).length && this.value !== null && this.value !== undefined && !isValueByText;
               break;
               default:
                doAutotext = false;
             }
 
             //depending on autotext run render() or just finilize init
-            AJS.$.when(doAutotext ? this.render() : true).then(AJS.$.proxy(function () {
+            $.when(doAutotext ? this.render() : true).then($.proxy(function () {
                 if(this.options.disabled) {
                     this.disable();
                 } else {
                     this.enable();
                 }
                 /**
-                 Fired when element was initialized by `AJS.$().editable()` method.
+                 Fired when element was initialized by `$().editable()` method.
                  Please note that you should setup `init` handler **before** applying `editable`.
 
                  @event init
@@ -1592,10 +1592,10 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                @param {Object} editable editable instance (as here it cannot accessed via data('editable'))
                @since 1.2.0
                @example
-                 AJS.$('#username').on('init', function(e, editable) {
+                 $('#username').on('init', function(e, editable) {
                    alert('initialized ' + editable.options.name);
                });
-                 AJS.$('#username').editable();
+                 $('#username').editable();
                  **/
                 this.$element.triggerHandler('init', this);
             }, this));
@@ -1611,8 +1611,8 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             this.options.selector = false;
            this.options.autotext = 'never';
            //listen toggle events
-            this.$element.on(this.options.toggle + '.editable', selector, AJS.$.proxy(function (e) {
-                var $target = AJS.$(e.target);
+            this.$element.on(this.options.toggle + '.editable', selector, $.proxy(function (e) {
+                var $target = $(e.target);
                if(!$target.data('editable')) {
                    //if delegated element initially empty, we need to clear it's text (that was manually set to `empty` by user)
                    //see https://github.com/vitalets/x-editable/issues/137
@@ -1696,13 +1696,13 @@ Makes editable any HTML element on the page. Applied as jQuery method.
         @param {string|object} key option name or object with several options
         @param {mixed} value option new value
         @example
-         AJS.$('.editable').editable('option', 'pk', 2);
+         $('.editable').editable('option', 'pk', 2);
          **/
         option: function(key, value) {
             //set option(s) by object
             if(key && typeof key === 'object') {
-                AJS.$.each(key, AJS.$.proxy(function (k, v) {
-                    this.option(AJS.$.trim(k), v);
+                $.each(key, $.proxy(function (k, v) {
+                    this.option($.trim(k), v);
                }, this));
                return;
             }
@@ -1755,7 +1755,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                 if(typeof(this.input.isEmpty) === 'function') {
                     this.isEmpty = this.input.isEmpty(this.$element);
                 } else {
-                    this.isEmpty = AJS.$.trim(this.$element.html()) === '';
+                    this.isEmpty = $.trim(this.$element.html()) === '';
                 }
             }
 
@@ -1792,13 +1792,13 @@ Makes editable any HTML element on the page. Applied as jQuery method.
 
             //init editableContainer: popover, tooltip, inline, etc..
             if(!this.container) {
-                var containerOptions = AJS.$.extend({}, this.options, {
+                var containerOptions = $.extend({}, this.options, {
                     value: this.value,
                     input: this.input //pass input to form (as it is already created)
                 });
                 this.$element.editableContainer(containerOptions);
                 //listen `save` event
-                this.$element.on("save.internal", AJS.$.proxy(this.save, this));
+                this.$element.on("save.internal", $.proxy(this.save, this));
                 this.container = this.$element.data('editableContainer');
             } else if(this.container.tip().is(':visible')) {
                 return;
@@ -1879,7 +1879,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             this.setValue(params.newValue, false, params.response);
 
             /**
-             Fired when new value was submitted. You can use <code>AJS.$(this).data('editable')</code> to access to editable instance
+             Fired when new value was submitted. You can use <code>$(this).data('editable')</code> to access to editable instance
 
              @event save
             @param {Object} event event object
@@ -1887,7 +1887,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             @param {mixed} params.newValue submitted value
             @param {Object} params.response ajax response
             @example
-             AJS.$('#username').on('save', function(e, params) {
+             $('#username').on('save', function(e, params) {
                 alert('Saved value: ' + params.newValue);
             });
             **/
@@ -1915,8 +1915,8 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             if(this.container) {
                 this.container.option('value', this.value);
             }
-            AJS.$.when(this.render(response))
-                .then(AJS.$.proxy(function () {
+            $.when(this.render(response))
+                .then($.proxy(function () {
                 this.handleEmpty();
             }, this));
         },
@@ -1962,16 +1962,16 @@ Makes editable any HTML element on the page. Applied as jQuery method.
     /**
     jQuery method to initialize editable element.
 
-     @method AJS.$().editable(options)
+     @method $().editable(options)
     @params {Object} options
     @example
-     AJS.$('#username').editable({
+     $('#username').editable({
         type: 'text',
         url: '/post',
         pk: 1
     });
     **/
-    AJS.$.fn.editable = function (option) {
+    $.fn.editable = function (option) {
         //special API methods returning non-jquery object
         var result = {}, args = arguments, datakey = 'editable';
         switch (option) {
@@ -1981,7 +1981,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             @method validate()
             @returns {Object} validation errors map
             @example
-             AJS.$('#username, #fullname').editable('validate');
+             $('#username, #fullname').editable('validate');
             // possible result:
             {
               username: "username is required",
@@ -1990,7 +1990,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             **/
             case 'validate':
                 this.each(function () {
-                    var $this = AJS.$(this), data = $this.data(datakey), error;
+                    var $this = $(this), data = $this.data(datakey), error;
                     if (data && (error = data.validate())) {
                         result[data.options.name] = error;
                     }
@@ -2007,14 +2007,14 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             @param {bool} isSingle whether to return just value of single element
             @returns {Object} object of element names and values
             @example
-             AJS.$('#username, #fullname').editable('getValue');
+             $('#username, #fullname').editable('getValue');
             //result:
             {
             username: "superuser",
             fullname: "John"
             }
             //isSingle = true
-             AJS.$('#username').editable('getValue', true);
+             $('#username').editable('getValue', true);
              //result "superuser"
             **/
             case 'getValue':
@@ -2022,7 +2022,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                     result = this.eq(0).data(datakey).value;
                 } else {
                     this.each(function () {
-                        var $this = AJS.$(this), data = $this.data(datakey);
+                        var $this = $(this), data = $this.data(datakey);
                         if (data && data.value !== undefined && data.value !== null) {
                             result[data.options.name] = data.input.value2submit(data.value);
                         }
@@ -2035,7 +2035,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
              Internally it runs client-side validation for all fields and submits only in case of success.
              See <a href="#newrecord">creating new records</a> for details.
             Since 1.5.1 `submit` can be applied to single element to send data programmatically. In that case
-             `url`, `success` and `error` is taken from initial options and you can just call `AJS.$('#username').editable('submit')`.
+             `url`, `success` and `error` is taken from initial options and you can just call `$('#username').editable('submit')`.
 
             @method submit(options)
              @param {object} options
@@ -2052,7 +2052,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                 errors = this.editable('validate');
 
                 // validation ok
-                if (AJS.$.isEmptyObject(errors)) {
+                if ($.isEmptyObject(errors)) {
                     var ajaxOptions = {};
 
                     // for single element use url, success etc from options
@@ -2072,8 +2072,8 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                             params = editable.options.params.call(editable.options.scope, params);
                         } else {
                             //try parse json in single quotes (from data-params attribute)
-                            editable.options.params = AJS.$.fn.editableutils.tryParseJson(editable.options.params, true);
-                            AJS.$.extend(params, editable.options.params);
+                            editable.options.params = $.fn.editableutils.tryParseJson(editable.options.params, true);
+                            $.extend(params, editable.options.params);
                         }
 
                         ajaxOptions = {
@@ -2100,25 +2100,25 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                     // ajax success callabck (response 200 OK)
                     ajaxOptions.success = typeof config.success === 'function' ? function(response) {
                             config.success.call($elems, response, config);
-                    } : AJS.$.noop;
+                    } : $.noop;
 
                     // ajax error callabck
                     ajaxOptions.error = typeof config.error === 'function' ? function() {
                              config.error.apply($elems, arguments);
-                    } : AJS.$.noop;
+                    } : $.noop;
 
                     // extend ajaxOptions
                     if (config.ajaxOptions) {
-                        AJS.$.extend(ajaxOptions, config.ajaxOptions);
+                        $.extend(ajaxOptions, config.ajaxOptions);
                     }
 
                     // extra data
                     if(config.data) {
-                        AJS.$.extend(ajaxOptions.data, config.data);
+                        $.extend(ajaxOptions.data, config.data);
                     }
 
                     // perform ajax request
-                    AJS.$.ajax(ajaxOptions);
+                    $.ajax(ajaxOptions);
                 } else { //client-side validation error
                     if(typeof config.error === 'function') {
                         config.error.call($elems, errors);
@@ -2129,7 +2129,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
 
         //return jquery object
         return this.each(function () {
-            var $this = AJS.$(this),
+            var $this = $(this),
                 data = $this.data(datakey),
                 options = typeof option === 'object' && option;
 
@@ -2152,7 +2152,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
     };
 
 
-    AJS.$.fn.editable.defaults = {
+    $.fn.editable.defaults = {
         /**
         Type of input. Can be <code>text|textarea|select|date|checklist</code> and more
 
@@ -2176,9 +2176,9 @@ Makes editable any HTML element on the page. Applied as jQuery method.
         you need to apply <code>e.stopPropagation()</code> because containers are being closed on any click on document.
 
         @example
-         AJS.$('#edit-button').click(function(e) {
+         $('#edit-button').click(function(e) {
             e.stopPropagation();
-            AJS.$('#username').editable('toggle');
+            $('#username').editable('toggle');
         });
 
          @property toggle
@@ -2212,10 +2212,10 @@ Makes editable any HTML element on the page. Applied as jQuery method.
         @example
         <a id="price" data-type="text" data-value="100"></a>
         <script>
-         AJS.$('#price').editable({
+         $('#price').editable({
             ...
             display: function(value) {
-              AJS.$(this).text(value + '$');
+              $(this).text(value + '$');
             }
         })
         </script>
@@ -2241,7 +2241,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
          * `sourceData` array of items for current input (e.g. dropdown items)
         * `response` server response (if display called after ajax submit), since 1.4.0
 
-         To get currently selected items use `AJS.$.fn.editableutils.itemsByValue(value, sourceData)`.
+         To get currently selected items use `$.fn.editableutils.itemsByValue(value, sourceData)`.
 
          @property display
         @type function|boolean
@@ -2251,13 +2251,13 @@ Makes editable any HTML element on the page. Applied as jQuery method.
         display: function(value, sourceData) {
            //display checklist as comma-separated values
            var html = [],
-               checked = AJS.$.fn.editableutils.itemsByValue(value, sourceData);
+               checked = $.fn.editableutils.itemsByValue(value, sourceData);
 
            if(checked.length) {
-               AJS.$.each(checked, function(i, v) { html.push(AJS.$.fn.editableutils.escape(v.text)); });
-               AJS.$(this).html(html.join(', '));
+               $.each(checked, function(i, v) { html.push($.fn.editableutils.escape(v.text)); });
+               $(this).html(html.join(', '));
            } else {
-               AJS.$(this).empty();
+               $(this).empty();
            }
         }
          **/
@@ -2302,7 +2302,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
          </div>
 
         <script>
-         AJS.$('#user').editable({
+         $('#user').editable({
             selector: 'a',
             url: '/post',
             pk: 1
@@ -2321,7 +2321,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
         highlight: '#FFFF80'
     };
 
-}(window.$));
+}(window.jQuery));
 
 /**
 AbstractInput - base class for all editable inputs.
@@ -2334,7 +2334,7 @@ To create your own input you can inherit from this class.
     "use strict";
 
     //types
-    AJS.$.fn.editabletypes = {};
+    $.fn.editabletypes = {};
 
     var AbstractInput = function () { };
 
@@ -2346,14 +2346,14 @@ To create your own input you can inherit from this class.
         **/
        init: function(type, options, defaults) {
            this.type = type;
-           this.options = AJS.$.extend({}, defaults, options);
+           this.options = $.extend({}, defaults, options);
        },
 
        /*
        this method called before render to init $tpl that is inserted in DOM
        */
        prerender: function() {
-           this.$tpl = AJS.$(this.options.tpl); //whole tpl as jquery object
+           this.$tpl = $(this.options.tpl); //whole tpl as jquery object
            this.$input = this.$tpl;         //control itself, can be changed in render method
            this.$clear = null;              //clear button
            this.error = null;               //error message, if input cannot be rendered
@@ -2377,7 +2377,7 @@ To create your own input you can inherit from this class.
         @param {DOMElement} element
        **/
        value2html: function(value, element) {
-           AJS.$(element)[this.options.escape ? 'text' : 'html'](AJS.$.trim(value));
+           $(element)[this.options.escape ? 'text' : 'html']($.trim(value));
        },
 
        /**
@@ -2388,7 +2388,7 @@ To create your own input you can inherit from this class.
         @returns {mixed}
        **/
        html2value: function(html) {
-           return AJS.$('<div>').html(html).text();
+           return $('<div>').html(html).text();
        },
 
        /**
@@ -2467,7 +2467,7 @@ To create your own input you can inherit from this class.
         method to escape html.
        **/
        escape: function(str) {
-           return AJS.$('<div>').text(str).html();
+           return $('<div>').text(str).html();
        },
 
        /**
@@ -2521,8 +2521,8 @@ To create your own input you can inherit from this class.
         inputclass: null,
 
         /**
-         If `true` - html will be escaped in content of element via AJS.$.text() method.
-         If `false` - html will not be escaped, AJS.$.html() used.
+         If `true` - html will be escaped in content of element via $.text() method.
+         If `false` - html will not be escaped, $.html() used.
         When you use own `display` function, this option obviosly has no effect.
 
          @property escape
@@ -2540,9 +2540,9 @@ To create your own input you can inherit from this class.
         showbuttons: true
     };
 
-    AJS.$.extend(AJS.$.fn.editabletypes, {abstractinput: AbstractInput});
+    $.extend($.fn.editabletypes, {abstractinput: AbstractInput});
 
-}(window.$));
+}(window.jQuery));
 
 /**
 List - abstract class for inputs that have source option loaded from js array or via ajax
@@ -2557,11 +2557,11 @@ List - abstract class for inputs that have source option loaded from js array or
 
     };
 
-    AJS.$.fn.editableutils.inherit(List, AJS.$.fn.editabletypes.abstractinput);
+    $.fn.editableutils.inherit(List, $.fn.editabletypes.abstractinput);
 
-    AJS.$.extend(List.prototype, {
+    $.extend(List.prototype, {
         render: function () {
-            var deferred = AJS.$.Deferred();
+            var deferred = $.Deferred();
 
             this.error = null;
             this.onSourceReady(function () {
@@ -2580,7 +2580,7 @@ List - abstract class for inputs that have source option loaded from js array or
         },
 
         value2html: function (value, element, display, response) {
-            var deferred = AJS.$.Deferred(),
+            var deferred = $.Deferred(),
                 success = function () {
                     if(typeof display === 'function') {
                         //custom display method
@@ -2606,7 +2606,7 @@ List - abstract class for inputs that have source option loaded from js array or
         onSourceReady: function (success, error) {
             //run source if it function
             var source;
-            if (AJS.$.isFunction(this.options.source)) {
+            if ($.isFunction(this.options.source)) {
                 source = this.options.source.call(this.options.scope);
                 this.sourceData = null;
                 //note: if function returns the same source as URL - sourceData will be taken from cahce and no extra request performed
@@ -2615,14 +2615,14 @@ List - abstract class for inputs that have source option loaded from js array or
             }
 
             //if allready loaded just call success
-            if (this.options.sourceCache && AJS.$.isArray(this.sourceData)) {
+            if (this.options.sourceCache && $.isArray(this.sourceData)) {
                 success.call(this);
                 return;
             }
 
             //try parse json in single quotes (for double quotes jquery does automatically)
             try {
-                source = AJS.$.fn.editableutils.tryParseJson(source, false);
+                source = $.fn.editableutils.tryParseJson(source, false);
             } catch (e) {
                 error.call(this);
                 return;
@@ -2635,10 +2635,10 @@ List - abstract class for inputs that have source option loaded from js array or
                     var cacheID = source,
                     cache;
 
-                    if (!AJS.$(document).data(cacheID)) {
-                        AJS.$(document).data(cacheID, {});
+                    if (!$(document).data(cacheID)) {
+                        $(document).data(cacheID, {});
                     }
-                    cache = AJS.$(document).data(cacheID);
+                    cache = $(document).data(cacheID);
 
                     //check for cached data
                     if (cache.loading === false && cache.sourceData) { //take source from cache
@@ -2647,14 +2647,14 @@ List - abstract class for inputs that have source option loaded from js array or
                         success.call(this);
                         return;
                     } else if (cache.loading === true) { //cache is loading, put callback in stack to be called later
-                        cache.callbacks.push(AJS.$.proxy(function () {
+                        cache.callbacks.push($.proxy(function () {
                             this.sourceData = cache.sourceData;
                             this.doPrepend();
                             success.call(this);
                         }, this));
 
                         //also collecting error callbacks
-                        cache.err_callbacks.push(AJS.$.proxy(error, this));
+                        cache.err_callbacks.push($.proxy(error, this));
                         return;
                     } else { //no cache yet, activate it
                         cache.loading = true;
@@ -2664,22 +2664,22 @@ List - abstract class for inputs that have source option loaded from js array or
                 }
 
                 //ajaxOptions for source. Can be overwritten bt options.sourceOptions
-                var ajaxOptions = AJS.$.extend({
+                var ajaxOptions = $.extend({
                     url: source,
                     type: 'get',
                     cache: false,
                     dataType: 'json',
-                    success: AJS.$.proxy(function (data) {
+                    success: $.proxy(function (data) {
                         if(cache) {
                             cache.loading = false;
                         }
                         this.sourceData = this.makeArray(data);
-                        if (AJS.$.isArray(this.sourceData)) {
+                        if ($.isArray(this.sourceData)) {
                             if(cache) {
                                 //store result in cache
                                 cache.sourceData = this.sourceData;
                                 //run success callbacks for other fields waiting for this source
-                                AJS.$.each(cache.callbacks, function () {
+                                $.each(cache.callbacks, function () {
                                     this.call();
                                 });
                             }
@@ -2689,18 +2689,18 @@ List - abstract class for inputs that have source option loaded from js array or
                             error.call(this);
                             if(cache) {
                                 //run error callbacks for other fields waiting for this source
-                                AJS.$.each(cache.err_callbacks, function () {
+                                $.each(cache.err_callbacks, function () {
                                     this.call();
                                 });
                             }
                         }
                     }, this),
-                    error: AJS.$.proxy(function () {
+                    error: $.proxy(function () {
                         error.call(this);
                         if(cache) {
                              cache.loading = false;
                              //run error callbacks for other fields
-                            AJS.$.each(cache.err_callbacks, function () {
+                            $.each(cache.err_callbacks, function () {
                                 this.call();
                             });
                         }
@@ -2708,12 +2708,12 @@ List - abstract class for inputs that have source option loaded from js array or
                 }, this.options.sourceOptions);
 
                 //loading sourceData from server
-                AJS.$.ajax(ajaxOptions);
+                $.ajax(ajaxOptions);
 
             } else { //options as json/array
                 this.sourceData = this.makeArray(source);
 
-                if (AJS.$.isArray(this.sourceData)) {
+                if ($.isArray(this.sourceData)) {
                     this.doPrepend();
                     success.call(this);
                 } else {
@@ -2727,14 +2727,14 @@ List - abstract class for inputs that have source option loaded from js array or
                 return;
             }
 
-            if (!AJS.$.isArray(this.prependData)) {
+            if (!$.isArray(this.prependData)) {
                 //run prepend if it is function (once)
-                if (AJS.$.isFunction(this.options.prepend)) {
+                if ($.isFunction(this.options.prepend)) {
                     this.options.prepend = this.options.prepend.call(this.options.scope);
                 }
 
                 //try parse json in single quotes
-                this.options.prepend = AJS.$.fn.editableutils.tryParseJson(this.options.prepend, true);
+                this.options.prepend = $.fn.editableutils.tryParseJson(this.options.prepend, true);
 
                 //convert prepend from string to object
                 if (typeof this.options.prepend === 'string') {
@@ -2744,7 +2744,7 @@ List - abstract class for inputs that have source option loaded from js array or
                 this.prependData = this.makeArray(this.options.prepend);
             }
 
-            if (AJS.$.isArray(this.prependData) && AJS.$.isArray(this.sourceData)) {
+            if ($.isArray(this.prependData) && $.isArray(this.sourceData)) {
                 this.sourceData = this.prependData.concat(this.sourceData);
             }
         },
@@ -2772,7 +2772,7 @@ List - abstract class for inputs that have source option loaded from js array or
                 return null;
             }
 
-            if (AJS.$.isArray(data)) { //array
+            if ($.isArray(data)) { //array
                 /*
                    function to iterate inside item of array if item is object.
                  Caclulates count of keys in item and store in obj.
@@ -2788,7 +2788,7 @@ List - abstract class for inputs that have source option loaded from js array or
                     item = data[i];
                     if(typeof item === 'object') {
                         count = 0; //count of keys inside item
-                        AJS.$.each(item, iterateItem);
+                        $.each(item, iterateItem);
                         //case: [{val1: 'text1'}, {val2: 'text2} ...]
                         if (count === 1) {
                             result.push(obj);
@@ -2806,7 +2806,7 @@ List - abstract class for inputs that have source option loaded from js array or
                     }
                 }
             } else {  //case: {val1: 'text1', val2: 'text2, ...}
-                AJS.$.each(data, function (k, v) {
+                $.each(data, function (k, v) {
                     result.push({value: k, text: v});
                 });
             }
@@ -2825,7 +2825,7 @@ List - abstract class for inputs that have source option loaded from js array or
 
     });
 
-    List.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    List.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         /**
          Source data for list.
          If **array** - it should be in format: `[{value: 1, text: "text1"}, {value: 2, text: "text2"}, ...]`
@@ -2871,7 +2871,7 @@ List - abstract class for inputs that have source option loaded from js array or
          **/
         sourceCache: true,
         /**
-         Additional ajax options to be used in AJS.$.ajax() when loading list from server.
+         Additional ajax options to be used in $.ajax() when loading list from server.
         Useful to send extra parameters (`data` key) or change request method (`type` key).
 
          @property sourceOptions
@@ -2882,9 +2882,9 @@ List - abstract class for inputs that have source option loaded from js array or
         sourceOptions: null
     });
 
-    AJS.$.fn.editabletypes.list = List;
+    $.fn.editabletypes.list = List;
 
-}(window.$));
+}(window.jQuery));
 
 /**
 Text input
@@ -2895,8 +2895,8 @@ Text input
 @example
 <a href="#" id="username" data-type="text" data-pk="1">awesome</a>
 <script>
- AJS.$(function(){
-    AJS.$('#username').editable({
+ $(function(){
+    $('#username').editable({
         url: '/post',
         title: 'Enter username'
     });
@@ -2910,9 +2910,9 @@ Text input
         this.init('text', options, Text.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(Text, AJS.$.fn.editabletypes.abstractinput);
+    $.fn.editableutils.inherit(Text, $.fn.editabletypes.abstractinput);
 
-    AJS.$.extend(Text.prototype, {
+    $.extend(Text.prototype, {
         render: function() {
            this.renderClear();
            this.setClass();
@@ -2922,7 +2922,7 @@ Text input
         activate: function() {
             if(this.$input.is(':visible')) {
                 this.$input.focus();
-                AJS.$.fn.editableutils.setCursorPosition(this.$input.get(0), this.$input.val().length);
+                $.fn.editableutils.setCursorPosition(this.$input.get(0), this.$input.val().length);
                 if(this.toggleClear) {
                     this.toggleClear();
                 }
@@ -2932,12 +2932,12 @@ Text input
         //render clear button
         renderClear:  function() {
            if (this.options.clear) {
-               this.$clear = AJS.$('<span class="editable-clear-x"></span>');
+               this.$clear = $('<span class="editable-clear-x"></span>');
                this.$input.after(this.$clear)
                           .css('padding-right', 24)
-                   .keyup(AJS.$.proxy(function (e) {
+                   .keyup($.proxy(function (e) {
                               //arrows, enter, tab, etc
-                       if (~AJS.$.inArray(e.keyCode, [40, 38, 9, 13, 27])) {
+                       if (~$.inArray(e.keyCode, [40, 38, 9, 13, 27])) {
                                 return;
                               }
 
@@ -2950,7 +2950,7 @@ Text input
                           }, this))
                           .parent().css('position', 'relative');
 
-               this.$clear.click(AJS.$.proxy(this.clear, this));
+               this.$clear.click($.proxy(this.clear, this));
            }
         },
 
@@ -2992,7 +2992,7 @@ Text input
         }
     });
 
-    Text.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    Text.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         /**
          @property tpl
         @default <input type="text">
@@ -3017,9 +3017,9 @@ Text input
         clear: true
     });
 
-    AJS.$.fn.editabletypes.text = Text;
+    $.fn.editabletypes.text = Text;
 
-}(window.$));
+}(window.jQuery));
 
 /**
 Textarea input
@@ -3030,8 +3030,8 @@ Textarea input
 @example
 <a href="#" id="comments" data-type="textarea" data-pk="1">awesome comment!</a>
 <script>
- AJS.$(function(){
-    AJS.$('#comments').editable({
+ $(function(){
+    $('#comments').editable({
         url: '/post',
         title: 'Enter comments',
         rows: 10
@@ -3046,9 +3046,9 @@ Textarea input
         this.init('textarea', options, Textarea.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(Textarea, AJS.$.fn.editabletypes.abstractinput);
+    $.fn.editableutils.inherit(Textarea, $.fn.editabletypes.abstractinput);
 
-    AJS.$.extend(Textarea.prototype, {
+    $.extend(Textarea.prototype, {
         render: function () {
             this.setClass();
             this.setAttr('placeholder');
@@ -3057,7 +3057,7 @@ Textarea input
             //ctrl + enter
             this.$input.keydown(function (e) {
                 if (e.ctrlKey && e.which === 13) {
-                    AJS.$(this).closest('form').submit();
+                    $(this).closest('form').submit();
                 }
             });
         },
@@ -3069,11 +3069,11 @@ Textarea input
             if(value) {
                 lines = value.split("\n");
                 for (var i = 0; i < lines.length; i++) {
-         lines[i] = AJS.$('<div>').text(lines[i]).html();
+         lines[i] = $('<div>').text(lines[i]).html();
                 }
                 html = lines.join('<br>');
             }
-         AJS.$(element).html(html);
+         $(element).html(html);
         },
 
         html2value: function(html) {
@@ -3084,7 +3084,7 @@ Textarea input
             var regex = new RegExp(String.fromCharCode(10), 'g');
             var lines = html.split(/<br\s*\/?>/i);
             for (var i = 0; i < lines.length; i++) {
-         var text = AJS.$('<div>').html(lines[i]).text();
+         var text = $('<div>').html(lines[i]).text();
 
                 // Remove newline characters (\n) to avoid them being converted by value2html() method
                 // thus adding extra <br> tags
@@ -3096,11 +3096,11 @@ Textarea input
         },
          */
         activate: function() {
-            AJS.$.fn.editabletypes.text.prototype.activate.call(this);
+            $.fn.editabletypes.text.prototype.activate.call(this);
         }
     });
 
-    Textarea.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    Textarea.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         /**
         @property tpl
         @default <textarea></textarea>
@@ -3129,9 +3129,9 @@ Textarea input
         rows: 7
     });
 
-    AJS.$.fn.editabletypes.textarea = Textarea;
+    $.fn.editabletypes.textarea = Textarea;
 
-}(window.$));
+}(window.jQuery));
 
 /**
 Select (dropdown)
@@ -3142,8 +3142,8 @@ Select (dropdown)
 @example
 <a href="#" id="status" data-type="select" data-pk="1" data-url="/post" data-title="Select status"></a>
 <script>
- AJS.$(function(){
-    AJS.$('#status').editable({
+ $(function(){
+    $('#status').editable({
         value: 2,
         source: [
               {value: 1, text: 'Active'},
@@ -3161,26 +3161,26 @@ Select (dropdown)
         this.init('select', options, Select.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(Select, AJS.$.fn.editabletypes.list);
+    $.fn.editableutils.inherit(Select, $.fn.editabletypes.list);
 
-    AJS.$.extend(Select.prototype, {
+    $.extend(Select.prototype, {
         renderList: function() {
             this.$input.empty();
 
             var fillItems = function($el, data) {
                 var attr;
-                if (AJS.$.isArray(data)) {
+                if ($.isArray(data)) {
                     for(var i=0; i<data.length; i++) {
                         attr = {};
                         if(data[i].children) {
                             attr.label = data[i].text;
-                            $el.append(fillItems(AJS.$('<optgroup>', attr), data[i].children));
+                            $el.append(fillItems($('<optgroup>', attr), data[i].children));
                         } else {
                             attr.value = data[i].value;
                             if(data[i].disabled) {
                                 attr.disabled = true;
                             }
-                            $el.append(AJS.$('<option>', attr).text(data[i].text));
+                            $el.append($('<option>', attr).text(data[i].text));
                         }
                     }
                 }
@@ -3194,31 +3194,31 @@ Select (dropdown)
             //enter submit
             this.$input.on('keydown.editable', function (e) {
                 if (e.which === 13) {
-                    AJS.$(this).closest('form').submit();
+                    $(this).closest('form').submit();
                 }
             });
         },
 
         value2htmlFinal: function(value, element) {
             var text = '',
-                items = AJS.$.fn.editableutils.itemsByValue(value, this.sourceData);
+                items = $.fn.editableutils.itemsByValue(value, this.sourceData);
 
             if(items.length) {
                 text = items[0].text;
             }
 
-            //AJS.$(element).text(text);
-            AJS.$.fn.editabletypes.abstractinput.prototype.value2html.call(this, text, element);
+            //$(element).text(text);
+            $.fn.editabletypes.abstractinput.prototype.value2html.call(this, text, element);
         },
 
         autosubmit: function() {
             this.$input.off('keydown.editable').on('change.editable', function(){
-                AJS.$(this).closest('form').submit();
+                $(this).closest('form').submit();
             });
         }
     });
 
-    Select.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.list.defaults, {
+    Select.defaults = $.extend({}, $.fn.editabletypes.list.defaults, {
         /**
          @property tpl
         @default <select></select>
@@ -3226,9 +3226,9 @@ Select (dropdown)
         tpl:'<select></select>'
     });
 
-    AJS.$.fn.editabletypes.select = Select;
+    $.fn.editabletypes.select = Select;
 
-}(window.$));
+}(window.jQuery));
 
 /**
  List of checkboxes.
@@ -3240,8 +3240,8 @@ Internally value stored as javascript array of values.
 @example
 <a href="#" id="options" data-type="checklist" data-pk="1" data-url="/post" data-title="Select options"></a>
 <script>
- AJS.$(function(){
-    AJS.$('#options').editable({
+ $(function(){
+    $('#options').editable({
         value: [2, 3],
         source: [
               {value: 1, text: 'option1'},
@@ -3259,26 +3259,26 @@ Internally value stored as javascript array of values.
         this.init('checklist', options, Checklist.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(Checklist, AJS.$.fn.editabletypes.list);
+    $.fn.editableutils.inherit(Checklist, $.fn.editabletypes.list);
 
-    AJS.$.extend(Checklist.prototype, {
+    $.extend(Checklist.prototype, {
         renderList: function() {
             var $label, $div;
 
             this.$tpl.empty();
 
-            if (!AJS.$.isArray(this.sourceData)) {
+            if (!$.isArray(this.sourceData)) {
                 return;
             }
 
             for(var i=0; i<this.sourceData.length; i++) {
-                $label = AJS.$('<label>').append(AJS.$('<input>', {
+                $label = $('<label>').append($('<input>', {
                                            type: 'checkbox',
                     value: this.sourceData[i].value
                                      }))
-                    .append(AJS.$('<span>').text(' ' + this.sourceData[i].text));
+                    .append($('<span>').text(' ' + this.sourceData[i].text));
 
-                AJS.$('<div>').append($label).appendTo(this.$tpl);
+                $('<div>').append($label).appendTo(this.$tpl);
             }
 
             this.$input = this.$tpl.find('input[type="checkbox"]');
@@ -3286,16 +3286,16 @@ Internally value stored as javascript array of values.
         },
 
        value2str: function(value) {
-           return AJS.$.isArray(value) ? value.sort().join(AJS.$.trim(this.options.separator)) : '';
+           return $.isArray(value) ? value.sort().join($.trim(this.options.separator)) : '';
        },
 
        //parse separated string
         str2value: function(str) {
            var reg, value = null;
            if(typeof str === 'string' && str.length) {
-               reg = new RegExp('\\s*' + AJS.$.trim(this.options.separator) + '\\s*');
+               reg = new RegExp('\\s*' + $.trim(this.options.separator) + '\\s*');
                value = str.split(reg);
-           } else if (AJS.$.isArray(str)) {
+           } else if ($.isArray(str)) {
                value = str;
            } else {
                value = [str];
@@ -3306,11 +3306,11 @@ Internally value stored as javascript array of values.
        //set checked on required checkboxes
        value2input: function(value) {
             this.$input.prop('checked', false);
-           if (AJS.$.isArray(value) && value.length) {
+           if ($.isArray(value) && value.length) {
                this.$input.each(function(i, el) {
-                   var $el = AJS.$(el);
-                   // cannot use AJS.$.inArray as it performs strict comparison
-                   AJS.$.each(value, function (j, val) {
+                   var $el = $(el);
+                   // cannot use $.inArray as it performs strict comparison
+                   $.each(value, function (j, val) {
                        /*jslint eqeq: true*/
                        if($el.val() == val) {
                            /*jslint eqeq: false*/
@@ -3324,7 +3324,7 @@ Internally value stored as javascript array of values.
         input2value: function () {
            var checked = [];
            this.$input.filter(':checked').each(function(i, el) {
-               checked.push(AJS.$(el).val());
+               checked.push($(el).val());
            });
            return checked;
         },
@@ -3332,17 +3332,17 @@ Internally value stored as javascript array of values.
        //collect text of checked boxes
         value2htmlFinal: function(value, element) {
            var html = [],
-               checked = AJS.$.fn.editableutils.itemsByValue(value, this.sourceData),
+               checked = $.fn.editableutils.itemsByValue(value, this.sourceData),
                escape = this.options.escape;
 
            if(checked.length) {
-               AJS.$.each(checked, function (i, v) {
-                   var text = escape ? AJS.$.fn.editableutils.escape(v.text) : v.text;
+               $.each(checked, function (i, v) {
+                   var text = escape ? $.fn.editableutils.escape(v.text) : v.text;
                    html.push(text);
                });
-               AJS.$(element).html(html.join('<br>'));
+               $(element).html(html.join('<br>'));
            } else {
-               AJS.$(element).empty();
+               $(element).empty();
            }
         },
 
@@ -3353,13 +3353,13 @@ Internally value stored as javascript array of values.
        autosubmit: function() {
            this.$input.on('keydown', function(e){
                if (e.which === 13) {
-                   AJS.$(this).closest('form').submit();
+                   $(this).closest('form').submit();
                }
            });
        }
     });
 
-    Checklist.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.list.defaults, {
+    Checklist.defaults = $.extend({}, $.fn.editabletypes.list.defaults, {
         /**
          @property tpl
         @default <div></div>
@@ -3383,9 +3383,9 @@ Internally value stored as javascript array of values.
         separator: ','
     });
 
-    AJS.$.fn.editabletypes.checklist = Checklist;
+    $.fn.editabletypes.checklist = Checklist;
 
-}(window.$));
+}(window.jQuery));
 
 /**
 HTML5 input types.
@@ -3411,8 +3411,8 @@ https://developer.mozilla.org/en-US/docs/HTML/Element/Input
 @example
 <a href="#" id="email" data-type="email" data-pk="1">admin@example.com</a>
 <script>
- AJS.$(function(){
-    AJS.$('#email').editable({
+ $(function(){
+    $('#email').editable({
         url: '/post',
         title: 'Enter email'
     });
@@ -3434,14 +3434,14 @@ Password
     var Password = function (options) {
         this.init('password', options, Password.defaults);
     };
-    AJS.$.fn.editableutils.inherit(Password, AJS.$.fn.editabletypes.text);
-    AJS.$.extend(Password.prototype, {
+    $.fn.editableutils.inherit(Password, $.fn.editabletypes.text);
+    $.extend(Password.prototype, {
        //do not display password, show '[hidden]' instead
        value2html: function(value, element) {
            if(value) {
-               AJS.$(element).text('[hidden]');
+               $(element).text('[hidden]');
            } else {
-               AJS.$(element).empty();
+               $(element).empty();
            }
        },
        //as password not displayed, should not set value by html
@@ -3449,11 +3449,11 @@ Password
            return null;
        }
     });
-    Password.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.text.defaults, {
+    Password.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
         tpl: '<input type="password">'
     });
-    AJS.$.fn.editabletypes.password = Password;
-}(window.$));
+    $.fn.editabletypes.password = Password;
+}(window.jQuery));
 
 
 /*
@@ -3465,12 +3465,12 @@ Email
     var Email = function (options) {
         this.init('email', options, Email.defaults);
     };
-    AJS.$.fn.editableutils.inherit(Email, AJS.$.fn.editabletypes.text);
-    Email.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.text.defaults, {
+    $.fn.editableutils.inherit(Email, $.fn.editabletypes.text);
+    Email.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
         tpl: '<input type="email">'
     });
-    AJS.$.fn.editabletypes.email = Email;
-}(window.$));
+    $.fn.editabletypes.email = Email;
+}(window.jQuery));
 
 
 /*
@@ -3482,12 +3482,12 @@ Url
     var Url = function (options) {
         this.init('url', options, Url.defaults);
     };
-    AJS.$.fn.editableutils.inherit(Url, AJS.$.fn.editabletypes.text);
-    Url.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.text.defaults, {
+    $.fn.editableutils.inherit(Url, $.fn.editabletypes.text);
+    Url.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
         tpl: '<input type="url">'
     });
-    AJS.$.fn.editabletypes.url = Url;
-}(window.$));
+    $.fn.editabletypes.url = Url;
+}(window.jQuery));
 
 
 /*
@@ -3499,12 +3499,12 @@ Tel
     var Tel = function (options) {
         this.init('tel', options, Tel.defaults);
     };
-    AJS.$.fn.editableutils.inherit(Tel, AJS.$.fn.editabletypes.text);
-    Tel.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.text.defaults, {
+    $.fn.editableutils.inherit(Tel, $.fn.editabletypes.text);
+    Tel.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
         tpl: '<input type="tel">'
     });
-    AJS.$.fn.editabletypes.tel = Tel;
-}(window.$));
+    $.fn.editabletypes.tel = Tel;
+}(window.jQuery));
 
 
 /*
@@ -3516,8 +3516,8 @@ Number
     var NumberInput = function (options) {
         this.init('number', options, NumberInput.defaults);
     };
-    AJS.$.fn.editableutils.inherit(NumberInput, AJS.$.fn.editabletypes.text);
-    AJS.$.extend(NumberInput.prototype, {
+    $.fn.editableutils.inherit(NumberInput, $.fn.editabletypes.text);
+    $.extend(NumberInput.prototype, {
          render: function () {
             NumberInput.superclass.render.call(this);
             this.setAttr('min');
@@ -3539,15 +3539,15 @@ Number
             }
         }
     });
-    NumberInput.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.text.defaults, {
+    NumberInput.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
         tpl: '<input type="number">',
         inputclass: 'input-mini',
         min: null,
         max: null,
         step: null
     });
-    AJS.$.fn.editabletypes.number = NumberInput;
-}(window.$));
+    $.fn.editabletypes.number = NumberInput;
+}(window.jQuery));
 
 
 /*
@@ -3559,8 +3559,8 @@ Range (inherit from number)
     var Range = function (options) {
         this.init('range', options, Range.defaults);
     };
-    AJS.$.fn.editableutils.inherit(Range, AJS.$.fn.editabletypes.number);
-    AJS.$.extend(Range.prototype, {
+    $.fn.editableutils.inherit(Range, $.fn.editabletypes.number);
+    $.extend(Range.prototype, {
         render: function () {
             this.$input = this.$tpl.filter('input');
 
@@ -3570,19 +3570,19 @@ Range (inherit from number)
             this.setAttr('step');
 
             this.$input.on('input', function(){
-                AJS.$(this).siblings('output').text(AJS.$(this).val());
+                $(this).siblings('output').text($(this).val());
             });
         },
         activate: function() {
             this.$input.focus();
         }
     });
-    Range.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.number.defaults, {
+    Range.defaults = $.extend({}, $.fn.editabletypes.number.defaults, {
         tpl: '<input type="range"><output style="width: 30px; display: inline-block"></output>',
         inputclass: 'input-medium'
     });
-    AJS.$.fn.editabletypes.range = Range;
-}(window.$));
+    $.fn.editabletypes.range = Range;
+}(window.jQuery));
 
 /*
 Time
@@ -3594,17 +3594,17 @@ Time
         this.init('time', options, Time.defaults);
     };
     //inherit from abstract, as inheritance from text gives selection error.
-    AJS.$.fn.editableutils.inherit(Time, AJS.$.fn.editabletypes.abstractinput);
-    AJS.$.extend(Time.prototype, {
+    $.fn.editableutils.inherit(Time, $.fn.editabletypes.abstractinput);
+    $.extend(Time.prototype, {
         render: function() {
            this.setClass();
         }
     });
-    Time.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    Time.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         tpl: '<input type="time">'
     });
-    AJS.$.fn.editabletypes.time = Time;
-}(window.$));
+    $.fn.editabletypes.time = Time;
+}(window.jQuery));
 
 /**
  Select2 input. Based on amazing work of Igor Vaynberg https://github.com/ivaynberg/select2.
@@ -3632,9 +3632,9 @@ Time
 @example
 <a href="#" id="country" data-type="select2" data-pk="1" data-value="ru" data-url="/post" data-title="Select country"></a>
 <script>
- AJS.$(function(){
+ $(function(){
     //local source
-    AJS.$('#country').editable({
+    $('#country').editable({
         source: [
               {id: 'gb', text: 'Great Britain'},
               {id: 'us', text: 'United States'},
@@ -3645,7 +3645,7 @@ Time
         }
     });
     //remote source (simple)
-    AJS.$('#country').editable({
+    $('#country').editable({
         source: '/getCountries',
         select2: {
             placeholder: 'Select Country',
@@ -3653,7 +3653,7 @@ Time
         }
     });
     //remote source (advanced)
-    AJS.$('#country').editable({
+    $('#country').editable({
         select2: {
             placeholder: 'Select Country',
             allowClear: true,
@@ -3678,7 +3678,7 @@ Time
                 return item.CountryName;
             },
             initSelection: function (element, callback) {
-                return AJS.$.get('/getCountryById', { query: element.val() }, function (data) {
+                return $.get('/getCountryById', { query: element.val() }, function (data) {
                     callback(data);
                 });
             }
@@ -3706,7 +3706,7 @@ Time
         if(!options.select2.tags && options.source) {
             var source = options.source;
             //if source is function, call it (once!)
-            if (AJS.$.isFunction(options.source)) {
+            if ($.isFunction(options.source)) {
                 source = options.source.call(options.scope);
             }
 
@@ -3728,7 +3728,7 @@ Time
         }
 
         //overriding objects in config (as by default jQuery extend() is not recursive)
-        this.options.select2 = AJS.$.extend({}, Constructor.defaults.select2, options.select2);
+        this.options.select2 = $.extend({}, Constructor.defaults.select2, options.select2);
 
         //detect whether it is multi-valued
         this.isMultiple = this.options.select2.tags || this.options.select2.multiple;
@@ -3749,9 +3749,9 @@ Time
         }
     };
 
-    AJS.$.fn.editableutils.inherit(Constructor, AJS.$.fn.editabletypes.abstractinput);
+    $.fn.editableutils.inherit(Constructor, $.fn.editabletypes.abstractinput);
 
-    AJS.$.extend(Constructor.prototype, {
+    $.extend(Constructor.prototype, {
         render: function() {
             this.setClass();
 
@@ -3763,7 +3763,7 @@ Time
             //when data is loaded via ajax, we need to know when it's done to populate listData
             if(this.isRemote) {
                 //listen to loaded event to populate data
-                this.$input.on('select2-loaded', AJS.$.proxy(function (e) {
+                this.$input.on('select2-loaded', $.proxy(function (e) {
                     this.sourceData = e.items.results;
                 }, this));
             }
@@ -3771,7 +3771,7 @@ Time
             //trigger resize of editableform to re-position container in multi-valued mode
             if(this.isMultiple) {
                this.$input.on('change', function() {
-                   AJS.$(this).closest('form').parent().triggerHandler('resize');
+                   $(this).closest('form').parent().triggerHandler('resize');
                });
             }
        },
@@ -3782,28 +3782,28 @@ Time
 
            if(this.options.select2.tags) { //in tags mode just assign value
                data = value;
-               //data = AJS.$.fn.editableutils.itemsByValue(value, this.options.select2.tags, this.idFunc);
+               //data = $.fn.editableutils.itemsByValue(value, this.options.select2.tags, this.idFunc);
            } else if(this.sourceData) {
-               data = AJS.$.fn.editableutils.itemsByValue(value, this.sourceData, this.idFunc);
+               data = $.fn.editableutils.itemsByValue(value, this.sourceData, this.idFunc);
            } else {
                //can not get list of possible values
               //(e.g. autotext for select2 with ajax source)
            }
 
            //data may be array (when multiple values allowed)
-           if (AJS.$.isArray(data)) {
+           if ($.isArray(data)) {
                //collect selected data and show with separator
                text = [];
-               AJS.$.each(data, function (k, v) {
+               $.each(data, function (k, v) {
                    text.push(v && typeof v === 'object' ? that.formatSelection(v) : v);
                });
            } else if(data) {
                text = that.formatSelection(data);
            }
 
-           text = AJS.$.isArray(text) ? text.join(this.options.viewseparator) : text;
+           text = $.isArray(text) ? text.join(this.options.viewseparator) : text;
 
-           //AJS.$(element).text(text);
+           //$(element).text(text);
            Constructor.superclass.value2html.call(this, text, element);
        },
 
@@ -3813,7 +3813,7 @@ Time
 
        value2input: function(value) {
            // if value array => join it anyway
-           if (AJS.$.isArray(value)) {
+           if ($.isArray(value)) {
               value = value.join(this.getSeparator());
            }
 
@@ -3840,7 +3840,7 @@ Time
                    customText = this.options.select2.formatSelection;
 
                if(!customId && !customText) {
-                   var $el = AJS.$(this.options.scope);
+                   var $el = $(this.options.scope);
                    if (!$el.data('editable').isEmpty) {
                        var data = {id: value, text: $el.text()};
                        this.$input.select2('data', data);
@@ -3867,7 +3867,7 @@ Time
             }
             val = str.split(separator);
             for (i = 0, l = val.length; i < l; i = i + 1) {
-                val[i] = AJS.$.trim(val[i]);
+                val[i] = $.trim(val[i]);
             }
 
             return val;
@@ -3876,13 +3876,13 @@ Time
         autosubmit: function() {
             this.$input.on('change', function(e, isInitial){
                 if(!isInitial) {
-                    AJS.$(this).closest('form').submit();
+                    $(this).closest('form').submit();
                 }
             });
         },
 
         getSeparator: function() {
-            return this.options.select2.separator || AJS.$.fn.select2.defaults.separator;
+            return this.options.select2.separator || $.fn.select2.defaults.separator;
         },
 
         /*
@@ -3890,7 +3890,7 @@ Time
         select2 format: {id: 1, text: "1"}
         */
         convertSource: function(source) {
-            if (AJS.$.isArray(source) && source.length && source[0].value !== undefined) {
+            if ($.isArray(source) && source.length && source[0].value !== undefined) {
                 for(var i = 0; i<source.length; i++) {
                     if(source[i].value !== undefined) {
                         source[i].id = source[i].value;
@@ -3909,7 +3909,7 @@ Time
 
     });
 
-    Constructor.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    Constructor.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         /**
          @property tpl
         @default <input type="hidden">
@@ -3951,9 +3951,9 @@ Time
         viewseparator: ', '
     });
 
-    AJS.$.fn.editabletypes.select2 = Constructor;
+    $.fn.editabletypes.select2 = Constructor;
 
-}(window.$));
+}(window.jQuery));
 
 /**
 * Combodate - 1.0.5
@@ -3979,12 +3979,12 @@ Time
 (function ($) {
 
     var Combodate = function (element, options) {
-        this.$element = AJS.$(element);
+        this.$element = $(element);
         if(!this.$element.is('input')) {
-            AJS.$.error('Combodate should be applied to INPUT element');
+            $.error('Combodate should be applied to INPUT element');
             return;
         }
-        this.options = AJS.$.extend({}, AJS.$.fn.combodate.defaults, options, this.$element.data());
+        this.options = $.extend({}, $.fn.combodate.defaults, options, this.$element.data());
         this.init();
      };
 
@@ -4002,16 +4002,16 @@ Time
                 ampm: ['[Aa]', '']
             };
 
-            this.$widget = AJS.$('<span class="combodate"></span>').html(this.getTemplate());
+            this.$widget = $('<span class="combodate"></span>').html(this.getTemplate());
 
             this.initCombos();
 
             //update original input on change
-            this.$widget.on('change', 'select', AJS.$.proxy(function (e) {
+            this.$widget.on('change', 'select', $.proxy(function (e) {
                 this.$element.val(this.getValue()).change();
                 // update days count if month or year changes
                 if (this.options.smartDays) {
-                    if (AJS.$(e.target).is('.month') || AJS.$(e.target).is('.year')) {
+                    if ($(e.target).is('.month') || $(e.target).is('.year')) {
                         this.fillCombo('day');
                     }
                 }
@@ -4033,7 +4033,7 @@ Time
             var tpl = this.options.template;
 
             //first pass
-            AJS.$.each(this.map, function (k, v) {
+            $.each(this.map, function (k, v) {
                 v = v[0];
                 var r = new RegExp(v+'+'),
                     token = v.length > 1 ? v.substring(1, 2) : v;
@@ -4045,7 +4045,7 @@ Time
             tpl = tpl.replace(/ /g, '&nbsp;');
 
             //second pass
-            AJS.$.each(this.map, function (k, v) {
+            $.each(this.map, function (k, v) {
                 v = v[0];
                 var token = v.length > 1 ? v.substring(1, 2) : v;
 
@@ -4249,7 +4249,7 @@ Time
                 notSelected = false;
 
             //getting selected values
-            AJS.$.each(this.map, function (k, v) {
+            $.each(this.map, function (k, v) {
                 if(k === 'ampm') {
                     return;
                 }
@@ -4304,7 +4304,7 @@ Time
             function getNearest($select, value) {
                 var delta = {};
                 $select.children('option').each(function(i, opt){
-                    var optValue = AJS.$(opt).attr('value'),
+                    var optValue = $(opt).attr('value'),
                     distance;
 
                     if(optValue === '') return;
@@ -4318,7 +4318,7 @@ Time
 
             if(dt.isValid()) {
                 //read values from date object
-                AJS.$.each(this.map, function (k, v) {
+                $.each(this.map, function (k, v) {
                     if(k === 'ampm') {
                         return;
                     }
@@ -4340,7 +4340,7 @@ Time
                     }
                 }
 
-                AJS.$.each(values, function (k, v) {
+                $.each(values, function (k, v) {
                     //call val() for each existing combo, e.g. this.$hour.val()
                     if(that['$'+k]) {
 
@@ -4400,7 +4400,7 @@ Time
         //todo: clear method
     };
 
-    AJS.$.fn.combodate = function (option) {
+    $.fn.combodate = function (option) {
         var d, args = Array.apply(null, arguments);
         args.shift();
 
@@ -4410,7 +4410,7 @@ Time
         }
 
         return this.each(function () {
-            var $this = AJS.$(this),
+            var $this = $(this),
             data = $this.data('combodate'),
             options = typeof option == 'object' && option;
             if (!data) {
@@ -4422,7 +4422,7 @@ Time
         });
     };
 
-    AJS.$.fn.combodate.defaults = {
+    $.fn.combodate.defaults = {
          //in this format value stored in original input
         format: 'DD-MM-YYYY HH:mm',
         //in this format items in dropdowns are displayed
@@ -4440,7 +4440,7 @@ Time
         smartDays: false // whether days in combo depend on selected month: 31, 30, 28
     };
 
-}(window.$));
+}(window.jQuery));
 /**
  Combodate input - dropdown date and time picker.
 Based on [combodate](http://vitalets.github.com/combodate) plugin (included). To use it you should manually include [momentjs](http://momentjs.com).
@@ -4463,8 +4463,8 @@ Based on [combodate](http://vitalets.github.com/combodate) plugin (included). To
 @example
 <a href="#" id="dob" data-type="combodate" data-pk="1" data-url="/post" data-value="1984-05-15" data-title="Select date"></a>
 <script>
- AJS.$(function(){
-    AJS.$('#dob').editable({
+ $(function(){
+    $('#dob').editable({
         format: 'YYYY-MM-DD',
         viewformat: 'DD.MM.YYYY',
         template: 'D / MMMM / YYYY',
@@ -4493,22 +4493,22 @@ Based on [combodate](http://vitalets.github.com/combodate) plugin (included). To
         }
 
         //try parse combodate config defined as json string in data-combodate
-        options.combodate = AJS.$.fn.editableutils.tryParseJson(options.combodate, true);
+        options.combodate = $.fn.editableutils.tryParseJson(options.combodate, true);
 
         //overriding combodate config (as by default jQuery extend() is not recursive)
-        this.options.combodate = AJS.$.extend({}, Constructor.defaults.combodate, options.combodate, {
+        this.options.combodate = $.extend({}, Constructor.defaults.combodate, options.combodate, {
             format: this.options.format,
             template: this.options.template
         });
     };
 
-    AJS.$.fn.editableutils.inherit(Constructor, AJS.$.fn.editabletypes.abstractinput);
+    $.fn.editableutils.inherit(Constructor, $.fn.editabletypes.abstractinput);
 
-    AJS.$.extend(Constructor.prototype, {
+    $.extend(Constructor.prototype, {
         render: function () {
             this.$input.combodate(this.options.combodate);
 
-            if (AJS.$.fn.editableform.engine === 'bs3') {
+            if ($.fn.editableform.engine === 'bs3') {
                 this.$input.siblings().find('select').addClass('form-control');
             }
 
@@ -4518,20 +4518,20 @@ Based on [combodate](http://vitalets.github.com/combodate) plugin (included). To
             //"clear" link
             /*
             if(this.options.clear) {
-             this.$clear = AJS.$('<a href="#"></a>').html(this.options.clear).click(AJS.$.proxy(function(e){
+             this.$clear = $('<a href="#"></a>').html(this.options.clear).click($.proxy(function(e){
                     e.preventDefault();
                     e.stopPropagation();
                     this.clear();
                 }, this));
 
-             this.$tpl.parent().append(AJS.$('<div class="editable-clear">').append(this.$clear));
+             this.$tpl.parent().append($('<div class="editable-clear">').append(this.$clear));
              }
              */
         },
 
         value2html: function(value, element) {
             var text = value ? value.format(this.options.viewformat) : '';
-            //AJS.$(element).text(text);
+            //$(element).text(text);
             Constructor.superclass.value2html.call(this, text, element);
         },
 
@@ -4576,7 +4576,7 @@ Based on [combodate](http://vitalets.github.com/combodate) plugin (included). To
 
     });
 
-    Constructor.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    Constructor.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         /**
          @property tpl
         @default <input type="text">
@@ -4635,9 +4635,9 @@ Based on [combodate](http://vitalets.github.com/combodate) plugin (included). To
         //clear: '&times; clear'
     });
 
-    AJS.$.fn.editabletypes.combodate = Constructor;
+    $.fn.editabletypes.combodate = Constructor;
 
-}(window.$));
+}(window.jQuery));
 
 /*
 Editableform based on Twitter Bootstrap 3
@@ -4646,11 +4646,11 @@ Editableform based on Twitter Bootstrap 3
     "use strict";
 
     //store parent methods
-    var pInitInput = AJS.$.fn.editableform.Constructor.prototype.initInput;
+    var pInitInput = $.fn.editableform.Constructor.prototype.initInput;
 
-    AJS.$.extend(AJS.$.fn.editableform.Constructor.prototype, {
+    $.extend($.fn.editableform.Constructor.prototype, {
         initTemplate: function() {
-            this.$form = AJS.$(AJS.$.fn.editableform.template);
+            this.$form = $($.fn.editableform.template);
             this.$form.find('.control-group').addClass('form-group');
             this.$form.find('.editable-error-block').addClass('help-block');
         },
@@ -4663,7 +4663,7 @@ Editableform based on Twitter Bootstrap 3
 
             //bs3 add `form-control` class to standard inputs
             var stdtypes = 'text,select,textarea,password,email,url,tel,number,range,time,typeaheadjs'.split(',');
-            if (~AJS.$.inArray(this.input.type, stdtypes)) {
+            if (~$.inArray(this.input.type, stdtypes)) {
                 this.input.$input.addClass('form-control');
                 if(emptyInputClass) {
                     this.input.options.inputclass = defaultClass;
@@ -4689,7 +4689,7 @@ Editableform based on Twitter Bootstrap 3
     });
 
     //buttons
-    AJS.$.fn.editableform.buttons =
+    $.fn.editableform.buttons =
       '<button type="submit" class="btn btn-primary btn-sm editable-submit">'+
         '<i class="glyphicon glyphicon-ok"></i>'+
       '</button>'+
@@ -4698,11 +4698,11 @@ Editableform based on Twitter Bootstrap 3
       '</button>';
 
     //error classes
-    AJS.$.fn.editableform.errorGroupClass = 'has-error';
-    AJS.$.fn.editableform.errorBlockClass = null;
+    $.fn.editableform.errorGroupClass = 'has-error';
+    $.fn.editableform.errorBlockClass = null;
     //engine
-    AJS.$.fn.editableform.engine = 'bs3';
-}(window.$));
+    $.fn.editableform.engine = 'bs3';
+}(window.jQuery));
 /**
  * Editable Popover3 (for Bootstrap 3)
 * ---------------------
@@ -4712,14 +4712,14 @@ Editableform based on Twitter Bootstrap 3
     "use strict";
 
     //extend methods
-    AJS.$.extend(AJS.$.fn.editableContainer.Popup.prototype, {
+    $.extend($.fn.editableContainer.Popup.prototype, {
         containerName: 'popover',
         containerDataName: 'bs.popover',
         innerCss: '.popover-content',
-        defaults: AJS.$.fn.popover.Constructor.DEFAULTS,
+        defaults: $.fn.popover.Constructor.DEFAULTS,
 
         initContainer: function(){
-            AJS.$.extend(this.containerOptions, {
+            $.extend(this.containerOptions, {
                 trigger: 'manual',
                 selector: false,
                 content: ' ',
@@ -4807,12 +4807,12 @@ Editableform based on Twitter Bootstrap 3
 
                 switch (placement) {
                     case 'bottom':
-                 if ((tpb.top + actualHeight) > (AJS.$(window).scrollTop() + AJS.$(window).height())) {
-                 if (tpt.top > AJS.$(window).scrollTop()) {
+                 if ((tpb.top + actualHeight) > ($(window).scrollTop() + $(window).height())) {
+                 if (tpt.top > $(window).scrollTop()) {
                                 placement = 'top';
-                 } else if ((tpr.left + actualWidth) < (AJS.$(window).scrollLeft() + AJS.$(window).width())) {
+                 } else if ((tpr.left + actualWidth) < ($(window).scrollLeft() + $(window).width())) {
                                 placement = 'right';
-                 } else if (tpl.left > AJS.$(window).scrollLeft()) {
+                 } else if (tpl.left > $(window).scrollLeft()) {
                                 placement = 'left';
                             } else {
                                 placement = 'right';
@@ -4820,12 +4820,12 @@ Editableform based on Twitter Bootstrap 3
                         }
                         break;
                     case 'top':
-                 if (tpt.top < AJS.$(window).scrollTop()) {
-                 if ((tpb.top + actualHeight) < (AJS.$(window).scrollTop() + AJS.$(window).height())) {
+                 if (tpt.top < $(window).scrollTop()) {
+                 if ((tpb.top + actualHeight) < ($(window).scrollTop() + $(window).height())) {
                                 placement = 'bottom';
-                 } else if ((tpr.left + actualWidth) < (AJS.$(window).scrollLeft() + AJS.$(window).width())) {
+                 } else if ((tpr.left + actualWidth) < ($(window).scrollLeft() + $(window).width())) {
                                 placement = 'right';
-                 } else if (tpl.left > AJS.$(window).scrollLeft()) {
+                 } else if (tpl.left > $(window).scrollLeft()) {
                                 placement = 'left';
                             } else {
                                 placement = 'right';
@@ -4833,12 +4833,12 @@ Editableform based on Twitter Bootstrap 3
                         }
                         break;
                     case 'left':
-                 if (tpl.left < AJS.$(window).scrollLeft()) {
-                 if ((tpr.left + actualWidth) < (AJS.$(window).scrollLeft() + AJS.$(window).width())) {
+                 if (tpl.left < $(window).scrollLeft()) {
+                 if ((tpr.left + actualWidth) < ($(window).scrollLeft() + $(window).width())) {
                                 placement = 'right';
-                 } else if (tpt.top > AJS.$(window).scrollTop()) {
+                 } else if (tpt.top > $(window).scrollTop()) {
                                 placement = 'top';
-                 } else if (tpt.top > AJS.$(window).scrollTop()) {
+                 } else if (tpt.top > $(window).scrollTop()) {
                                 placement = 'bottom';
                             } else {
                                 placement = 'right';
@@ -4846,12 +4846,12 @@ Editableform based on Twitter Bootstrap 3
                         }
                         break;
                     case 'right':
-                 if ((tpr.left + actualWidth) > (AJS.$(window).scrollLeft() + AJS.$(window).width())) {
-                 if (tpl.left > AJS.$(window).scrollLeft()) {
+                 if ((tpr.left + actualWidth) > ($(window).scrollLeft() + $(window).width())) {
+                 if (tpl.left > $(window).scrollLeft()) {
                                 placement = 'left';
-                 } else if (tpt.top > AJS.$(window).scrollTop()) {
+                 } else if (tpt.top > $(window).scrollTop()) {
                                 placement = 'top';
-                 } else if (tpt.top > AJS.$(window).scrollTop()) {
+                 } else if (tpt.top > $(window).scrollTop()) {
                                 placement = 'bottom';
                             }
                         }
@@ -4928,7 +4928,7 @@ Editableform based on Twitter Bootstrap 3
         }
     });
 
-}(window.$));
+}(window.jQuery));
 
 /* =========================================================
  * bootstrap-datepicker.js
@@ -4967,7 +4967,7 @@ Editableform based on Twitter Bootstrap 3
 
 		this._process_options(options);
 
-        this.element = AJS.$(element);
+        this.element = $(element);
 		this.isInline = false;
 		this.isInput = this.element.is('input');
 		this.component = this.element.is('.date') ? this.element.find('.add-on, .btn') : false;
@@ -4975,7 +4975,7 @@ Editableform based on Twitter Bootstrap 3
 		if(this.component && this.component.length === 0)
 			this.component = false;
 
-        this.picker = AJS.$(DPGlobal.template);
+        this.picker = $(DPGlobal.template);
 		this._buildEvents();
 		this._attachEvents();
 
@@ -5024,9 +5024,9 @@ Editableform based on Twitter Bootstrap 3
 
 		_process_options: function(opts){
 			// Store raw options for reference
-            this._o = AJS.$.extend({}, this._o, opts);
+            this._o = $.extend({}, this._o, opts);
 			// Processed options
-            var o = this.o = AJS.$.extend({}, this._o);
+            var o = this.o = $.extend({}, this._o);
 
 			// Check if "de-DE" style date is available, if not language should
 			// fallback to 2 letter code eg "de"
@@ -5078,9 +5078,9 @@ Editableform based on Twitter Bootstrap 3
 			}
 
 			o.daysOfWeekDisabled = o.daysOfWeekDisabled||[];
-            if (!AJS.$.isArray(o.daysOfWeekDisabled))
+            if (!$.isArray(o.daysOfWeekDisabled))
 				o.daysOfWeekDisabled = o.daysOfWeekDisabled.split(/[,\s]*/);
-            o.daysOfWeekDisabled = AJS.$.map(o.daysOfWeekDisabled, function (d) {
+            o.daysOfWeekDisabled = $.map(o.daysOfWeekDisabled, function (d) {
 				return parseInt(d, 10);
 			});
 		},
@@ -5104,9 +5104,9 @@ Editableform based on Twitter Bootstrap 3
 			if (this.isInput) { // single input
 				this._events = [
 					[this.element, {
-                        focus: AJS.$.proxy(this.show, this),
-                        keyup: AJS.$.proxy(this.update, this),
-                        keydown: AJS.$.proxy(this.keydown, this)
+                        focus: $.proxy(this.show, this),
+                        keyup: $.proxy(this.update, this),
+                        keydown: $.proxy(this.keydown, this)
 					}]
 				];
 			}
@@ -5114,12 +5114,12 @@ Editableform based on Twitter Bootstrap 3
 				this._events = [
 					// For components that are not readonly, allow keyboard nav
 					[this.element.find('input'), {
-                        focus: AJS.$.proxy(this.show, this),
-                        keyup: AJS.$.proxy(this.update, this),
-                        keydown: AJS.$.proxy(this.keydown, this)
+                        focus: $.proxy(this.show, this),
+                        keyup: $.proxy(this.update, this),
+                        keydown: $.proxy(this.keydown, this)
 					}],
 					[this.component, {
-                        click: AJS.$.proxy(this.show, this)
+                        click: $.proxy(this.show, this)
 					}]
 				];
 			}
@@ -5129,20 +5129,20 @@ Editableform based on Twitter Bootstrap 3
 			else {
 				this._events = [
 					[this.element, {
-                        click: AJS.$.proxy(this.show, this)
+                        click: $.proxy(this.show, this)
 					}]
 				];
 			}
 
 			this._secondaryEvents = [
 				[this.picker, {
-                    click: AJS.$.proxy(this.click, this)
+                    click: $.proxy(this.click, this)
 				}],
-                [AJS.$(window), {
-                    resize: AJS.$.proxy(this.place, this)
+                [$(window), {
+                    resize: $.proxy(this.place, this)
 				}],
-                [AJS.$(document), {
-                    mousedown: AJS.$.proxy(function (e) {
+                [$(document), {
+                    mousedown: $.proxy(function (e) {
 						// Clicked outside the datepicker, hide it
 						if (!(
 							this.element.is(e.target) ||
@@ -5177,7 +5177,7 @@ Editableform based on Twitter Bootstrap 3
 			this.element.trigger({
 				type: event,
 				date: local_date,
-                format: AJS.$.proxy(function (altformat) {
+                format: $.proxy(function (altformat) {
 					var format = altformat || this.o.format;
 					return DPGlobal.formatDate(date, format, this.o.language);
 				}, this)
@@ -5283,7 +5283,7 @@ Editableform based on Twitter Bootstrap 3
 		place: function(){
 						if(this.isInline) return;
 			var zIndex = parseInt(this.element.parents().filter(function() {
-                    return AJS.$(this).css('z-index') != 'auto';
+                    return $(this).css('z-index') != 'auto';
 						}).first().css('z-index'))+10;
 			var offset = this.component ? this.component.parent().offset() : this.element.offset();
 			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(true);
@@ -5349,7 +5349,7 @@ Editableform based on Twitter Bootstrap 3
 			if (!range || !range.length)
 				delete this.range;
 			else
-                this.range = AJS.$.map(range, function (d) {
+                this.range = $.map(range, function (d) {
                     return d.valueOf();
                 });
 			this.fill();
@@ -5377,14 +5377,14 @@ Editableform based on Twitter Bootstrap 3
 				cls.push('active');
 			}
 			if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
-                AJS.$.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1) {
+                $.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1) {
 				cls.push('disabled');
 			}
 			if (this.range){
 				if (date > this.range[0] && date < this.range[this.range.length-1]){
 					cls.push('range');
 				}
-                if (AJS.$.inArray(date.valueOf(), this.range) != -1) {
+                if ($.inArray(date.valueOf(), this.range) != -1) {
 					cls.push('selected');
 				}
 			}
@@ -5456,7 +5456,7 @@ Editableform based on Twitter Bootstrap 3
 				if (before.tooltip)
 					tooltip = before.tooltip;
 
-                clsName = AJS.$.unique(clsName);
+                clsName = $.unique(clsName);
 				html.push('<td class="'+clsName.join(' ')+'"' + (tooltip ? ' title="'+tooltip+'"' : '') + '>'+prevMonth.getUTCDate() + '</td>');
 				if (prevMonth.getUTCDay() == this.o.weekEnd) {
 					html.push('</tr>');
@@ -5536,7 +5536,7 @@ Editableform based on Twitter Bootstrap 3
 
 		click: function(e) {
 			e.preventDefault();
-            var target = AJS.$(e.target).closest('span, td, th');
+            var target = $(e.target).closest('span, td, th');
 			if (target.length == 1) {
 				switch(target[0].nodeName.toLowerCase()) {
 					case 'th':
@@ -5810,40 +5810,40 @@ Editableform based on Twitter Bootstrap 3
 	};
 
 	var DateRangePicker = function(element, options){
-        this.element = AJS.$(element);
-        this.inputs = AJS.$.map(options.inputs, function (i) {
+        this.element = $(element);
+        this.inputs = $.map(options.inputs, function (i) {
             return i.jquery ? i[0] : i;
         });
 		delete options.inputs;
 
-        AJS.$(this.inputs)
+        $(this.inputs)
 			.datepicker(options)
-            .bind('changeDate', AJS.$.proxy(this.dateUpdated, this));
+            .bind('changeDate', $.proxy(this.dateUpdated, this));
 
-        this.pickers = AJS.$.map(this.inputs, function (i) {
-            return AJS.$(i).data('datepicker');
+        this.pickers = $.map(this.inputs, function (i) {
+            return $(i).data('datepicker');
         });
 		this.updateDates();
 	};
 	DateRangePicker.prototype = {
 		updateDates: function(){
-            this.dates = AJS.$.map(this.pickers, function (i) {
+            this.dates = $.map(this.pickers, function (i) {
                 return i.date;
             });
 			this.updateRanges();
 		},
 		updateRanges: function(){
-            var range = AJS.$.map(this.dates, function (d) {
+            var range = $.map(this.dates, function (d) {
                 return d.valueOf();
             });
-            AJS.$.each(this.pickers, function (i, p) {
+            $.each(this.pickers, function (i, p) {
 				p.setRange(range);
 			});
 		},
 		dateUpdated: function(e){
-            var dp = AJS.$(e.target).data('datepicker'),
+            var dp = $(e.target).data('datepicker'),
 				new_date = dp.getUTCDate(),
-                i = AJS.$.inArray(e.target, this.inputs),
+                i = $.inArray(e.target, this.inputs),
 				l = this.inputs.length;
 			if (i == -1) return;
 
@@ -5862,7 +5862,7 @@ Editableform based on Twitter Bootstrap 3
 			this.updateDates();
 		},
 		remove: function(){
-            AJS.$.map(this.pickers, function (p) {
+            $.map(this.pickers, function (p) {
                 p.remove();
             });
 			delete this.element.data().datepicker;
@@ -5871,7 +5871,7 @@ Editableform based on Twitter Bootstrap 3
 
 	function opts_from_el(el, prefix){
 		// Derive options from element data-attrs
-        var data = AJS.$(el).data(),
+        var data = $(el).data(),
 			out = {}, inkey,
 			replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])'),
 			prefix = new RegExp('^' + prefix.toLowerCase());
@@ -5894,35 +5894,35 @@ Editableform based on Twitter Bootstrap 3
 				return;
 		}
 		var d = dates[lang];
-        AJS.$.each(locale_opts, function (i, k) {
+        $.each(locale_opts, function (i, k) {
 			if (k in d)
 				out[k] = d[k];
 		});
 		return out;
 	}
 
-    var old = AJS.$.fn.datepicker;
-    var datepicker = AJS.$.fn.datepicker = function (option) {
+    var old = $.fn.datepicker;
+    var datepicker = $.fn.datepicker = function (option) {
 		var args = Array.apply(null, arguments);
 		args.shift();
 		var internal_return,
 			this_return;
 		this.each(function () {
-            var $this = AJS.$(this),
+            var $this = $(this),
 				data = $this.data('datepicker'),
 				options = typeof option == 'object' && option;
 			if (!data) {
 				var elopts = opts_from_el(this, 'date'),
 					// Preliminary otions
-                    xopts = AJS.$.extend({}, defaults, elopts, options),
+                    xopts = $.extend({}, defaults, elopts, options),
 					locopts = opts_from_locale(xopts.language),
 					// Options priority: js args, data-attrs, locales, defaults
-                    opts = AJS.$.extend({}, defaults, locopts, elopts, options);
+                    opts = $.extend({}, defaults, locopts, elopts, options);
 				if ($this.is('.input-daterange') || opts.inputs){
 					var ropts = {
 						inputs: opts.inputs || $this.find('input').toArray()
 					};
-                    $this.data('datepicker', (data = new DateRangePicker(this, AJS.$.extend(opts, ropts))));
+                    $this.data('datepicker', (data = new DateRangePicker(this, $.extend(opts, ropts))));
 				}
 				else{
 					$this.data('datepicker', (data = new Datepicker(this, opts)));
@@ -5940,9 +5940,9 @@ Editableform based on Twitter Bootstrap 3
 			return this;
 	};
 
-    var defaults = AJS.$.fn.datepicker.defaults = {
+    var defaults = $.fn.datepicker.defaults = {
 		autoclose: false,
-        beforeShowDay: AJS.$.noop,
+        beforeShowDay: $.noop,
 		calendarWeeks: false,
 		clearBtn: false,
 		daysOfWeekDisabled: [],
@@ -5959,13 +5959,13 @@ Editableform based on Twitter Bootstrap 3
 		todayHighlight: false,
 		weekStart: 0
 	};
-    var locale_opts = AJS.$.fn.datepicker.locale_opts = [
+    var locale_opts = $.fn.datepicker.locale_opts = [
 		'format',
 		'rtl',
 		'weekStart'
 	];
-    AJS.$.fn.datepicker.Constructor = Datepicker;
-    var dates = AJS.$.fn.datepicker.dates = {
+    $.fn.datepicker.Constructor = Datepicker;
+    var dates = $.fn.datepicker.dates = {
 		en: {
 			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -6066,8 +6066,8 @@ Editableform based on Twitter Bootstrap 3
 			var fparts = format.parts.slice();
 			// Remove noop parts
 			if (parts.length != fparts.length) {
-                fparts = AJS.$(fparts).filter(function (i, p) {
-                    return AJS.$.inArray(p, setters_order) !== -1;
+                fparts = $(fparts).filter(function (i, p) {
+                    return $.inArray(p, setters_order) !== -1;
 				}).toArray();
 			}
 			// Process remainder
@@ -6078,20 +6078,20 @@ Editableform based on Twitter Bootstrap 3
 					if (isNaN(val)) {
 						switch(part) {
 							case 'MM':
-                                filtered = AJS.$(dates[language].months).filter(function () {
+                                filtered = $(dates[language].months).filter(function () {
 									var m = this.slice(0, parts[i].length),
 										p = parts[i].slice(0, m.length);
 									return m == p;
 								});
-                                val = AJS.$.inArray(filtered[0], dates[language].months) + 1;
+                                val = $.inArray(filtered[0], dates[language].months) + 1;
 								break;
 							case 'M':
-                                filtered = AJS.$(dates[language].monthsShort).filter(function () {
+                                filtered = $(dates[language].monthsShort).filter(function () {
 									var m = this.slice(0, parts[i].length),
 										p = parts[i].slice(0, m.length);
 									return m == p;
 								});
-                                val = AJS.$.inArray(filtered[0], dates[language].monthsShort) + 1;
+                                val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
 								break;
 						}
 					}
@@ -6121,7 +6121,7 @@ Editableform based on Twitter Bootstrap 3
 			val.dd = (val.d < 10 ? '0' : '') + val.d;
 			val.mm = (val.m < 10 ? '0' : '') + val.m;
 			var date = [],
-                seps = AJS.$.extend([], format.separators);
+                seps = $.extend([], format.separators);
 			for (var i=0, cnt = format.parts.length; i <= cnt; i++) {
 				if (seps.length)
 					date.push(seps.shift());
@@ -6163,14 +6163,14 @@ Editableform based on Twitter Bootstrap 3
 							'</div>'+
 						'</div>';
 
-    AJS.$.fn.datepicker.DPGlobal = DPGlobal;
+    $.fn.datepicker.DPGlobal = DPGlobal;
 
 
 	/* DATEPICKER NO CONFLICT
 	* =================== */
 
-    AJS.$.fn.datepicker.noConflict = function () {
-        AJS.$.fn.datepicker = old;
+    $.fn.datepicker.noConflict = function () {
+        $.fn.datepicker = old;
 		return this;
 	};
 
@@ -6178,24 +6178,24 @@ Editableform based on Twitter Bootstrap 3
 	/* DATEPICKER DATA-API
 	* ================== */
 
-    AJS.$(document).on(
+    $(document).on(
 		'focus.datepicker.data-api click.datepicker.data-api',
 		'[data-provide="datepicker"]',
 		function(e){
-            var $this = AJS.$(this);
+            var $this = $(this);
 			if ($this.data('datepicker')) return;
 			e.preventDefault();
 			// component click requires us to explicitly show it
 			datepicker.call($this, 'show');
 		}
 	);
-    AJS.$(function () {
-        //AJS.$('[data-provide="datepicker-inline"]').datepicker();
+    $(function () {
+        //$('[data-provide="datepicker-inline"]').datepicker();
         //vit: changed to support noConflict()
-        datepicker.call(AJS.$('[data-provide="datepicker-inline"]'));
+        datepicker.call($('[data-provide="datepicker-inline"]'));
 	});
 
-}(window.$));
+}(window.jQuery));
 
 /**
  Bootstrap-datepicker.
@@ -6210,8 +6210,8 @@ For **i18n** you should include js file from here: https://github.com/eternicode
 @example
 <a href="#" id="dob" data-type="date" data-pk="1" data-url="/post" data-title="Select date">15/05/1984</a>
 <script>
- AJS.$(function(){
-    AJS.$('#dob').editable({
+ $(function(){
+    $('#dob').editable({
         format: 'yyyy-mm-dd',
         viewformat: 'dd/mm/yyyy',
         datepicker: {
@@ -6226,9 +6226,9 @@ For **i18n** you should include js file from here: https://github.com/eternicode
     "use strict";
 
     //store bootstrap-datepicker as bdateicker to exclude conflict with jQuery UI one
-    AJS.$.fn.bdatepicker = AJS.$.fn.datepicker.noConflict();
-    if (!AJS.$.fn.datepicker) { //if there were no other datepickers, keep also original name
-        AJS.$.fn.datepicker = AJS.$.fn.bdatepicker;
+    $.fn.bdatepicker = $.fn.datepicker.noConflict();
+    if (!$.fn.datepicker) { //if there were no other datepickers, keep also original name
+        $.fn.datepicker = $.fn.bdatepicker;
     }
 
     var Date = function (options) {
@@ -6236,9 +6236,9 @@ For **i18n** you should include js file from here: https://github.com/eternicode
         this.initPicker(options, Date.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(Date, AJS.$.fn.editabletypes.abstractinput);
+    $.fn.editableutils.inherit(Date, $.fn.editabletypes.abstractinput);
 
-    AJS.$.extend(Date.prototype, {
+    $.extend(Date.prototype, {
         initPicker: function(options, defaults) {
             //'format' is set directly from settings or data-* attributes
 
@@ -6248,11 +6248,11 @@ For **i18n** you should include js file from here: https://github.com/eternicode
             }
 
             //try parse datepicker config defined as json string in data-datepicker
-            options.datepicker = AJS.$.fn.editableutils.tryParseJson(options.datepicker, true);
+            options.datepicker = $.fn.editableutils.tryParseJson(options.datepicker, true);
 
             //overriding datepicker config (as by default jQuery extend() is not recursive)
             //since 1.4 datepicker internally uses viewformat instead of format. Format is for submit only
-            this.options.datepicker = AJS.$.extend({}, defaults.datepicker, options.datepicker, {
+            this.options.datepicker = $.extend({}, defaults.datepicker, options.datepicker, {
                 format: this.options.viewformat
             });
 
@@ -6260,7 +6260,7 @@ For **i18n** you should include js file from here: https://github.com/eternicode
             this.options.datepicker.language = this.options.datepicker.language || 'en';
 
             //store DPglobal
-            this.dpg = AJS.$.fn.bdatepicker.DPGlobal;
+            this.dpg = $.fn.bdatepicker.DPGlobal;
 
             //store parsed formats
             this.parsedFormat = this.dpg.parseFormat(this.options.format);
@@ -6272,13 +6272,13 @@ For **i18n** you should include js file from here: https://github.com/eternicode
 
             //"clear" link
             if(this.options.clear) {
-                this.$clear = AJS.$('<a href="#"></a>').html(this.options.clear).click(AJS.$.proxy(function (e) {
+                this.$clear = $('<a href="#"></a>').html(this.options.clear).click($.proxy(function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     this.clear();
                 }, this));
 
-                this.$tpl.parent().append(AJS.$('<div class="editable-clear">').append(this.$clear));
+                this.$tpl.parent().append($('<div class="editable-clear">').append(this.$clear));
             }
         },
 
@@ -6324,10 +6324,10 @@ For **i18n** you should include js file from here: https://github.com/eternicode
 
         autosubmit: function() {
             this.$input.on('mouseup', '.day', function(e){
-                if (AJS.$(e.currentTarget).is('.old') || AJS.$(e.currentTarget).is('.new')) {
+                if ($(e.currentTarget).is('.old') || $(e.currentTarget).is('.new')) {
                     return;
                 }
-                var $form = AJS.$(this).closest('form');
+                var $form = $(this).closest('form');
                 setTimeout(function() {
                     $form.submit();
                 }, 200);
@@ -6335,7 +6335,7 @@ For **i18n** you should include js file from here: https://github.com/eternicode
            //changedate is not suitable as it triggered when showing datepicker. see #149
            /*
            this.$input.on('changeDate', function(e){
-            var $form = AJS.$(this).closest('form');
+            var $form = $(this).closest('form');
                setTimeout(function() {
                    $form.submit();
                }, 200);
@@ -6364,7 +6364,7 @@ For **i18n** you should include js file from here: https://github.com/eternicode
 
     });
 
-    Date.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    Date.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         /**
          @property tpl
         @default <div></div>
@@ -6423,9 +6423,9 @@ For **i18n** you should include js file from here: https://github.com/eternicode
         clear: '&times; clear'
     });
 
-    AJS.$.fn.editabletypes.date = Date;
+    $.fn.editabletypes.date = Date;
 
-}(window.$));
+}(window.jQuery));
 
 /**
 Bootstrap datefield input - modification for inline mode.
@@ -6445,9 +6445,9 @@ Automatically shown in inline mode.
         this.initPicker(options, DateField.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(DateField, AJS.$.fn.editabletypes.date);
+    $.fn.editableutils.inherit(DateField, $.fn.editabletypes.date);
 
-    AJS.$.extend(DateField.prototype, {
+    $.extend(DateField.prototype, {
         render: function () {
             this.$input = this.$tpl.find('input');
             this.setClass();
@@ -6460,7 +6460,7 @@ Automatically shown in inline mode.
             this.$input.off('focus keydown');
 
             //update value of datepicker
-            this.$input.keyup(AJS.$.proxy(function () {
+            this.$input.keyup($.proxy(function () {
                this.$tpl.removeData('date');
                this.$tpl.bdatepicker('update');
             }, this));
@@ -6477,7 +6477,7 @@ Automatically shown in inline mode.
         },
 
        activate: function() {
-           AJS.$.fn.editabletypes.text.prototype.activate.call(this);
+           $.fn.editabletypes.text.prototype.activate.call(this);
        },
 
         autosubmit: function () {
@@ -6485,7 +6485,7 @@ Automatically shown in inline mode.
        }
     });
 
-    DateField.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.date.defaults, {
+    DateField.defaults = $.extend({}, $.fn.editabletypes.date.defaults, {
         /**
          @property tpl
          **/
@@ -6505,9 +6505,9 @@ Automatically shown in inline mode.
         }
     });
 
-    AJS.$.fn.editabletypes.datefield = DateField;
+    $.fn.editabletypes.datefield = DateField;
 
-}(window.$));
+}(window.jQuery));
 /**
  Bootstrap-datetimepicker.
  Based on [smalot bootstrap-datetimepicker plugin](https://github.com/smalot/bootstrap-datetimepicker).
@@ -6526,8 +6526,8 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
 @example
 <a href="#" id="last_seen" data-type="datetime" data-pk="1" data-url="/post" title="Select date & time">15/03/2013 12:45</a>
 <script>
- AJS.$(function(){
-    AJS.$('#last_seen').editable({
+ $(function(){
+    $('#last_seen').editable({
         format: 'yyyy-mm-dd hh:ii',
         viewformat: 'dd/mm/yyyy hh:ii',
         datetimepicker: {
@@ -6546,9 +6546,9 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
         this.initPicker(options, DateTime.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(DateTime, AJS.$.fn.editabletypes.abstractinput);
+    $.fn.editableutils.inherit(DateTime, $.fn.editabletypes.abstractinput);
 
-    AJS.$.extend(DateTime.prototype, {
+    $.extend(DateTime.prototype, {
         initPicker: function(options, defaults) {
             //'format' is set directly from settings or data-* attributes
 
@@ -6558,11 +6558,11 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
             }
 
             //try parse datetimepicker config defined as json string in data-datetimepicker
-            options.datetimepicker = AJS.$.fn.editableutils.tryParseJson(options.datetimepicker, true);
+            options.datetimepicker = $.fn.editableutils.tryParseJson(options.datetimepicker, true);
 
             //overriding datetimepicker config (as by default jQuery extend() is not recursive)
             //since 1.4 datetimepicker internally uses viewformat instead of format. Format is for submit only
-            this.options.datetimepicker = AJS.$.extend({}, defaults.datetimepicker, options.datetimepicker, {
+            this.options.datetimepicker = $.extend({}, defaults.datetimepicker, options.datetimepicker, {
                 format: this.options.viewformat
             });
 
@@ -6570,7 +6570,7 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
             this.options.datetimepicker.language = this.options.datetimepicker.language || 'en';
 
             //store DPglobal
-            this.dpg = AJS.$.fn.datetimepicker.DPGlobal;
+            this.dpg = $.fn.datetimepicker.DPGlobal;
 
             //store parsed formats
             this.parsedFormat = this.dpg.parseFormat(this.options.format, this.options.formatType);
@@ -6583,7 +6583,7 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
             //adjust container position when viewMode changes
             //see https://github.com/smalot/bootstrap-datetimepicker/pull/80
             this.$input.on('changeMode', function(e) {
-                var f = AJS.$(this).closest('form').parent();
+                var f = $(this).closest('form').parent();
                 //timeout here, otherwise container changes position before form has new size
                 setTimeout(function(){
                     f.triggerHandler('resize');
@@ -6592,13 +6592,13 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
 
             //"clear" link
             if(this.options.clear) {
-                this.$clear = AJS.$('<a href="#"></a>').html(this.options.clear).click(AJS.$.proxy(function (e) {
+                this.$clear = $('<a href="#"></a>').html(this.options.clear).click($.proxy(function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     this.clear();
                 }, this));
 
-                this.$tpl.parent().append(AJS.$('<div class="editable-clear">').append(this.$clear));
+                this.$tpl.parent().append($('<div class="editable-clear">').append(this.$clear));
             }
         },
 
@@ -6658,7 +6658,7 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
 
        autosubmit: function() {
            this.$input.on('mouseup', '.minute', function(e){
-               var $form = AJS.$(this).closest('form');
+               var $form = $(this).closest('form');
                setTimeout(function() {
                    $form.submit();
                }, 200);
@@ -6696,7 +6696,7 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
 
     });
 
-    DateTime.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.abstractinput.defaults, {
+    DateTime.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
         /**
          @property tpl
         @default <div></div>
@@ -6749,9 +6749,9 @@ For **i18n** you should include js file from here: https://github.com/smalot/boo
         clear: '&times; clear'
     });
 
-    AJS.$.fn.editabletypes.datetime = DateTime;
+    $.fn.editabletypes.datetime = DateTime;
 
-}(window.$));
+}(window.jQuery));
 /**
 Bootstrap datetimefield input - datetime input for inline mode.
  Shows normal <input type="text"> and binds popup datetimepicker.
@@ -6769,9 +6769,9 @@ Automatically shown in inline mode.
         this.initPicker(options, DateTimeField.defaults);
     };
 
-    AJS.$.fn.editableutils.inherit(DateTimeField, AJS.$.fn.editabletypes.datetime);
+    $.fn.editableutils.inherit(DateTimeField, $.fn.editabletypes.datetime);
 
-    AJS.$.extend(DateTimeField.prototype, {
+    $.extend(DateTimeField.prototype, {
         render: function () {
             this.$input = this.$tpl.find('input');
             this.setClass();
@@ -6783,7 +6783,7 @@ Automatically shown in inline mode.
             this.$input.off('focus keydown');
 
             //update value of datepicker
-            this.$input.keyup(AJS.$.proxy(function () {
+            this.$input.keyup($.proxy(function () {
                this.$tpl.removeData('date');
                this.$tpl.datetimepicker('update');
             }, this));
@@ -6800,7 +6800,7 @@ Automatically shown in inline mode.
         },
 
        activate: function() {
-           AJS.$.fn.editabletypes.text.prototype.activate.call(this);
+           $.fn.editabletypes.text.prototype.activate.call(this);
        },
 
         autosubmit: function () {
@@ -6808,7 +6808,7 @@ Automatically shown in inline mode.
        }
     });
 
-    DateTimeField.defaults = AJS.$.extend({}, AJS.$.fn.editabletypes.datetime.defaults, {
+    DateTimeField.defaults = $.extend({}, $.fn.editabletypes.datetime.defaults, {
         /**
          @property tpl
          **/
@@ -6826,6 +6826,6 @@ Automatically shown in inline mode.
         }
     });
 
-    AJS.$.fn.editabletypes.datetimefield = DateTimeField;
+    $.fn.editabletypes.datetimefield = DateTimeField;
 
-}(window.$));
+}(window.jQuery));
