@@ -3,13 +3,12 @@
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/underscore-min.js"></script>
 <script src="https://rawgit.com/magruene/sam_release_overview/master/js/bootstrap.js"></script>
-<
 <link rel="stylesheet"
       href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css">
 <script type="text/javascript"
-        src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+        src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
 <script type="text/javascript"
-        src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
+        src="https://rawgit.com/magruene/sam_release_overview/master/js/dataTables.bootstrap.js"></script>
 <link href="https://rawgit.com/magruene/sam_release_overview/master/css/bootstrap-editable.css"
       rel="stylesheet"/>
 <script src="https://rawgit.com/magruene/sam_release_overview/master/js/bootstrap-editable.js"></script>
@@ -23,7 +22,7 @@
             view: {
                 onResizeAdjustHeight: true,
                 template: function (args) {
-        jQuery('#username').editable({
+                    jQuery('#username').editable({
                         type: 'text',
                         pk: 1,
                         title: 'Enter username'
