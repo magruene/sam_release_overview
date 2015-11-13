@@ -1,0 +1,81 @@
+<!-- bootstrap -->
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="js/underscore-min.js"></script>
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css">
+<script type="text/javascript"
+        src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css"
+      rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.js"></script>
+<script src="js/report.js"></script>
+<!--<script src="http://rawgit.com/magruene/jira_milestone_based_remaining_effort/master/js/report.js"></script>-->
+<script>
+    $(document).ready(function () {
+//        window.gadget = AJS.Gadget({
+//            baseUrl: "http://jira.swisscom.com",
+//            view: {
+//                onResizeAdjustHeight: true,
+//                template: function (args) {
+        $.fn.editable.defaults.mode = 'popup';
+        $('#username').editable({
+            type: 'text',
+            pk: 1,
+            url: '/post',
+            title: 'Enter username'
+        });
+        Report.init("SAM_SolutionDesign_Epics");
+//                    gadget.resize();
+//                }
+//            }
+//        });
+    });
+</script>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>JIRA Selfmade report</h1>
+
+        <p>This is a draft for milestone based effort reporting.</p>
+    </div>
+</div>
+
+<div>
+    <span>Username:</span>
+    <a href="#" id="username">superuser</a>
+
+    <div class="led-red"></div>
+    <div class="led-yellow"></div>
+    <div class="led-green"></div>
+</div>
+
+<div class="row-fluid">
+    <div class="col-lg-12">
+        <table style="width: 100%" class="table" id="myTable">
+            <thead>
+            <tr>
+                <th style="width: 5%">Team</th>
+                <th style="width: 5%">Status</th>
+                <th style="width: 5%">Key</th>
+                <th style="width: 15%">Summary</th>
+                <th style="width: 10%">SD</th>
+                <th style="width: 10%">SPOC</th>
+                <th style="width: 10%">Labels</th>
+                <th style="width: 10%">Progress</th>
+                <th style="width: 5%">Report State</th>
+                <th style="width: 25%">Report Detail</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
