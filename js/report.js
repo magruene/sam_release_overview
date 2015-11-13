@@ -72,28 +72,35 @@ function prepareTableRow(team, epic, sumForEpic) {
         var newState;
         if (element.attr("src").indexOf("green") != -1) {
             element.attr("src", element.attr("src").replace("green", "yellow"));
-            newState = "yellow";
+            newState = "16549"; //yellow
         } else if (element.attr("src").indexOf("yellow") != -1) {
             element.attr("src", element.attr("src").replace("yellow", "red"));
-            newState = "red";
+            newState = "16548"; //red
         } else if (element.attr("src").indexOf("red") != -1) {
             element.attr("src", element.attr("src").replace("red", "green"));
-            newState = "green";
+            newState = "16550"; //green
         }
-        updateEpicState(epicKey, newState);
+        updateEpicState(epic, newState);
     });
     tableRow.append("<td>" + epic.fields.customfield_17650 + "</td>");
 }
 
-function updateEpicState(epicKey, newState) {
+function updateEpicState(epic, newState) {
     var data = {
-        "update": {
-            "customfield_17554": newState
-        }
+        "customfield_17554": newState,
+        "issueId": epic.id,
+        "singleFieldEdit": "true",
+        "fieldsToForcePresent": "customfield_17554"
     };
     AJS.$.ajax({
-        url: "http://jira.swisscom.com/rest/api/2/issue/" + epicKey,
-        type: "PUT",
+        url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none",
+        crossDomain: true,
+        headers: {
+            "X-Atlassian-Token": "no-check",
+            "X-AUSERNAME": "taagrma3",
+            "Cookie": "JSESSIONID=1E9D832CFCCD0DAD3D4D28D161A45FA3; atlassian.xsrf.token=A0G2-HDW2-Z1MJ-TM9B|1dbe6729426934d333c50fc0cac87853a9840fce|lin"
+        },
+        type: "POST",
         data: JSON.stringify(data),
         contentType: 'application/json',
         dataType: "json"
