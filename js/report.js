@@ -32,7 +32,7 @@ function startReportGeneration() {
 }
 
 function prepareTable() {
-    if ($.fn.dataTable.isDataTable('#myTable')) {
+    if (AJS.$.fn.dataTable.isDataTable('#myTable')) {
         table.destroy();
     }
 
