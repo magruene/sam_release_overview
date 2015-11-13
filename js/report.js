@@ -6,11 +6,6 @@ var teams = ["Skipper", "Catta", "Yankee", "Private", "Rico", "Kowalski"],
     onJira;
 
 //if not on jira, we need to initialize this.
-if (!AJS) {
-    onJira = false;
-} else {
-    onJira = true;
-}
 
 
 function init(newBaseEpicFilter) {
@@ -38,7 +33,7 @@ function prepareTable() {
         "order": [[0, "asc"]],
         "iDisplayLength": 50
     });
-    if (onJira && gadget) {
+    if (gadget) {
         gadget.resize();
     }
 }
