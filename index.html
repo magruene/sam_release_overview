@@ -1,20 +1,17 @@
 <!-- bootstrap -->
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-<script src="js/jquery-2.1.4.min.js"></script>
-<script src="js/underscore-min.js"></script>
 <script src="https://rawgit.com/magruene/sam_release_overview/master/js/bootstrap.js"></script>
 <link rel="stylesheet"
       href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css">
 <script type="text/javascript"
-        src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.js"></script>
-<script type="text/javascript"
-        src="https://rawgit.com/magruene/sam_release_overview/master/js/dataTables.bootstrap.js"></script>
+        src="https://rawgit.com/magruene/sam_release_overview/master/js/jquery.dataTables.js"></script>
 <link href="https://rawgit.com/magruene/sam_release_overview/master/css/bootstrap-editable.css"
       rel="stylesheet"/>
 <script src="https://rawgit.com/magruene/sam_release_overview/master/js/bootstrap-editable.js"></script>
 <script src="https://rawgit.com/magruene/sam_release_overview/master/js/report.js"></script>
+<script type="text/javascript"
+        src="https://rawgit.com/magruene/sam_release_overview/master/js/dataTables.bootstrap.js"></script>
 <!--<script src="js/report.js"></script>-->
-<!--<script src="http://rawgit.com/magruene/jira_milestone_based_remaining_effort/master/js/report.js"></script>-->
 <script>
     jQuery(window).load(function () {
         window.gadget = AJS.Gadget({
@@ -22,6 +19,7 @@
             view: {
                 onResizeAdjustHeight: true,
                 template: function (args) {
+                    debugger;
                     jQuery('#username').editable({
                         type: 'text',
                         pk: 1,
