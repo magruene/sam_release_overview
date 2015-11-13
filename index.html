@@ -13,13 +13,13 @@
 <script src="https://rawgit.com/magruene/sam_release_overview/master/js/report.js"></script>
 <!--<script src="http://rawgit.com/magruene/jira_milestone_based_remaining_effort/master/js/report.js"></script>-->
 <script>
-    AJS.$(window).load(function () {
+    $(window).load(function () {
         window.gadget = AJS.Gadget({
             baseUrl: "http://jira.swisscom.com",
             view: {
                 onResizeAdjustHeight: true,
                 template: function (args) {
-                    AJS.$('#username').editable({
+                    $('#username').editable({
                         type: 'text',
                         pk: 1,
                         title: 'Enter username'
