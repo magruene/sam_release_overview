@@ -20,13 +20,11 @@
                 onResizeAdjustHeight: true,
                 template: function (args) {
                     AJS.$('#username').editable({
-            type: 'text',
-            pk: 1,
-            url: '/post',
-            title: 'Enter username'
-        });
-        Report.init("SAM_SolutionDesign_Epics");
-                    gadget.resize();
+                        type: 'text',
+                        pk: 1,
+                        title: 'Enter username'
+                    });
+                    Report.init("SAM_SolutionDesign_Epics");
                 }
             }
         });

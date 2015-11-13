@@ -40,7 +40,7 @@ function prepareTable() {
         "order": [[0, "asc"]],
         "iDisplayLength": 50
     });
-    if (onJira) {
+    if (onJira && gadget) {
         gadget.resize();
     }
 }
