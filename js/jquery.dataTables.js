@@ -22,33 +22,33 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
+/*globals jQuery,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
 
 (function( factory ) {
 	"use strict";
 
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
-		define( ['jquery'], function ( $ ) {
-			return factory( $, window, document );
+		define( ['jquery'], function ( jQuery ) {
+			return factory( jQuery, window, document );
 		} );
 	}
 	else if ( typeof exports === 'object' ) {
 		// CommonJS
-		module.exports = function (root, $) {
+		module.exports = function (root, jQuery) {
 			if ( ! root ) {
 				// CommonJS environments without a window global must pass a
 				// root. This will give an error otherwise
 				root = window;
 			}
 
-			if ( ! $ ) {
-				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
+			if ( ! jQuery ) {
+				jQuery = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
 					require('jquery') :
 					require('jquery')( root );
 			}
 
-			return factory( $, root, root.document );
+			return factory( jQuery, root, root.document );
 		};
 	}
 	else {
@@ -56,7 +56,7 @@
 		factory( jQuery, window, document );
 	}
 }
-(function( $, window, document, undefined ) {
+(function( jQuery, window, document, undefined ) {
 	"use strict";
 
 	/**
@@ -77,15 +77,15 @@
 	 *
 	 *  @example
 	 *    // Basic initialisation
-	 *    $(document).ready( function {
-	 *      $('#example').dataTable();
+	 *    jQuery(document).ready( function {
+	 *      jQuery('#example').dataTable();
 	 *    } );
 	 *
 	 *  @example
 	 *    // Initialisation with configuration options - in this case, disable
 	 *    // pagination and sorting.
-	 *    $(document).ready( function {
-	 *      $('#example').dataTable( {
+	 *    jQuery(document).ready( function {
+	 *      jQuery('#example').dataTable( {
 	 *        "paginate": false,
 	 *        "sort": false
 	 *      } );
@@ -119,22 +119,22 @@
 	var _re_new_lines = /[\r\n]/g;
 	var _re_html = /<.*?>/g;
 	var _re_date_start = /^[\w\+\-]/;
-	var _re_date_end = /[\w\+\-]$/;
+	var _re_date_end = /[\w\+\-]jQuery/;
 	
 	// Escape regular expression special characters
-	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ].join('|\\') + ')', 'g' );
+	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', 'jQuery', '^', '-' ].join('|\\') + ')', 'g' );
 	
 	// http://en.wikipedia.org/wiki/Foreign_exchange_market
 	// - \u20BD - Russian ruble.
 	// - \u20a9 - South Korean Won
 	// - \u20BA - Turkish Lira
 	// - \u20B9 - Indian Rupee
-	// - R - Brazil (R$) and South Africa
+	// - R - Brazil (RjQuery) and South Africa
 	// - fr - Swiss Franc
 	// - kr - Swedish krona, Norwegian krone and Danish krone
 	// - \u2009 is thin space and \u202F is narrow no-break space, both used in many
 	//   standards as thousands separators.
-	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfk]/gi;
+	var _re_formatted_numeric = /[',jQuery£€¥%\u2009\u202F\u20BD\u20a9\u20BArfk]/gi;
 	
 	
 	var _empty = function ( d ) {
@@ -346,7 +346,7 @@
 			newKey,
 			map = {};
 	
-		$.each( o, function (key, val) {
+		jQuery.each( o, function (key, val) {
 			match = key.match(/^([^A-Z]+?)([A-Z])/);
 	
 			if ( match && hungarian.indexOf(match[1]+' ') !== -1 )
@@ -384,7 +384,7 @@
 	
 		var hungarianKey;
 	
-		$.each( user, function (key, val) {
+		jQuery.each( user, function (key, val) {
 			hungarianKey = src._hungarianMap[ key ];
 	
 			if ( hungarianKey !== undefined && (force || user[hungarianKey] === undefined) )
@@ -396,7 +396,7 @@
 					if ( ! user[ hungarianKey ] ) {
 						user[ hungarianKey ] = {};
 					}
-					$.extend( true, user[hungarianKey], user[key] );
+					jQuery.extend( true, user[hungarianKey], user[key] );
 	
 					_fnCamelToHungarian( src[hungarianKey], user[hungarianKey], force );
 				}
@@ -517,7 +517,7 @@
 	
 		// orderData can be given as an integer
 		var dataSort = init.aDataSort;
-		if ( dataSort && ! $.isArray( dataSort ) ) {
+		if ( dataSort && ! jQuery.isArray( dataSort ) ) {
 			init.aDataSort = [ dataSort ];
 		}
 	}
@@ -538,7 +538,7 @@
 			DataTable.__browser = browser;
 	
 			// Scrolling feature / quirks detection
-			var n = $('<div/>')
+			var n = jQuery('<div/>')
 				.css( {
 					position: 'fixed',
 					top: 0,
@@ -548,7 +548,7 @@
 					overflow: 'hidden'
 				} )
 				.append(
-					$('<div/>')
+					jQuery('<div/>')
 						.css( {
 							position: 'absolute',
 							top: 1,
@@ -557,7 +557,7 @@
 							overflow: 'scroll'
 						} )
 						.append(
-							$('<div/>')
+							jQuery('<div/>')
 								.css( {
 									width: '100%',
 									height: 10
@@ -597,7 +597,7 @@
 			n.remove();
 		}
 	
-		$.extend( settings.oBrowser, DataTable.__browser );
+		jQuery.extend( settings.oBrowser, DataTable.__browser );
 		settings.oScroll.iBarWidth = DataTable.__browser.barWidth;
 	}
 	
@@ -647,7 +647,7 @@
 		// Add column to aoColumns array
 		var oDefaults = DataTable.defaults.column;
 		var iCol = oSettings.aoColumns.length;
-		var oCol = $.extend( {}, DataTable.models.oColumn, oDefaults, {
+		var oCol = jQuery.extend( {}, DataTable.models.oColumn, oDefaults, {
 			"nTh": nTh ? nTh : document.createElement('th'),
 			"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
 			"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
@@ -660,10 +660,10 @@
 		// passed into extend can be undefined. This allows the user to give a default
 		// with only some of the parameters defined, and also not give a default
 		var searchCols = oSettings.aoPreSearchCols;
-		searchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch, searchCols[ iCol ] );
+		searchCols[ iCol ] = jQuery.extend( {}, DataTable.models.oSearch, searchCols[ iCol ] );
 	
 		// Use the default column options function to initialise classes etc
-		_fnColumnOptions( oSettings, iCol, $(nTh).data() );
+		_fnColumnOptions( oSettings, iCol, jQuery(nTh).data() );
 	}
 	
 	
@@ -678,7 +678,7 @@
 	{
 		var oCol = oSettings.aoColumns[ iCol ];
 		var oClasses = oSettings.oClasses;
-		var th = $(oCol.nTh);
+		var th = jQuery(oCol.nTh);
 	
 		// Try to get width information from the DOM. We can't get it from CSS
 		// as we'd need to parse the CSS stylesheet. `width` option can override
@@ -720,7 +720,7 @@
 				oOptions.sClass = oOptions.className;
 			}
 	
-			$.extend( oCol, oOptions );
+			jQuery.extend( oCol, oOptions );
 			_fnMap( oCol, oOptions, "sWidth", "sWidthOrig" );
 	
 			/* iDataSort to be applied (backwards compatibility), but aDataSort will take
@@ -741,7 +741,7 @@
 		var attrTest = function( src ) {
 			return typeof src === 'string' && src.indexOf('@') !== -1;
 		};
-		oCol._bAttrSrc = $.isPlainObject( mDataSrc ) && (
+		oCol._bAttrSrc = jQuery.isPlainObject( mDataSrc ) && (
 			attrTest(mDataSrc.sort) || attrTest(mDataSrc.type) || attrTest(mDataSrc.filter)
 		);
 	
@@ -770,8 +770,8 @@
 		}
 	
 		/* Check that the class assignment is correct for sorting */
-		var bAsc = $.inArray('asc', oCol.asSorting) !== -1;
-		var bDesc = $.inArray('desc', oCol.asSorting) !== -1;
+		var bAsc = jQuery.inArray('asc', oCol.asSorting) !== -1;
+		var bDesc = jQuery.inArray('desc', oCol.asSorting) !== -1;
 		if ( !oCol.bSortable || (!bAsc && !bDesc) )
 		{
 			oCol.sSortingClass = oClasses.sSortableNone;
@@ -854,7 +854,7 @@
 	function _fnColumnIndexToVisible( oSettings, iMatch )
 	{
 		var aiVis = _fnGetColumns( oSettings, 'bVisible' );
-		var iPos = $.inArray( iMatch, aiVis );
+		var iPos = jQuery.inArray( iMatch, aiVis );
 	
 		return iPos !== -1 ? iPos : null;
 	}
@@ -884,7 +884,7 @@
 	{
 		var a = [];
 	
-		$.map( oSettings.aoColumns, function(val, i) {
+		jQuery.map( oSettings.aoColumns, function(val, i) {
 			if ( val[sParam] ) {
 				a.push( i );
 			}
@@ -988,7 +988,7 @@
 					def.targets :
 					def.aTargets;
 	
-				if ( ! $.isArray( aTargets ) )
+				if ( ! jQuery.isArray( aTargets ) )
 				{
 					aTargets = [ aTargets ];
 				}
@@ -1017,7 +1017,7 @@
 						for ( k=0, kLen=columns.length ; k<kLen ; k++ )
 						{
 							if ( aTargets[j] == "_all" ||
-							     $(columns[k].nTh).hasClass( aTargets[j] ) )
+							     jQuery(columns[k].nTh).hasClass( aTargets[j] ) )
 							{
 								fn( k, def );
 							}
@@ -1054,7 +1054,7 @@
 	{
 		/* Create the object for storing information about this new row */
 		var iRow = oSettings.aoData.length;
-		var oData = $.extend( true, {}, DataTable.models.oRow, {
+		var oData = jQuery.extend( true, {}, DataTable.models.oRow, {
 			src: nTr ? 'dom' : 'data',
 			idx: iRow
 		} );
@@ -1105,8 +1105,8 @@
 		var row;
 	
 		// Allow an individual node to be passed in
-		if ( ! (trs instanceof $) ) {
-			trs = $(trs);
+		if ( ! (trs instanceof jQuery) ) {
+			trs = jQuery(trs);
 		}
 	
 		return trs.map( function (i, el) {
@@ -1139,7 +1139,7 @@
 	 */
 	function _fnNodeToColumnIndex( oSettings, iRow, n )
 	{
-		return $.inArray( n, oSettings.aoData[ iRow ].anCells );
+		return jQuery.inArray( n, oSettings.aoData[ iRow ].anCells );
 	}
 	
 	
@@ -1213,8 +1213,8 @@
 	
 	
 	// Private variable that is used to match action syntax in the data property object
-	var __reArray = /\[.*?\]$/;
-	var __reFn = /\(\)$/;
+	var __reArray = /\[.*?\]jQuery/;
+	var __reFn = /\(\)jQuery/;
 	
 	/**
 	 * Split string on periods, taking into account escaped periods
@@ -1223,7 +1223,7 @@
 	 */
 	function _fnSplitObjNotation( str )
 	{
-		return $.map( str.match(/(\\.|[^\.])+/g) || [''], function ( s ) {
+		return jQuery.map( str.match(/(\\.|[^\.])+/g) || [''], function ( s ) {
 			return s.replace(/\\./g, '.');
 		} );
 	}
@@ -1238,11 +1238,11 @@
 	 */
 	function _fnGetObjectDataFn( mSource )
 	{
-		if ( $.isPlainObject( mSource ) )
+		if ( jQuery.isPlainObject( mSource ) )
 		{
 			/* Build an object of get functions, and wrap them in a single call */
 			var o = {};
-			$.each( mSource, function (key, val) {
+			jQuery.each( mSource, function (key, val) {
 				if ( val ) {
 					o[key] = _fnGetObjectDataFn( val );
 				}
@@ -1306,7 +1306,7 @@
 							innerSrc = a.join('.');
 	
 							// Traverse each entry in the array getting the properties requested
-							if ( $.isArray( data ) ) {
+							if ( jQuery.isArray( data ) ) {
 								for ( var j=0, jLen=data.length ; j<jLen ; j++ ) {
 									out.push( fetchData( data[j], type, innerSrc ) );
 								}
@@ -1363,7 +1363,7 @@
 	 */
 	function _fnSetObjectDataFn( mSource )
 	{
-		if ( $.isPlainObject( mSource ) )
+		if ( jQuery.isPlainObject( mSource ) )
 		{
 			/* Unlike get, only the underscore (global) option is used for for
 			 * setting data since we don't know the type here. This is why an object
@@ -1409,7 +1409,7 @@
 						innerSrc = b.join('.');
 	
 						// Traverse each entry in the array setting the properties requested
-						if ( $.isArray( val ) )
+						if ( jQuery.isArray( val ) )
 						{
 							for ( var j=0, jLen=val.length ; j<jLen ; j++ )
 							{
@@ -1656,7 +1656,7 @@
 		var cellProcess = function ( cell ) {
 			if ( colIdx === undefined || colIdx === i ) {
 				col = columns[i];
-				contents = $.trim(cell.innerHTML);
+				contents = jQuery.trim(cell.innerHTML);
 	
 				if ( col && col._bAttrSrc ) {
 					var setter = _fnSetObjectDataFn( col.mData._ );
@@ -1835,17 +1835,17 @@
 					_unique( row.__rowc.concat( a ) ) :
 					a;
 	
-				$(tr)
+				jQuery(tr)
 					.removeClass( row.__rowc.join(' ') )
 					.addClass( data.DT_RowClass );
 			}
 	
 			if ( data.DT_RowAttr ) {
-				$(tr).attr( data.DT_RowAttr );
+				jQuery(tr).attr( data.DT_RowAttr );
 			}
 	
 			if ( data.DT_RowData ) {
-				$(tr).data( data.DT_RowData );
+				jQuery(tr).data( data.DT_RowData );
 			}
 		}
 	}
@@ -1861,17 +1861,17 @@
 		var i, ien, cell, row, column;
 		var thead = oSettings.nTHead;
 		var tfoot = oSettings.nTFoot;
-		var createHeader = $('th, td', thead).length === 0;
+		var createHeader = jQuery('th, td', thead).length === 0;
 		var classes = oSettings.oClasses;
 		var columns = oSettings.aoColumns;
 	
 		if ( createHeader ) {
-			row = $('<tr/>').appendTo( thead );
+			row = jQuery('<tr/>').appendTo( thead );
 		}
 	
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
 			column = columns[i];
-			cell = $( column.nTh ).addClass( column.sClass );
+			cell = jQuery( column.nTh ).addClass( column.sClass );
 	
 			if ( createHeader ) {
 				cell.appendTo( row );
@@ -1904,11 +1904,11 @@
 		}
 		
 		/* ARIA role for the rows */
-	 	$(thead).find('>tr').attr('role', 'row');
+	 	jQuery(thead).find('>tr').attr('role', 'row');
 	
 		/* Deal with the footer - add classes if required */
-		$(thead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
-		$(tfoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
+		jQuery(thead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
+		jQuery(tfoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
 	
 		// Cache the footer cells. Note that we only take the cells from the first
 		// row in the footer. If there is more than one row the user wants to
@@ -1922,7 +1922,7 @@
 				column.nTf = cells[i].cell;
 	
 				if ( column.sClass ) {
-					$(column.nTf).addClass( column.sClass );
+					jQuery(column.nTf).addClass( column.sClass );
 				}
 			}
 		}
@@ -2026,7 +2026,7 @@
 					}
 	
 					/* Do the actual expansion in the DOM */
-					$(aoLocal[i][j].cell)
+					jQuery(aoLocal[i][j].cell)
 						.attr('rowspan', iRowspan)
 						.attr('colspan', iColspan);
 				}
@@ -2044,7 +2044,7 @@
 	{
 		/* Provide a pre-callback function which can be used to cancel the draw is false is returned */
 		var aPreDraw = _fnCallbackFire( oSettings, 'aoPreDrawCallback', 'preDraw', [oSettings] );
-		if ( $.inArray( false, aPreDraw ) !== -1 )
+		if ( jQuery.inArray( false, aPreDraw ) !== -1 )
 		{
 			_fnProcessingDisplay( oSettings, false );
 			return;
@@ -2116,7 +2116,7 @@
 					var sStripe = asStripeClasses[ iRowCount % iStripes ];
 					if ( aoData._sRowStripe != sStripe )
 					{
-						$(nRow).removeClass( aoData._sRowStripe ).addClass( sStripe );
+						jQuery(nRow).removeClass( aoData._sRowStripe ).addClass( sStripe );
 						aoData._sRowStripe = sStripe;
 					}
 				}
@@ -2144,8 +2144,8 @@
 				sZero = oLang.sEmptyTable;
 			}
 	
-			anRows[ 0 ] = $( '<tr/>', { 'class': iStripes ? asStripeClasses[0] : '' } )
-				.append( $('<td />', {
+			anRows[ 0 ] = jQuery( '<tr/>', { 'class': iStripes ? asStripeClasses[0] : '' } )
+				.append( jQuery('<td />', {
 					'valign':  'top',
 					'colSpan': _fnVisbleColumns( oSettings ),
 					'class':   oSettings.oClasses.sRowEmpty
@@ -2153,16 +2153,16 @@
 		}
 	
 		/* Header and footer callbacks */
-		_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0],
+		_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ jQuery(oSettings.nTHead).children('tr')[0],
 			_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
 	
-		_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0],
+		_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ jQuery(oSettings.nTFoot).children('tr')[0],
 			_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
 	
-		var body = $(oSettings.nTBody);
+		var body = jQuery(oSettings.nTBody);
 	
 		body.children().detach();
-		body.append( $(anRows) );
+		body.append( jQuery(anRows) );
 	
 		/* Call all required callback functions for the end of a draw */
 		_fnCallbackFire( oSettings, 'aoDrawCallback', 'draw', [oSettings] );
@@ -2222,12 +2222,12 @@
 	function _fnAddOptionsHtml ( oSettings )
 	{
 		var classes = oSettings.oClasses;
-		var table = $(oSettings.nTable);
-		var holding = $('<div/>').insertBefore( table ); // Holding element for speed
+		var table = jQuery(oSettings.nTable);
+		var holding = jQuery('<div/>').insertBefore( table ); // Holding element for speed
 		var features = oSettings.oFeatures;
 	
 		// All DataTables are wrapped in a div
-		var insert = $('<div/>', {
+		var insert = jQuery('<div/>', {
 			id:      oSettings.sTableId+'_wrapper',
 			'class': classes.sWrapper + (oSettings.nTFoot ? '' : ' '+classes.sNoFooter)
 		} );
@@ -2247,7 +2247,7 @@
 			if ( cOption == '<' )
 			{
 				/* New container div */
-				nNewNode = $('<div/>')[0];
+				nNewNode = jQuery('<div/>')[0];
 	
 				/* Check to see if we should append an id and/or a class name to the container */
 				cNext = aDom[i+1];
@@ -2293,7 +2293,7 @@
 				}
 	
 				insert.append( nNewNode );
-				insert = $(nNewNode);
+				insert = jQuery(nNewNode);
 			}
 			else if ( cOption == '>' )
 			{
@@ -2377,7 +2377,7 @@
 	 */
 	function _fnDetectHeader ( aLayout, nThead )
 	{
-		var nTrs = $(nThead).children('tr');
+		var nTrs = jQuery(nThead).children('tr');
 		var nTr, nCell;
 		var i, k, l, iLen, jLen, iColShifted, iColumn, iColspan, iRowspan;
 		var bUnique;
@@ -2494,11 +2494,11 @@
 	
 		// Convert to object based for 1.10+ if using the old array scheme which can
 		// come from server-side processing or serverParams
-		if ( data && $.isArray(data) ) {
+		if ( data && jQuery.isArray(data) ) {
 			var tmp = {};
-			var rbracket = /(.*?)\[\]$/;
+			var rbracket = /(.*?)\[\]jQuery/;
 	
-			$.each( data, function (key, val) {
+			jQuery.each( data, function (key, val) {
 				var match = val.name.match(rbracket);
 	
 				if ( match ) {
@@ -2525,18 +2525,18 @@
 			fn( json );
 		};
 	
-		if ( $.isPlainObject( ajax ) && ajax.data )
+		if ( jQuery.isPlainObject( ajax ) && ajax.data )
 		{
 			ajaxData = ajax.data;
 	
-			var newData = $.isFunction( ajaxData ) ?
+			var newData = jQuery.isFunction( ajaxData ) ?
 				ajaxData( data, oSettings ) :  // fn can manipulate data or return
 				ajaxData;                      // an object object or array to merge
 	
 			// If the function returned something, use that alone
-			data = $.isFunction( ajaxData ) && newData ?
+			data = jQuery.isFunction( ajaxData ) && newData ?
 				newData :
-				$.extend( true, data, newData );
+				jQuery.extend( true, data, newData );
 	
 			// Remove the data property as we've resolved it already and don't want
 			// jQuery to do it again (it is restored at the end of the function)
@@ -2560,7 +2560,7 @@
 			"error": function (xhr, error, thrown) {
 				var ret = _fnCallbackFire( oSettings, null, 'xhr', [oSettings, null, oSettings.jqXHR] );
 	
-				if ( $.inArray( true, ret ) === -1 ) {
+				if ( jQuery.inArray( true, ret ) === -1 ) {
 					if ( error == "parsererror" ) {
 						_fnLog( oSettings, 0, 'Invalid JSON response', 1 );
 					}
@@ -2584,7 +2584,7 @@
 			// DataTables 1.9- compatibility
 			oSettings.fnServerData.call( instance,
 				oSettings.sAjaxSource,
-				$.map( data, function (val, key) { // Need to convert back to 1.9 trad format
+				jQuery.map( data, function (val, key) { // Need to convert back to 1.9 trad format
 					return { name: key, value: val };
 				} ),
 				callback,
@@ -2594,11 +2594,11 @@
 		else if ( oSettings.sAjaxSource || typeof ajax === 'string' )
 		{
 			// DataTables 1.9- compatibility
-			oSettings.jqXHR = $.ajax( $.extend( baseAjax, {
+			oSettings.jqXHR = jQuery.ajax( jQuery.extend( baseAjax, {
 				url: ajax || oSettings.sAjaxSource
 			} ) );
 		}
-		else if ( $.isFunction( ajax ) )
+		else if ( jQuery.isFunction( ajax ) )
 		{
 			// Is a function - let the caller define what needs to be done
 			oSettings.jqXHR = ajax.call( instance, data, callback, oSettings );
@@ -2606,7 +2606,7 @@
 		else
 		{
 			// Object to extend the base settings
-			oSettings.jqXHR = $.ajax( $.extend( baseAjax, ajax ) );
+			oSettings.jqXHR = jQuery.ajax( jQuery.extend( baseAjax, ajax ) );
 	
 			// Restore for next time around
 			ajax.data = ajaxData;
@@ -2725,7 +2725,7 @@
 		}
 	
 		if ( features.bSort ) {
-			$.each( sort, function ( i, val ) {
+			jQuery.each( sort, function ( i, val ) {
 				d.order.push( { column: val.col, dir: val.dir } );
 	
 				param( 'iSortCol_'+i, val.col );
@@ -2811,7 +2811,7 @@
 	 */
 	function _fnAjaxDataSrc ( oSettings, json )
 	{
-		var dataSrc = $.isPlainObject( oSettings.ajax ) && oSettings.ajax.dataSrc !== undefined ?
+		var dataSrc = jQuery.isPlainObject( oSettings.ajax ) && oSettings.ajax.dataSrc !== undefined ?
 			oSettings.ajax.dataSrc :
 			oSettings.sAjaxDataProp; // Compatibility with 1.9-.
 	
@@ -2846,11 +2846,11 @@
 			str.replace('_INPUT_', input) :
 			str+input;
 	
-		var filter = $('<div/>', {
+		var filter = jQuery('<div/>', {
 				'id': ! features.f ? tableId+'_filter' : null,
 				'class': classes.sFilter
 			} )
-			.append( $('<label/>' ).append( str ) );
+			.append( jQuery('<label/>' ).append( str ) );
 	
 		var searchFn = function() {
 			/* Update all other filter input elements for the new display */
@@ -2878,7 +2878,7 @@
 				400 :
 				0;
 	
-		var jqFilter = $('input', filter)
+		var jqFilter = jQuery('input', filter)
 			.val( previousSearch.sSearch )
 			.attr( 'placeholder', language.sSearchPlaceholder )
 			.bind(
@@ -2896,7 +2896,7 @@
 			.attr('aria-controls', tableId);
 	
 		// Update the input elements whenever the table is filtered
-		$(settings.nTable).on( 'search.dt.DT', function ( ev, s ) {
+		jQuery(settings.nTable).on( 'search.dt.DT', function ( ev, s ) {
 			if ( settings === s ) {
 				// IE9 throws an 'unknown error' if document.activeElement is used
 				// inside an iframe or frame...
@@ -2995,7 +2995,7 @@
 			// So the array reference doesn't break set the results into the
 			// existing array
 			displayRows.length = 0;
-			$.merge( displayRows, rows );
+			jQuery.merge( displayRows, rows );
 		}
 	}
 	
@@ -3104,18 +3104,18 @@
 			 * order is important - a la google. So this is what we want to
 			 * generate:
 			 * 
-			 * ^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$
+			 * ^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*jQuery
 			 */
-			var a = $.map( search.match( /"[^"]+"|[^ ]+/g ) || [''], function ( word ) {
+			var a = jQuery.map( search.match( /"[^"]+"|[^ ]+/g ) || [''], function ( word ) {
 				if ( word.charAt(0) === '"' ) {
-					var m = word.match( /^"(.*)"$/ );
+					var m = word.match( /^"(.*)"jQuery/ );
 					word = m ? m[1] : word;
 				}
 	
 				return word.replace('"', '');
 			} );
 	
-			search = '^(?=.*?'+a.join( ')(?=.*?' )+').*$';
+			search = '^(?=.*?'+a.join( ')(?=.*?' )+').*jQuery';
 		}
 	
 		return new RegExp( search, caseInsensitive ? 'i' : '' );
@@ -3130,12 +3130,12 @@
 	 */
 	function _fnEscapeRegex ( sVal )
 	{
-		return sVal.replace( _re_escape_regex, '\\$1' );
+		return sVal.replace( _re_escape_regex, '\\jQuery1' );
 	}
 	
 	
 	
-	var __filter_div = $('<div>')[0];
+	var __filter_div = jQuery('<div>')[0];
 	var __filter_div_textContent = __filter_div.textContent !== undefined;
 	
 	// Update the filtering data for each row if needed (by invalidation or first run)
@@ -3252,7 +3252,7 @@
 		var
 			tid = settings.sTableId,
 			nodes = settings.aanFeatures.i,
-			n = $('<div/>', {
+			n = jQuery('<div/>', {
 				'class': settings.oClasses.sInfo,
 				'id': ! nodes ? tid+'_info' : null
 			} );
@@ -3269,7 +3269,7 @@
 				.attr( 'aria-live', 'polite' );
 	
 			// Table is described by our info div
-			$(settings.nTable).attr( 'aria-describedby', tid+'_info' );
+			jQuery(settings.nTable).attr( 'aria-describedby', tid+'_info' );
 		}
 	
 		return n[0];
@@ -3315,7 +3315,7 @@
 			);
 		}
 	
-		$(nodes).html( out );
+		jQuery(nodes).html( out );
 	}
 	
 	
@@ -3469,11 +3469,11 @@
 			classes  = settings.oClasses,
 			tableId  = settings.sTableId,
 			menu     = settings.aLengthMenu,
-			d2       = $.isArray( menu[0] ),
+			d2       = jQuery.isArray( menu[0] ),
 			lengths  = d2 ? menu[0] : menu,
 			language = d2 ? menu[1] : menu;
 	
-		var select = $('<select/>', {
+		var select = jQuery('<select/>', {
 			'name':          tableId+'_length',
 			'aria-controls': tableId,
 			'class':         classes.sLengthSelect
@@ -3483,7 +3483,7 @@
 			select[0][ i ] = new Option( language[i], lengths[i] );
 		}
 	
-		var div = $('<div><label/></div>').addClass( classes.sLength );
+		var div = jQuery('<div><label/></div>').addClass( classes.sLength );
 		if ( ! settings.aanFeatures.l ) {
 			div[0].id = tableId+'_length';
 		}
@@ -3494,17 +3494,17 @@
 	
 		// Can't use `select` variable as user might provide their own and the
 		// reference is broken by the use of outerHTML
-		$('select', div)
+		jQuery('select', div)
 			.val( settings._iDisplayLength )
 			.bind( 'change.DT', function(e) {
-				_fnLengthChange( settings, $(this).val() );
+				_fnLengthChange( settings, jQuery(this).val() );
 				_fnDraw( settings );
 			} );
 	
 		// Update node value whenever anything changes the table's length
-		$(settings.nTable).bind( 'length.dt.DT', function (e, s, len) {
+		jQuery(settings.nTable).bind( 'length.dt.DT', function (e, s, len) {
 			if ( settings === s ) {
-				$('select', div).val( len );
+				jQuery('select', div).val( len );
 			}
 		} );
 	
@@ -3533,7 +3533,7 @@
 			redraw = function( settings ) {
 				_fnDraw( settings );
 			},
-			node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0],
+			node = jQuery('<div/>').addClass( settings.oClasses.sPaging + type )[0],
 			features = settings.aanFeatures;
 	
 		if ( ! modern ) {
@@ -3660,7 +3660,7 @@
 	 */
 	function _fnFeatureHtmlProcessing ( settings )
 	{
-		return $('<div/>', {
+		return jQuery('<div/>', {
 				'id': ! settings.aanFeatures.r ? settings.sTableId+'_processing' : null,
 				'class': settings.oClasses.sProcessing
 			} )
@@ -3678,7 +3678,7 @@
 	function _fnProcessingDisplay ( settings, show )
 	{
 		if ( settings.oFeatures.bProcessing ) {
-			$(settings.aanFeatures.r).css( 'display', show ? 'block' : 'none' );
+			jQuery(settings.aanFeatures.r).css( 'display', show ? 'block' : 'none' );
 		}
 	
 		_fnCallbackFire( settings, null, 'processing', [settings, show] );
@@ -3692,7 +3692,7 @@
 	 */
 	function _fnFeatureHtmlTable ( settings )
 	{
-		var table = $(settings.nTable);
+		var table = jQuery(settings.nTable);
 	
 		// Add the ARIA grid role to the table
 		table.attr( 'role', 'grid' );
@@ -3709,8 +3709,8 @@
 		var classes = settings.oClasses;
 		var caption = table.children('caption');
 		var captionSide = caption.length ? caption[0]._captionSide : null;
-		var headerClone = $( table[0].cloneNode(false) );
-		var footerClone = $( table[0].cloneNode(false) );
+		var headerClone = jQuery( table[0].cloneNode(false) );
+		var footerClone = jQuery( table[0].cloneNode(false) );
 		var footer = table.children('tfoot');
 		var _div = '<div/>';
 		var size = function ( s ) {
@@ -3737,9 +3737,9 @@
 		 *        table - scroll foot table
 		 *          tfoot - tfoot
 		 */
-		var scroller = $( _div, { 'class': classes.sScrollWrapper } )
+		var scroller = jQuery( _div, { 'class': classes.sScrollWrapper } )
 			.append(
-				$(_div, { 'class': classes.sScrollHead } )
+				jQuery(_div, { 'class': classes.sScrollHead } )
 					.css( {
 						overflow: 'hidden',
 						position: 'relative',
@@ -3747,7 +3747,7 @@
 						width: scrollX ? size(scrollX) : '100%'
 					} )
 					.append(
-						$(_div, { 'class': classes.sScrollHeadInner } )
+						jQuery(_div, { 'class': classes.sScrollHeadInner } )
 							.css( {
 								'box-sizing': 'content-box',
 								width: scroll.sXInner || '100%'
@@ -3764,7 +3764,7 @@
 					)
 			)
 			.append(
-				$(_div, { 'class': classes.sScrollBody } )
+				jQuery(_div, { 'class': classes.sScrollBody } )
 					.css( {
 						position: 'relative',
 						overflow: 'auto',
@@ -3775,14 +3775,14 @@
 	
 		if ( footer ) {
 			scroller.append(
-				$(_div, { 'class': classes.sScrollFoot } )
+				jQuery(_div, { 'class': classes.sScrollFoot } )
 					.css( {
 						overflow: 'hidden',
 						border: 0,
 						width: scrollX ? size(scrollX) : '100%'
 					} )
 					.append(
-						$(_div, { 'class': classes.sScrollFootInner } )
+						jQuery(_div, { 'class': classes.sScrollFootInner } )
 							.append(
 								footerClone
 									.removeAttr('id')
@@ -3803,7 +3803,7 @@
 	
 		// When the body is scrolled, then we also want to scroll the headers
 		if ( scrollX ) {
-			$(scrollBody).on( 'scroll.DT', function (e) {
+			jQuery(scrollBody).on( 'scroll.DT', function (e) {
 				var scrollLeft = this.scrollLeft;
 	
 				scrollHead.scrollLeft = scrollLeft;
@@ -3814,7 +3814,7 @@
 			} );
 		}
 	
-		$(scrollBody).css(
+		jQuery(scrollBody).css(
 			scrollY && scroll.bCollapse ? 'max-height' : 'height', 
 			scrollY
 		);
@@ -3858,22 +3858,22 @@
 			scrollXInner   = scroll.sXInner,
 			scrollY        = scroll.sY,
 			barWidth       = scroll.iBarWidth,
-			divHeader      = $(settings.nScrollHead),
+			divHeader      = jQuery(settings.nScrollHead),
 			divHeaderStyle = divHeader[0].style,
 			divHeaderInner = divHeader.children('div'),
 			divHeaderInnerStyle = divHeaderInner[0].style,
 			divHeaderTable = divHeaderInner.children('table'),
 			divBodyEl      = settings.nScrollBody,
-			divBody        = $(divBodyEl),
+			divBody        = jQuery(divBodyEl),
 			divBodyStyle   = divBodyEl.style,
-			divFooter      = $(settings.nScrollFoot),
+			divFooter      = jQuery(settings.nScrollFoot),
 			divFooterInner = divFooter.children('div'),
 			divFooterTable = divFooterInner.children('table'),
-			header         = $(settings.nTHead),
-			table          = $(settings.nTable),
+			header         = jQuery(settings.nTHead),
+			table          = jQuery(settings.nTable),
 			tableEl        = table[0],
 			tableStyle     = tableEl.style,
-			footer         = settings.nTFoot ? $(settings.nTFoot) : null,
+			footer         = settings.nTFoot ? jQuery(settings.nTFoot) : null,
 			browser        = settings.oBrowser,
 			ie67           = browser.bScrollOversize,
 			headerTrgEls, footerTrgEls,
@@ -3938,7 +3938,7 @@
 			divHeader[0].style.width = '100%';
 		}
 	
-		$.each( _fnGetUniqueThs( settings, headerCopy ), function ( i, el ) {
+		jQuery.each( _fnGetUniqueThs( settings, headerCopy ), function ( i, el ) {
 			idx = _fnVisibleToColumnIndex( settings, i );
 			el.style.width = settings.aoColumns[idx].sWidth;
 		} );
@@ -3984,7 +3984,7 @@
 		// Read all widths in next pass
 		_fnApplyToChildren( function(nSizer) {
 			headerContent.push( nSizer.innerHTML );
-			headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+			headerWidths.push( _fnStringToCss( jQuery(nSizer).css('width') ) );
 		}, headerSrcEls );
 	
 		// Apply all widths in final pass
@@ -3992,7 +3992,7 @@
 			nToSize.style.width = headerWidths[i];
 		}, headerTrgEls );
 	
-		$(headerSrcEls).height(0);
+		jQuery(headerSrcEls).height(0);
 	
 		/* Same again with the footer if we have one */
 		if ( footer )
@@ -4000,14 +4000,14 @@
 			_fnApplyToChildren( zeroOut, footerSrcEls );
 	
 			_fnApplyToChildren( function(nSizer) {
-				footerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+				footerWidths.push( _fnStringToCss( jQuery(nSizer).css('width') ) );
 			}, footerSrcEls );
 	
 			_fnApplyToChildren( function(nToSize, i) {
 				nToSize.style.width = footerWidths[i];
 			}, footerTrgEls );
 	
-			$(footerSrcEls).height(0);
+			jQuery(footerSrcEls).height(0);
 		}
 	
 	
@@ -4168,7 +4168,7 @@
 			scrollXInner = scroll.sXInner,
 			columnCount = columns.length,
 			visibleColumns = _fnGetColumns( oSettings, 'bVisible' ),
-			headerCells = $('th', oSettings.nTHead),
+			headerCells = jQuery('th', oSettings.nTHead),
 			tableWidthAttr = table.getAttribute('width'), // from DOM element
 			tableContainer = table.parentNode,
 			userInputs = false,
@@ -4215,21 +4215,21 @@
 			// node in the data, assign any user defined widths, then insert it into
 			// the DOM and allow the browser to do all the hard work of calculating
 			// table widths
-			var tmpTable = $(table).clone() // don't use cloneNode - IE8 will remove events on the main table
+			var tmpTable = jQuery(table).clone() // don't use cloneNode - IE8 will remove events on the main table
 				.css( 'visibility', 'hidden' )
 				.removeAttr( 'id' );
 	
 			// Clean up the table body
 			tmpTable.find('tbody tr').remove();
-			var tr = $('<tr/>').appendTo( tmpTable.find('tbody') );
+			var tr = jQuery('<tr/>').appendTo( tmpTable.find('tbody') );
 	
 			// Clone the table header and footer - we can't use the header / footer
 			// from the cloned table, since if scrolling is active, the table's
 			// real header and footer are contained in different table tags
 			tmpTable.find('thead, tfoot').remove();
 			tmpTable
-				.append( $(oSettings.nTHead).clone() )
-				.append( $(oSettings.nTFoot).clone() );
+				.append( jQuery(oSettings.nTHead).clone() )
+				.append( jQuery(oSettings.nTFoot).clone() );
 	
 			// Remove any assigned widths from the footer (from scrolling)
 			tmpTable.find('tfoot th, tfoot td').css('width', '');
@@ -4248,7 +4248,7 @@
 				// browser will collapse it. If this width is smaller than the
 				// width the column requires, then it will have no effect
 				if ( column.sWidthOrig && scrollX ) {
-					$( headerCells[i] ).append( $('<div/>').css( {
+					jQuery( headerCells[i] ).append( jQuery('<div/>').css( {
 						width: column.sWidthOrig,
 						margin: 0,
 						padding: 0,
@@ -4264,7 +4264,7 @@
 					columnIdx = visibleColumns[i];
 					column = columns[ columnIdx ];
 	
-					$( _fnGetWidestNode( oSettings, columnIdx ) )
+					jQuery( _fnGetWidestNode( oSettings, columnIdx ) )
 						.clone( false )
 						.append( column.sContentPadding )
 						.appendTo( tr );
@@ -4276,7 +4276,7 @@
 			// with minimal height, so it has no effect on if the container scrolls
 			// or not. Otherwise it might trigger scrolling when it actually isn't
 			// needed
-			var holder = $('<div/>').css( scrollX || scrollY ?
+			var holder = jQuery('<div/>').css( scrollX || scrollY ?
 					{
 						position: 'absolute',
 						top: 0,
@@ -4321,7 +4321,7 @@
 			// need to be modified.
 			var total = 0;
 			for ( i=0 ; i<visibleColumns.length ; i++ ) {
-				var cell = $(headerCells[i]);
+				var cell = jQuery(headerCells[i]);
 				var border = cell.outerWidth() - cell.width();
 	
 				// Use getBounding... where possible (not IE8-) because it can give
@@ -4354,7 +4354,7 @@
 	
 		if ( (tableWidthAttr || scrollX) && ! oSettings._reszEvt ) {
 			var bindResize = function () {
-				$(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
+				jQuery(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
 					_fnAdjustColumnSizing( oSettings );
 				} ) );
 			};
@@ -4422,7 +4422,7 @@
 			return 0;
 		}
 	
-		var n = $('<div/>')
+		var n = jQuery('<div/>')
 			.css( 'width', _fnStringToCss( width ) )
 			.appendTo( parent || document.body );
 	
@@ -4449,7 +4449,7 @@
 	
 		var data = settings.aoData[ idx ];
 		return ! data.nTr ? // Might not have been created when deferred rendering
-			$('<td/>').html( _fnGetCellData( settings, idx, colIdx, 'display' ) )[0] :
+			jQuery('<td/>').html( _fnGetCellData( settings, idx, colIdx, 'display' ) )[0] :
 			data.anCells[ colIdx ];
 	}
 	
@@ -4499,7 +4499,7 @@
 		}
 	
 		// Check it has a unit character already
-		return s.match(/\d$/) ?
+		return s.match(/\djQuery/) ?
 			s+'px' :
 			s;
 	}
@@ -4515,22 +4515,22 @@
 			aoColumns = settings.aoColumns,
 			aDataSort, iCol, sType, srcCol,
 			fixed = settings.aaSortingFixed,
-			fixedObj = $.isPlainObject( fixed ),
+			fixedObj = jQuery.isPlainObject( fixed ),
 			nestedSort = [],
 			add = function ( a ) {
-				if ( a.length && ! $.isArray( a[0] ) ) {
+				if ( a.length && ! jQuery.isArray( a[0] ) ) {
 					// 1D array
 					nestedSort.push( a );
 				}
 				else {
 					// 2D array
-					$.merge( nestedSort, a );
+					jQuery.merge( nestedSort, a );
 				}
 			};
 	
 		// Build the sort array, with pre-fix and post-fix options if they have been
 		// specified
-		if ( $.isArray( fixed ) ) {
+		if ( jQuery.isArray( fixed ) ) {
 			add( fixed );
 		}
 	
@@ -4555,7 +4555,7 @@
 				sType = aoColumns[ iCol ].sType || 'string';
 	
 				if ( nestedSort[i]._idx === undefined ) {
-					nestedSort[i]._idx = $.inArray( nestedSort[i][1], aoColumns[iCol].asSorting );
+					nestedSort[i]._idx = jQuery.inArray( nestedSort[i][1], aoColumns[iCol].asSorting );
 				}
 	
 				aSort.push( {
@@ -4768,7 +4768,7 @@
 		var next = function ( a, overflow ) {
 			var idx = a._idx;
 			if ( idx === undefined ) {
-				idx = $.inArray( a[1], asSorting );
+				idx = jQuery.inArray( a[1], asSorting );
 			}
 	
 			return idx+1 < asSorting.length ?
@@ -4786,7 +4786,7 @@
 		// If appending the sort then we are multi-column sorting
 		if ( append && settings.oFeatures.bSortMulti ) {
 			// Are we already doing some kind of sort on this column?
-			var sortIdx = $.inArray( colIdx, _pluck(sorting, '0') );
+			var sortIdx = jQuery.inArray( colIdx, _pluck(sorting, '0') );
 	
 			if ( sortIdx !== -1 ) {
 				// Yes, modify the sort
@@ -4895,7 +4895,7 @@
 				colIdx = oldSort[i].src;
 	
 				// Remove column sorting
-				$( _pluck( settings.aoData, 'anCells', colIdx ) )
+				jQuery( _pluck( settings.aoData, 'anCells', colIdx ) )
 					.removeClass( sortClass + (i<2 ? i+1 : 3) );
 			}
 	
@@ -4903,7 +4903,7 @@
 			for ( i=0, ien=sort.length ; i<ien ; i++ ) {
 				colIdx = sort[i].src;
 	
-				$( _pluck( settings.aoData, 'anCells', colIdx ) )
+				jQuery( _pluck( settings.aoData, 'anCells', colIdx ) )
 					.addClass( sortClass + (i<2 ? i+1 : 3) );
 			}
 		}
@@ -4969,9 +4969,9 @@
 			time:    +new Date(),
 			start:   settings._iDisplayStart,
 			length:  settings._iDisplayLength,
-			order:   $.extend( true, [], settings.aaSorting ),
+			order:   jQuery.extend( true, [], settings.aaSorting ),
 			search:  _fnSearchToCamel( settings.oPreviousSearch ),
-			columns: $.map( settings.aoColumns, function ( col, i ) {
+			columns: jQuery.map( settings.aoColumns, function ( col, i ) {
 				return {
 					visible: col.bVisible,
 					search: _fnSearchToCamel( settings.aoPreSearchCols[i] )
@@ -5010,7 +5010,7 @@
 		 * cancelling of loading by returning false
 		 */
 		var abStateLoad = _fnCallbackFire( settings, 'aoStateLoadParams', 'stateLoadParams', [settings, state] );
-		if ( $.inArray( false, abStateLoad ) !== -1 ) {
+		if ( jQuery.inArray( false, abStateLoad ) !== -1 ) {
 			return;
 		}
 	
@@ -5026,7 +5026,7 @@
 		}
 	
 		// Store the saved state so it might be accessed at any time
-		settings.oLoadedState = $.extend( true, {}, state );
+		settings.oLoadedState = jQuery.extend( true, {}, state );
 	
 		// Restore key features - todo - for 1.11 this needs to be done by
 		// subscribed events
@@ -5041,7 +5041,7 @@
 		// Order
 		if ( state.order !== undefined ) {
 			settings.aaSorting = [];
-			$.each( state.order, function ( i, col ) {
+			jQuery.each( state.order, function ( i, col ) {
 				settings.aaSorting.push( col[0] >= columns.length ?
 					[ 0, col[1] ] :
 					col
@@ -5051,7 +5051,7 @@
 	
 		// Search
 		if ( state.search !== undefined ) {
-			$.extend( settings.oPreviousSearch, _fnSearchToHung( state.search ) );
+			jQuery.extend( settings.oPreviousSearch, _fnSearchToHung( state.search ) );
 		}
 	
 		// Columns
@@ -5065,7 +5065,7 @@
 	
 			// Search
 			if ( col.search !== undefined ) {
-				$.extend( settings.aoPreSearchCols[i], _fnSearchToHung( col.search ) );
+				jQuery.extend( settings.aoPreSearchCols[i], _fnSearchToHung( col.search ) );
 			}
 		}
 	
@@ -5082,7 +5082,7 @@
 	function _fnSettingsFromNode ( table )
 	{
 		var settings = DataTable.settings;
-		var idx = $.inArray( table, _pluck( settings, 'nTable' ) );
+		var idx = jQuery.inArray( table, _pluck( settings, 'nTable' ) );
 	
 		return idx !== -1 ?
 			settings[ idx ] :
@@ -5143,9 +5143,9 @@
 	 */
 	function _fnMap( ret, src, name, mappedName )
 	{
-		if ( $.isArray( name ) ) {
-			$.each( name, function (i, val) {
-				if ( $.isArray( val ) ) {
+		if ( jQuery.isArray( name ) ) {
+			jQuery.each( name, function (i, val) {
+				if ( jQuery.isArray( val ) ) {
 					_fnMap( ret, src, val[0], val[1] );
 				}
 				else {
@@ -5191,13 +5191,13 @@
 			if ( extender.hasOwnProperty(prop) ) {
 				val = extender[prop];
 	
-				if ( $.isPlainObject( val ) ) {
-					if ( ! $.isPlainObject( out[prop] ) ) {
+				if ( jQuery.isPlainObject( val ) ) {
+					if ( ! jQuery.isPlainObject( out[prop] ) ) {
 						out[prop] = {};
 					}
-					$.extend( true, out[prop], val );
+					jQuery.extend( true, out[prop], val );
 				}
-				else if ( breakRefs && prop !== 'data' && prop !== 'aaData' && $.isArray(val) ) {
+				else if ( breakRefs && prop !== 'data' && prop !== 'aaData' && jQuery.isArray(val) ) {
 					out[prop] = val.slice();
 				}
 				else {
@@ -5221,7 +5221,7 @@
 	 */
 	function _fnBindAction( n, oData, fn )
 	{
-		$(n)
+		jQuery(n)
 			.bind( 'click.DT', oData, function (e) {
 					n.blur(); // Remove focus outline for mouse users
 					fn(e);
@@ -5279,15 +5279,15 @@
 		var ret = [];
 	
 		if ( callbackArr ) {
-			ret = $.map( settings[callbackArr].slice().reverse(), function (val, i) {
+			ret = jQuery.map( settings[callbackArr].slice().reverse(), function (val, i) {
 				return val.fn.apply( settings.oInstance, args );
 			} );
 		}
 	
 		if ( eventName !== null ) {
-			var e = $.Event( eventName+'.dt' );
+			var e = jQuery.Event( eventName+'.dt' );
 	
-			$(settings.nTable).trigger( e, args );
+			jQuery(settings.nTable).trigger( e, args );
 	
 			ret.push( e.result );
 		}
@@ -5326,7 +5326,7 @@
 		var renderer = settings.renderer;
 		var host = DataTable.ext.renderer[type];
 	
-		if ( $.isPlainObject( renderer ) && renderer[type] ) {
+		if ( jQuery.isPlainObject( renderer ) && renderer[type] ) {
 			// Specific renderer for this type. If available use it, otherwise use
 			// the default.
 			return host[renderer[type]] || host._;
@@ -5382,38 +5382,38 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Highlight every second row
-		 *      oTable.$('tr:odd').css('backgroundColor', 'blue');
+		 *      oTable.jQuery('tr:odd').css('backgroundColor', 'blue');
 		 *    } );
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Filter to rows with 'Webkit' in them, add a background colour and then
 		 *      // remove the filter, thus highlighting the 'Webkit' rows only.
 		 *      oTable.fnFilter('Webkit');
-		 *      oTable.$('tr', {"search": "applied"}).css('backgroundColor', 'blue');
+		 *      oTable.jQuery('tr', {"search": "applied"}).css('backgroundColor', 'blue');
 		 *      oTable.fnFilter('');
 		 *    } );
 		 */
-		this.$ = function ( sSelector, oOpts )
+		this.jQuery = function ( sSelector, oOpts )
 		{
-			return this.api(true).$( sSelector, oOpts );
+			return this.api(true).jQuery( sSelector, oOpts );
 		};
 		
 		
 		/**
-		 * Almost identical to $ in operation, but in this case returns the data for the matched
+		 * Almost identical to jQuery in operation, but in this case returns the data for the matched
 		 * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
 		 * rather than any descendants, so the data can be obtained for the row/cell. If matching
 		 * rows are found, the data returned is the original data array/object that was used to
 		 * create the row (or a generated array if from a DOM source).
 		 *
-		 * This method is often useful in-combination with $ where both functions are given the
+		 * This method is often useful in-combination with jQuery where both functions are given the
 		 * same parameters and the array indexes will match identically.
 		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
@@ -5432,8 +5432,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Get the data from the first row in the table
 		 *      var data = oTable._('tr:first');
@@ -5443,8 +5443,8 @@
 		 *    } );
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Filter to 'Webkit' and get all data for
 		 *      oTable.fnFilter('Webkit');
@@ -5502,12 +5502,12 @@
 		 *    // Global var for counter
 		 *    var giCount = 2;
 		 *
-		 *    $(document).ready(function() {
-		 *      $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      jQuery('#example').dataTable();
 		 *    } );
 		 *
 		 *    function fnClickAddRow() {
-		 *      $('#example').dataTable().fnAddData( [
+		 *      jQuery('#example').dataTable().fnAddData( [
 		 *        giCount+".1",
 		 *        giCount+".2",
 		 *        giCount+".3",
@@ -5522,7 +5522,7 @@
 			var api = this.api( true );
 		
 			/* Check if we want to add multiple rows or not */
-			var rows = $.isArray(data) && ( $.isArray(data[0]) || $.isPlainObject(data[0]) ) ?
+			var rows = jQuery.isArray(data) && ( jQuery.isArray(data[0]) || jQuery.isPlainObject(data[0]) ) ?
 				api.rows.add( data ) :
 				api.row.add( data );
 		
@@ -5544,13 +5544,13 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable( {
 		 *        "sScrollY": "200px",
 		 *        "bPaginate": false
 		 *      } );
 		 *
-		 *      $(window).bind('resize', function () {
+		 *      jQuery(window).bind('resize', function () {
 		 *        oTable.fnAdjustColumnSizing();
 		 *      } );
 		 *    } );
@@ -5578,8 +5578,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Immediately 'nuke' the current rows (perhaps waiting for an Ajax callback...)
 		 *      oTable.fnClearTable();
@@ -5604,11 +5604,11 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    jQuery(document).ready(function() {
 		 *      var oTable;
 		 *
 		 *      // 'open' an information row when a row is clicked on
-		 *      $('#example tbody tr').click( function () {
+		 *      jQuery('#example tbody tr').click( function () {
 		 *        if ( oTable.fnIsOpen(this) ) {
 		 *          oTable.fnClose( this );
 		 *        } else {
@@ -5616,7 +5616,7 @@
 		 *        }
 		 *      } );
 		 *
-		 *      oTable = $('#example').dataTable();
+		 *      oTable = jQuery('#example').dataTable();
 		 *    } );
 		 */
 		this.fnClose = function( nTr )
@@ -5636,8 +5636,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Immediately remove the first row
 		 *      oTable.fnDeleteRow( 0 );
@@ -5672,9 +5672,9 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    jQuery(document).ready(function() {
 		 *      // This example is fairly pointless in reality, but shows how fnDestroy can be used
-		 *      var oTable = $('#example').dataTable();
+		 *      var oTable = jQuery('#example').dataTable();
 		 *      oTable.fnDestroy();
 		 *    } );
 		 */
@@ -5691,8 +5691,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Re-draw the table - you wouldn't want to do it here, but it's an example :-)
 		 *      oTable.fnDraw();
@@ -5718,8 +5718,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Sometime later - filter...
 		 *      oTable.fnFilter( 'test string' );
@@ -5757,10 +5757,10 @@
 		 *
 		 *  @example
 		 *    // Row data
-		 *    $(document).ready(function() {
-		 *      oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      oTable = jQuery('#example').dataTable();
 		 *
-		 *      oTable.$('tr').click( function () {
+		 *      oTable.jQuery('tr').click( function () {
 		 *        var data = oTable.fnGetData( this );
 		 *        // ... do something with the array / object of data for the row
 		 *      } );
@@ -5768,10 +5768,10 @@
 		 *
 		 *  @example
 		 *    // Individual cell data
-		 *    $(document).ready(function() {
-		 *      oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      oTable = jQuery('#example').dataTable();
 		 *
-		 *      oTable.$('td').click( function () {
+		 *      oTable.jQuery('td').click( function () {
 		 *        var sData = oTable.fnGetData( this );
 		 *        alert( 'The cell clicked on had the value of '+sData );
 		 *      } );
@@ -5795,7 +5795,7 @@
 		
 		/**
 		 * Get an array of the TR nodes that are used in the table's body. Note that you will
-		 * typically want to use the '$' API method in preference to this as it is more
+		 * typically want to use the 'jQuery' API method in preference to this as it is more
 		 * flexible.
 		 *  @param {int} [iRow] Optional row index for the TR element you want
 		 *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
@@ -5804,8 +5804,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Get the nodes from the table
 		 *      var nNodes = oTable.fnGetNodes( );
@@ -5832,8 +5832,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      $('#example tbody td').click( function () {
+		 *    jQuery(document).ready(function() {
+		 *      jQuery('#example tbody td').click( function () {
 		 *        // Get the position of the current data from the node
 		 *        var aPos = oTable.fnGetPosition( this );
 		 *
@@ -5846,7 +5846,7 @@
 		 *      } );
 		 *
 		 *      // Init DataTables
-		 *      oTable = $('#example').dataTable();
+		 *      oTable = jQuery('#example').dataTable();
 		 *    } );
 		 */
 		this.fnGetPosition = function( node )
@@ -5878,11 +5878,11 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    jQuery(document).ready(function() {
 		 *      var oTable;
 		 *
 		 *      // 'open' an information row when a row is clicked on
-		 *      $('#example tbody tr').click( function () {
+		 *      jQuery('#example tbody tr').click( function () {
 		 *        if ( oTable.fnIsOpen(this) ) {
 		 *          oTable.fnClose( this );
 		 *        } else {
@@ -5890,7 +5890,7 @@
 		 *        }
 		 *      } );
 		 *
-		 *      oTable = $('#example').dataTable();
+		 *      oTable = jQuery('#example').dataTable();
 		 *    } );
 		 */
 		this.fnIsOpen = function( nTr )
@@ -5914,11 +5914,11 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    jQuery(document).ready(function() {
 		 *      var oTable;
 		 *
 		 *      // 'open' an information row when a row is clicked on
-		 *      $('#example tbody tr').click( function () {
+		 *      jQuery('#example tbody tr').click( function () {
 		 *        if ( oTable.fnIsOpen(this) ) {
 		 *          oTable.fnClose( this );
 		 *        } else {
@@ -5926,7 +5926,7 @@
 		 *        }
 		 *      } );
 		 *
-		 *      oTable = $('#example').dataTable();
+		 *      oTable = jQuery('#example').dataTable();
 		 *    } );
 		 */
 		this.fnOpen = function( nTr, mHtml, sClass )
@@ -5950,8 +5950,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *      oTable.fnPageChange( 'next' );
 		 *    } );
 		 */
@@ -5974,8 +5974,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Hide the second column after initialisation
 		 *      oTable.fnSetColumnVis( 1, false );
@@ -5999,8 +5999,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *      var oSettings = oTable.fnSettings();
 		 *
 		 *      // Show an example parameter from the settings
@@ -6021,8 +6021,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Sort immediately with columns 0 and 1
 		 *      oTable.fnSort( [ [0,'asc'], [1,'asc'] ] );
@@ -6043,8 +6043,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *
 		 *      // Sort on column 1, when 'sorter' is clicked on
 		 *      oTable.fnSortListener( document.getElementById('sorter'), 1 );
@@ -6072,10 +6072,10 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *      oTable.fnUpdate( 'Example update', 0, 0 ); // Single cell
-		 *      oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], $('tbody tr')[0] ); // Row
+		 *      oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], jQuery('tbody tr')[0] ); // Row
 		 *    } );
 		 */
 		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
@@ -6112,8 +6112,8 @@
 		 *  @deprecated Since v1.10
 		 *
 		 *  @example
-		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *    jQuery(document).ready(function() {
+		 *      var oTable = jQuery('#example').dataTable();
 		 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
 		 *    } );
 		 */
@@ -6150,7 +6150,7 @@
 			var sId = this.getAttribute( 'id' );
 			var bInitHandedOff = false;
 			var defaults = DataTable.defaults;
-			var $this = $(this);
+			var jQuerythis = jQuery(this);
 			
 			
 			/* Sanity check */
@@ -6169,7 +6169,7 @@
 			_fnCamelToHungarian( defaults.column, defaults.column, true );
 			
 			/* Setting up the initialisation object */
-			_fnCamelToHungarian( defaults, $.extend( oInit, $this.data() ) );
+			_fnCamelToHungarian( defaults, jQuery.extend( oInit, jQuerythis.data() ) );
 			
 			
 			
@@ -6221,8 +6221,8 @@
 			}
 			
 			/* Create the settings object for this table and set some of the default parameters */
-			var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
-				"sDestroyWidth": $this[0].style.width,
+			var oSettings = jQuery.extend( true, {}, DataTable.models.oSettings, {
+				"sDestroyWidth": jQuerythis[0].style.width,
 				"sInstance":     sId,
 				"sTableId":      sId
 			} );
@@ -6234,7 +6234,7 @@
 			
 			// Need to add the instance after the instance after the settings object has been added
 			// to the settings array, so we can self reference the table instance if more than one
-			oSettings.oInstance = (_that.length===1) ? _that : $this.dataTable();
+			oSettings.oInstance = (_that.length===1) ? _that : jQuerythis.dataTable();
 			
 			// Backwards compatibility, before we apply all the defaults
 			_fnCompatOpts( oInit );
@@ -6247,13 +6247,13 @@
 			// If the length menu is given, but the init display length is not, use the length menu
 			if ( oInit.aLengthMenu && ! oInit.iDisplayLength )
 			{
-				oInit.iDisplayLength = $.isArray( oInit.aLengthMenu[0] ) ?
+				oInit.iDisplayLength = jQuery.isArray( oInit.aLengthMenu[0] ) ?
 					oInit.aLengthMenu[0][0] : oInit.aLengthMenu[0];
 			}
 			
 			// Apply the defaults and init options to make a single init object will all
 			// options defined from defaults and instance options.
-			oInit = _fnExtend( $.extend( true, {}, defaults ), oInit );
+			oInit = _fnExtend( jQuery.extend( true, {}, defaults ), oInit );
 			
 			
 			// Map the initialisation options onto the settings object
@@ -6331,7 +6331,7 @@
 				/* Use the JUI classes object for display. You could clone the oStdClasses object if
 				 * you want to have multiple tables with multiple independent classes
 				 */
-				$.extend( oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
+				jQuery.extend( oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
 			
 				if ( oInit.sDom === defaults.sDom && defaults.sDom === "lfrtip" )
 				{
@@ -6342,15 +6342,15 @@
 				if ( ! oSettings.renderer ) {
 					oSettings.renderer = 'jqueryui';
 				}
-				else if ( $.isPlainObject( oSettings.renderer ) && ! oSettings.renderer.header ) {
+				else if ( jQuery.isPlainObject( oSettings.renderer ) && ! oSettings.renderer.header ) {
 					oSettings.renderer.header = 'jqueryui';
 				}
 			}
 			else
 			{
-				$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
+				jQuery.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
 			}
-			$this.addClass( oClasses.sTable );
+			jQuerythis.addClass( oClasses.sTable );
 			
 			
 			if ( oSettings.iInitDisplayStart === undefined )
@@ -6363,14 +6363,14 @@
 			if ( oInit.iDeferLoading !== null )
 			{
 				oSettings.bDeferLoading = true;
-				var tmp = $.isArray( oInit.iDeferLoading );
+				var tmp = jQuery.isArray( oInit.iDeferLoading );
 				oSettings._iRecordsDisplay = tmp ? oInit.iDeferLoading[0] : oInit.iDeferLoading;
 				oSettings._iRecordsTotal = tmp ? oInit.iDeferLoading[1] : oInit.iDeferLoading;
 			}
 			
 			/* Language definitions */
 			var oLanguage = oSettings.oLanguage;
-			$.extend( true, oLanguage, oInit.oLanguage );
+			jQuery.extend( true, oLanguage, oInit.oLanguage );
 			
 			if ( oLanguage.sUrl !== "" )
 			{
@@ -6378,13 +6378,13 @@
 				 * get async to the remainder of this function we use bInitHandedOff to indicate that
 				 * _fnInitialise will be fired by the returned Ajax handler, rather than the constructor
 				 */
-				$.ajax( {
+				jQuery.ajax( {
 					dataType: 'json',
 					url: oLanguage.sUrl,
 					success: function ( json ) {
 						_fnLanguageCompat( json );
 						_fnCamelToHungarian( defaults.oLanguage, json );
-						$.extend( true, oLanguage, json );
+						jQuery.extend( true, oLanguage, json );
 						_fnInitialise( oSettings );
 					},
 					error: function () {
@@ -6408,11 +6408,11 @@
 			
 			/* Remove row stripe classes if they are already on the table row */
 			var stripeClasses = oSettings.asStripeClasses;
-			var rowOne = $this.children('tbody').find('tr').eq(0);
-			if ( $.inArray( true, $.map( stripeClasses, function(el, i) {
+			var rowOne = jQuerythis.children('tbody').find('tr').eq(0);
+			if ( jQuery.inArray( true, jQuery.map( stripeClasses, function(el, i) {
 				return rowOne.hasClass(el);
 			} ) ) !== -1 ) {
-				$('tbody tr', this).removeClass( stripeClasses.join(' ') );
+				jQuery('tbody tr', this).removeClass( stripeClasses.join(' ') );
 				oSettings.asDestroyStripes = stripeClasses.slice();
 			}
 			
@@ -6462,7 +6462,7 @@
 					return cell.getAttribute( 'data-'+name ) !== null ? name : null;
 				};
 			
-				$( rowOne[0] ).children('th, td').each( function (i, cell) {
+				jQuery( rowOne[0] ).children('th, td').each( function (i, cell) {
 					var col = oSettings.aoColumns[i];
 			
 					if ( col.mData === i ) {
@@ -6522,7 +6522,7 @@
 						var aSort = _fnSortFlatten( oSettings );
 						var sortedColumns = {};
 			
-						$.each( aSort, function (i, val) {
+						jQuery.each( aSort, function (i, val) {
 							sortedColumns[ val.src ] = val.dir;
 						} );
 			
@@ -6545,34 +6545,34 @@
 			 */
 			
 			// Work around for Webkit bug 83867 - store the caption-side before removing from doc
-			var captions = $this.children('caption').each( function () {
-				this._captionSide = $this.css('caption-side');
+			var captions = jQuerythis.children('caption').each( function () {
+				this._captionSide = jQuerythis.css('caption-side');
 			} );
 			
-			var thead = $this.children('thead');
+			var thead = jQuerythis.children('thead');
 			if ( thead.length === 0 )
 			{
-				thead = $('<thead/>').appendTo(this);
+				thead = jQuery('<thead/>').appendTo(this);
 			}
 			oSettings.nTHead = thead[0];
 			
-			var tbody = $this.children('tbody');
+			var tbody = jQuerythis.children('tbody');
 			if ( tbody.length === 0 )
 			{
-				tbody = $('<tbody/>').appendTo(this);
+				tbody = jQuery('<tbody/>').appendTo(this);
 			}
 			oSettings.nTBody = tbody[0];
 			
-			var tfoot = $this.children('tfoot');
+			var tfoot = jQuerythis.children('tfoot');
 			if ( tfoot.length === 0 && captions.length > 0 && (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
 			{
 				// If we are a scrolling table, and no footer has been given, then we need to create
 				// a tfoot element for the caption element to be appended to
-				tfoot = $('<tfoot/>').appendTo(this);
+				tfoot = jQuery('<tfoot/>').appendTo(this);
 			}
 			
 			if ( tfoot.length === 0 || tfoot.children().length === 0 ) {
-				$this.addClass( oClasses.sNoFooter );
+				jQuerythis.addClass( oClasses.sNoFooter );
 			}
 			else if ( tfoot.length > 0 ) {
 				oSettings.nTFoot = tfoot[0];
@@ -6593,7 +6593,7 @@
 				 * source since there is no point in reading the DOM data if we are then going
 				 * to replace it with Ajax data
 				 */
-				_fnAddTr( oSettings, $(oSettings.nTBody).children('tr') );
+				_fnAddTr( oSettings, jQuery(oSettings.nTBody).children('tr') );
 			}
 			
 			/* Copy the data index array */
@@ -6688,7 +6688,7 @@
 	{
 		var idx, jq;
 		var settings = DataTable.settings;
-		var tables = $.map( settings, function (el, i) {
+		var tables = jQuery.map( settings, function (el, i) {
 			return el.nTable;
 		} );
 	
@@ -6701,7 +6701,7 @@
 		}
 		else if ( mixed.nodeName && mixed.nodeName.toLowerCase() === 'table' ) {
 			// Table node
-			idx = $.inArray( mixed, tables );
+			idx = jQuery.inArray( mixed, tables );
 			return idx !== -1 ? [ settings[idx] ] : null;
 		}
 		else if ( mixed && typeof mixed.settings === 'function' ) {
@@ -6709,16 +6709,16 @@
 		}
 		else if ( typeof mixed === 'string' ) {
 			// jQuery selector
-			jq = $(mixed);
+			jq = jQuery(mixed);
 		}
-		else if ( mixed instanceof $ ) {
+		else if ( mixed instanceof jQuery ) {
 			// jQuery object (also DataTables instance)
 			jq = mixed;
 		}
 	
 		if ( jq ) {
 			return jq.map( function(i) {
-				idx = $.inArray( this, tables );
+				idx = jQuery.inArray( this, tables );
 				return idx !== -1 ? settings[idx] : null;
 			} ).toArray();
 		}
@@ -6769,15 +6769,15 @@
 	 *
 	 * @example
 	 *   // Direct initialisation during DataTables construction
-	 *   var api = $('#example').DataTable();
+	 *   var api = jQuery('#example').DataTable();
 	 *
 	 * @example
 	 *   // Initialisation using a DataTables jQuery object
-	 *   var api = $('#example').dataTable().api();
+	 *   var api = jQuery('#example').dataTable().api();
 	 *
 	 * @example
 	 *   // Initialisation as a constructor
-	 *   var api = new $.fn.DataTable.Api( 'table.dataTable' );
+	 *   var api = new jQuery.fn.DataTable.Api( 'table.dataTable' );
 	 */
 	_Api = function ( context, data )
 	{
@@ -6793,7 +6793,7 @@
 			}
 		};
 	
-		if ( $.isArray( context ) ) {
+		if ( jQuery.isArray( context ) ) {
 			for ( var i=0, ien=context.length ; i<ien ; i++ ) {
 				ctxSettings( context[i] );
 			}
@@ -6807,7 +6807,7 @@
 	
 		// Initial data
 		if ( data ) {
-			$.merge( this, data );
+			jQuery.merge( this, data );
 		}
 	
 		// selector
@@ -6824,7 +6824,7 @@
 	
 	// Don't destroy the existing prototype, just extend it. Required for jQuery 2's
 	// isPlainObject.
-	$.extend( _Api.prototype, {
+	jQuery.extend( _Api.prototype, {
 		any: function ()
 		{
 			return this.count() !== 0;
@@ -7051,15 +7051,15 @@
 		},
 	
 	
-		to$: function ()
+		tojQuery: function ()
 		{
-			return $( this );
+			return jQuery( this );
 		},
 	
 	
 		toJQuery: function ()
 		{
-			return $( this );
+			return jQuery( this );
 		},
 	
 	
@@ -7100,7 +7100,7 @@
 			// Value
 			obj[ struct.name ] = typeof struct.val === 'function' ?
 				methodScoping( scope, struct.val, struct ) :
-				$.isPlainObject( struct.val ) ?
+				jQuery.isPlainObject( struct.val ) ?
 					{} :
 					struct.val;
 	
@@ -7147,7 +7147,7 @@
 	
 	_Api.register = _api_register = function ( name, val )
 	{
-		if ( $.isArray( name ) ) {
+		if ( jQuery.isArray( name ) ) {
 			for ( var j=0, jen=name.length ; j<jen ; j++ ) {
 				_Api.register( name[j], val );
 			}
@@ -7212,7 +7212,7 @@
 				// New API instance returned, want the value from the first item
 				// in the returned array for the singular result.
 				return ret.length ?
-					$.isArray( ret[0] ) ?
+					jQuery.isArray( ret[0] ) ?
 						new _Api( ret.context, ret[0] ) : // Array results are 'enhanced'
 						ret[0] :
 					undefined;
@@ -7241,15 +7241,15 @@
 		}
 	
 		// Perform a jQuery selector on the table nodes
-		var nodes = $.map( a, function (el, i) {
+		var nodes = jQuery.map( a, function (el, i) {
 			return el.nTable;
 		} );
 	
-		return $(nodes)
+		return jQuery(nodes)
 			.filter( selector )
 			.map( function (i) {
 				// Need to translate back from the table node to the settings
-				var idx = $.inArray( this, nodes );
+				var idx = jQuery.inArray( this, nodes );
 				return a[ idx ];
 			} )
 			.toArray();
@@ -7557,7 +7557,7 @@
 			ctx = ctx[0];
 	
 			return ctx.ajax ?
-				$.isPlainObject( ctx.ajax ) ?
+				jQuery.isPlainObject( ctx.ajax ) ?
 					ctx.ajax.url :
 					ctx.ajax :
 				ctx.sAjaxSource;
@@ -7565,7 +7565,7 @@
 	
 		// set
 		return this.iterator( 'table', function ( settings ) {
-			if ( $.isPlainObject( settings.ajax ) ) {
+			if ( jQuery.isPlainObject( settings.ajax ) ) {
 				settings.ajax.url = url;
 			}
 			else {
@@ -7617,7 +7617,7 @@
 				[ selector[i] ];
 	
 			for ( j=0, jen=a.length ; j<jen ; j++ ) {
-				res = selectFn( typeof a[j] === 'string' ? $.trim(a[j]) : a[j] );
+				res = selectFn( typeof a[j] === 'string' ? jQuery.trim(a[j]) : a[j] );
 	
 				if ( res && res.length ) {
 					out = out.concat( res );
@@ -7649,7 +7649,7 @@
 			opts.search = opts.filter;
 		}
 	
-		return $.extend( {
+		return jQuery.extend( {
 			search: 'none',
 			order: 'current',
 			page: 'all'
@@ -7713,8 +7713,8 @@
 				displayMaster.slice() :                      // no search
 				search == 'applied' ?
 					displayFiltered.slice() :                // applied search
-					$.map( displayMaster, function (el, i) { // removed search
-						return $.inArray( el, displayFiltered ) === -1 ? el : null;
+					jQuery.map( displayMaster, function (el, i) { // removed search
+						return jQuery.inArray( el, displayFiltered ) === -1 ? el : null;
 					} );
 		}
 		else if ( order == 'index' || order == 'original' ) {
@@ -7723,7 +7723,7 @@
 					a.push( i );
 				}
 				else { // applied | removed
-					tmp = $.inArray( i, displayFiltered );
+					tmp = jQuery.inArray( i, displayFiltered );
 	
 					if ((tmp === -1 && search == 'removed') ||
 						(tmp >= 0   && search == 'applied') )
@@ -7765,7 +7765,7 @@
 	
 			var rows = _selector_row_indexes( settings, opts );
 	
-			if ( selInt !== null && $.inArray( selInt, rows ) !== -1 ) {
+			if ( selInt !== null && jQuery.inArray( selInt, rows ) !== -1 ) {
 				// Selector - integer
 				return [ selInt ];
 			}
@@ -7776,7 +7776,7 @@
 	
 			// Selector - function
 			if ( typeof sel === 'function' ) {
-				return $.map( rows, function (idx) {
+				return jQuery.map( rows, function (idx) {
 					var row = settings.aoData[ idx ];
 					return sel( idx, row._aData, row.nTr ) ? idx : null;
 				} );
@@ -7789,7 +7789,7 @@
 	
 			// Selector - node
 			if ( sel.nodeName ) {
-				if ( $.inArray( sel, nodes ) !== -1 ) {
+				if ( jQuery.inArray( sel, nodes ) !== -1 ) {
 					return [ sel._DT_RowIndex ]; // sel is a TR node that is in the table
 					                             // and DataTables adds a prop for fast lookup
 				}
@@ -7818,7 +7818,7 @@
 			// Selector - jQuery selector string, array of nodes or jQuery object/
 			// As jQuery's .filter() allows jQuery objects to be passed in filter,
 			// it also allows arrays, so this will cope with all three options
-			return $(nodes)
+			return jQuery(nodes)
 				.filter( sel )
 				.map( function () {
 					return this._DT_RowIndex;
@@ -7835,7 +7835,7 @@
 		if ( selector === undefined ) {
 			selector = '';
 		}
-		else if ( $.isPlainObject( selector ) ) {
+		else if ( jQuery.isPlainObject( selector ) ) {
 			opts = selector;
 			selector = '';
 		}
@@ -7975,7 +7975,7 @@
 		// Return an Api.rows() extended instance, so rows().nodes() etc can be used
 		var modRows = this.rows( -1 );
 		modRows.pop();
-		$.merge( modRows, newRows );
+		jQuery.merge( modRows, newRows );
 	
 		return modRows;
 	} );
@@ -8024,7 +8024,7 @@
 	_api_register( 'row.add()', function ( row ) {
 		// Allow a jQuery object to be passed in - only a single row is added from
 		// it though - the first element in the set
-		if ( row instanceof $ && row.length ) {
+		if ( row instanceof jQuery && row.length ) {
 			row = row[0];
 		}
 	
@@ -8047,7 +8047,7 @@
 		var rows = [];
 		var addRow = function ( r, k ) {
 			// Recursion to allow for arrays of jQuery objects
-			if ( $.isArray( r ) || r instanceof $ ) {
+			if ( jQuery.isArray( r ) || r instanceof jQuery ) {
 				for ( var i=0, ien=r.length ; i<ien ; i++ ) {
 					addRow( r[i], k );
 				}
@@ -8061,8 +8061,8 @@
 			}
 			else {
 				// Otherwise create a row with a wrapper
-				var created = $('<tr><td/></tr>').addClass( k );
-				$('td', created)
+				var created = jQuery('<tr><td/></tr>').addClass( k );
+				jQuery('td', created)
 					.addClass( k )
 					.html( r )
 					[0].colSpan = _fnVisbleColumns( ctx );
@@ -8077,7 +8077,7 @@
 			row._details.remove();
 		}
 	
-		row._details = $(rows);
+		row._details = jQuery(rows);
 	
 		// If the children were already shown, that state should be retained
 		if ( row._detailsShow ) {
@@ -8275,7 +8275,7 @@
 	// can be an array of these items, comma separated list, or an array of comma
 	// separated lists
 	
-	var __re_column_selector = /^(.+):(name|visIdx|visible)$/;
+	var __re_column_selector = /^(.+):(name|visIdx|visible)jQuery/;
 	
 	
 	// r1 and r2 are redundant - but it means that the parameters match for the
@@ -8316,7 +8316,7 @@
 			if ( typeof s === 'function' ) {
 				var rows = _selector_row_indexes( settings, opts );
 	
-				return $.map( columns, function (col, idx) {
+				return jQuery.map( columns, function (col, idx) {
 					return s(
 							idx,
 							__columnData( settings, idx, 0, 0, rows ),
@@ -8338,7 +8338,7 @@
 						// Visible index given, convert to column index
 						if ( idx < 0 ) {
 							// Counting from the right
-							var visColumns = $.map( columns, function (col,i) {
+							var visColumns = jQuery.map( columns, function (col,i) {
 								return col.bVisible ? i : null;
 							} );
 							return [ visColumns[ visColumns.length + idx ] ];
@@ -8348,17 +8348,17 @@
 	
 					case 'name':
 						// match by name. `names` is column index complete and in order
-						return $.map( names, function (name, i) {
+						return jQuery.map( names, function (name, i) {
 							return name === match[1] ? i : null;
 						} );
 				}
 			}
 			else {
 				// jQuery selector on the TH elements for the columns
-				return $( nodes )
+				return jQuery( nodes )
 					.filter( s )
 					.map( function () {
-						return $.inArray( this, nodes ); // `nodes` is column index complete and in order
+						return jQuery.inArray( this, nodes ); // `nodes` is column index complete and in order
 					} )
 					.toArray();
 			}
@@ -8389,7 +8389,7 @@
 		if ( vis ) {
 			// Insert column
 			// Need to decide if we should use appendChild or insertBefore
-			var insertBefore = $.inArray( true, _pluck(cols, 'bVisible'), column+1 );
+			var insertBefore = jQuery.inArray( true, _pluck(cols, 'bVisible'), column+1 );
 	
 			for ( i=0, ien=data.length ; i<ien ; i++ ) {
 				tr = data[i].nTr;
@@ -8403,7 +8403,7 @@
 		}
 		else {
 			// Remove column
-			$( _pluck( settings.aoData, 'anCells', column ) ).detach();
+			jQuery( _pluck( settings.aoData, 'anCells', column ) ).detach();
 		}
 	
 		// Common actions
@@ -8432,7 +8432,7 @@
 		if ( selector === undefined ) {
 			selector = '';
 		}
-		else if ( $.isPlainObject( selector ) ) {
+		else if ( jQuery.isPlainObject( selector ) ) {
 			opts = selector;
 			selector = '';
 		}
@@ -8534,7 +8534,7 @@
 		var data = settings.aoData;
 		var rows = _selector_row_indexes( settings, opts );
 		var cells = _removeEmpty( _pluck_order( data, rows, 'anCells' ) );
-		var allCells = $( [].concat.apply([], cells) );
+		var allCells = jQuery( [].concat.apply([], cells) );
 		var row;
 		var columns = settings.aoColumns.length;
 		var a, i, ien, j, o, host;
@@ -8574,7 +8574,7 @@
 			}
 			
 			// Selector - index
-			if ( $.isPlainObject( s ) ) {
+			if ( jQuery.isPlainObject( s ) ) {
 				return [s];
 			}
 	
@@ -8598,7 +8598,7 @@
 	
 	_api_register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 		// Argument shifting
-		if ( $.isPlainObject( rowSelector ) ) {
+		if ( jQuery.isPlainObject( rowSelector ) ) {
 			// Indexes
 			if ( rowSelector.row === undefined ) {
 				// Selector options in first parameter
@@ -8611,7 +8611,7 @@
 				columnSelector = null;
 			}
 		}
-		if ( $.isPlainObject( columnSelector ) ) {
+		if ( jQuery.isPlainObject( columnSelector ) ) {
 			opts = columnSelector;
 			columnSelector = null;
 		}
@@ -8643,7 +8643,7 @@
 			return a;
 		}, 1 );
 	
-		$.extend( cells.selector, {
+		jQuery.extend( cells.selector, {
 			cols: columnSelector,
 			rows: rowSelector,
 			opts: opts
@@ -8773,7 +8773,7 @@
 			// Simple column / direction passed in
 			order = [ [ order, dir ] ];
 		}
-		else if ( ! $.isArray( order[0] ) ) {
+		else if ( ! jQuery.isArray( order[0] ) ) {
 			// Arguments passed in (list of 1D arrays)
 			order = Array.prototype.slice.call( arguments );
 		}
@@ -8809,13 +8809,13 @@
 				ctx[0].aaSortingFixed :
 				undefined;
 	
-			return $.isArray( fixed ) ?
+			return jQuery.isArray( fixed ) ?
 				{ pre: fixed } :
 				fixed;
 		}
 	
 		return this.iterator( 'table', function ( settings ) {
-			settings.aaSortingFixed = $.extend( true, {}, set );
+			settings.aaSortingFixed = jQuery.extend( true, {}, set );
 		} );
 	} );
 	
@@ -8830,7 +8830,7 @@
 		return this.iterator( 'table', function ( settings, i ) {
 			var sort = [];
 	
-			$.each( that[i], function (j, col) {
+			jQuery.each( that[i], function (j, col) {
 				sort.push( [ col, dir ] );
 			} );
 	
@@ -8856,7 +8856,7 @@
 				return;
 			}
 	
-			_fnFilterComplete( settings, $.extend( {}, settings.oPreviousSearch, {
+			_fnFilterComplete( settings, jQuery.extend( {}, settings.oPreviousSearch, {
 				"sSearch": input+"",
 				"bRegex":  regex === null ? false : regex,
 				"bSmart":  smart === null ? true  : smart,
@@ -8883,7 +8883,7 @@
 					return;
 				}
 	
-				$.extend( preSearch[ column ], {
+				jQuery.extend( preSearch[ column ], {
 					"sSearch": input+"",
 					"bRegex":  regex === null ? false : regex,
 					"bSmart":  smart === null ? true  : smart,
@@ -8942,7 +8942,7 @@
 	 *  @dtopt API-Static
 	 *
 	 *  @example
-	 *    alert( $.fn.dataTable.versionCheck( '1.9.0' ) );
+	 *    alert( jQuery.fn.dataTable.versionCheck( '1.9.0' ) );
 	 */
 	DataTable.versionCheck = DataTable.fnVersionCheck = function( version )
 	{
@@ -8978,18 +8978,18 @@
 	 *  @dtopt API-Static
 	 *
 	 *  @example
-	 *    if ( ! $.fn.DataTable.isDataTable( '#example' ) ) {
-	 *      $('#example').dataTable();
+	 *    if ( ! jQuery.fn.DataTable.isDataTable( '#example' ) ) {
+	 *      jQuery('#example').dataTable();
 	 *    }
 	 */
 	DataTable.isDataTable = DataTable.fnIsDataTable = function ( table )
 	{
-		var t = $(table).get(0);
+		var t = jQuery(table).get(0);
 		var is = false;
 	
-		$.each( DataTable.settings, function (i, o) {
-			var head = o.nScrollHead ? $('table', o.nScrollHead)[0] : null;
-			var foot = o.nScrollFoot ? $('table', o.nScrollFoot)[0] : null;
+		jQuery.each( DataTable.settings, function (i, o) {
+			var head = o.nScrollHead ? jQuery('table', o.nScrollHead)[0] : null;
+			var foot = o.nScrollFoot ? jQuery('table', o.nScrollFoot)[0] : null;
 	
 			if ( o.nTable === t || head === t || foot === t ) {
 				is = true;
@@ -9012,21 +9012,21 @@
 	 *  @dtopt API-Static
 	 *
 	 *  @example
-	 *    $.each( $.fn.dataTable.tables(true), function () {
-	 *      $(table).DataTable().columns.adjust();
+	 *    jQuery.each( jQuery.fn.dataTable.tables(true), function () {
+	 *      jQuery(table).DataTable().columns.adjust();
 	 *    } );
 	 */
 	DataTable.tables = DataTable.fnTables = function ( visible )
 	{
 		var api = false;
 	
-		if ( $.isPlainObject( visible ) ) {
+		if ( jQuery.isPlainObject( visible ) ) {
 			api = visible.api;
 			visible = visible.visible;
 		}
 	
-		var a = $.map( DataTable.settings, function (o) {
-			if ( !visible || (visible && $(o.nTable).is(':visible')) ) {
+		var a = jQuery.map( DataTable.settings, function (o) {
+			if ( !visible || (visible && jQuery(o.nTable).is(':visible')) ) {
 				return o.nTable;
 			}
 		} );
@@ -9089,12 +9089,12 @@
 	/**
 	 *
 	 */
-	_api_register( '$()', function ( selector, opts ) {
+	_api_register( 'jQuery()', function ( selector, opts ) {
 		var
 			rows   = this.rows( opts ).nodes(), // Get all rows
-			jqRows = $(rows);
+			jqRows = jQuery(rows);
 	
-		return $( [].concat(
+		return jQuery( [].concat(
 			jqRows.filter( selector ).toArray(),
 			jqRows.find( selector ).toArray()
 		) );
@@ -9102,7 +9102,7 @@
 	
 	
 	// jQuery functions to operate on the tables
-	$.each( [ 'on', 'one', 'off' ], function (i, key) {
+	jQuery.each( [ 'on', 'one', 'off' ], function (i, key) {
 		_api_register( key+'()', function ( /* event, handler */ ) {
 			var args = Array.prototype.slice.call(arguments);
 	
@@ -9111,7 +9111,7 @@
 				args[0] += '.dt';
 			}
 	
-			var inst = $( this.tables().nodes() );
+			var inst = jQuery( this.tables().nodes() );
 			inst[key].apply( inst, args );
 			return this;
 		} );
@@ -9153,10 +9153,10 @@
 			var tbody     = settings.nTBody;
 			var thead     = settings.nTHead;
 			var tfoot     = settings.nTFoot;
-			var jqTable   = $(table);
-			var jqTbody   = $(tbody);
-			var jqWrapper = $(settings.nTableWrapper);
-			var rows      = $.map( settings.aoData, function (r) { return r.nTr; } );
+			var jqTable   = jQuery(table);
+			var jqTbody   = jQuery(tbody);
+			var jqWrapper = jQuery(settings.nTableWrapper);
+			var rows      = jQuery.map( settings.aoData, function (r) { return r.nTr; } );
 			var i, ien;
 	
 			// Flag to note that the table is currently being destroyed - no action
@@ -9175,7 +9175,7 @@
 			// lowercase, `dt` events are user subscribed and they are responsible
 			// for removing them
 			jqWrapper.unbind('.DT').find(':not(tbody *)').unbind('.DT');
-			$(window).unbind('.DT-'+settings.sInstance);
+			jQuery(window).unbind('.DT-'+settings.sInstance);
 	
 			// When scrolling we had to break the table up - restore it
 			if ( table != thead.parentNode ) {
@@ -9192,17 +9192,17 @@
 			settings.aaSortingFixed = [];
 			_fnSortingClasses( settings );
 	
-			$( rows ).removeClass( settings.asStripeClasses.join(' ') );
+			jQuery( rows ).removeClass( settings.asStripeClasses.join(' ') );
 	
-			$('th, td', thead).removeClass( classes.sSortable+' '+
+			jQuery('th, td', thead).removeClass( classes.sSortable+' '+
 				classes.sSortableAsc+' '+classes.sSortableDesc+' '+classes.sSortableNone
 			);
 	
 			if ( settings.bJUI ) {
-				$('th span.'+classes.sSortIcon+ ', td span.'+classes.sSortIcon, thead).detach();
-				$('th, td', thead).each( function () {
-					var wrapper = $('div.'+classes.sSortJUIWrapper, this);
-					$(this).append( wrapper.contents() );
+				jQuery('th span.'+classes.sSortIcon+ ', td span.'+classes.sSortIcon, thead).detach();
+				jQuery('th, td', thead).each( function () {
+					var wrapper = jQuery('div.'+classes.sSortJUIWrapper, this);
+					jQuery(this).append( wrapper.contents() );
 					wrapper.detach();
 				} );
 			}
@@ -9234,13 +9234,13 @@
 	
 				if ( ien ) {
 					jqTbody.children().each( function (i) {
-						$(this).addClass( settings.asDestroyStripes[i % ien] );
+						jQuery(this).addClass( settings.asDestroyStripes[i % ien] );
 					} );
 				}
 			}
 	
 			/* Remove the settings object from the settings array */
-			var idx = $.inArray( settings, DataTable.settings );
+			var idx = jQuery.inArray( settings, DataTable.settings );
 			if ( idx !== -1 ) {
 				DataTable.settings.splice( idx, 1 );
 			}
@@ -9249,7 +9249,7 @@
 	
 	
 	// Add the `every()` method for rows, columns and cells in a compact form
-	$.each( [ 'column', 'row', 'cell' ], function ( i, type ) {
+	jQuery.each( [ 'column', 'row', 'cell' ], function ( i, type ) {
 		_api_register( type+'s().every()', function ( fn ) {
 			var opts = this.selector.opts;
 			var api = this;
@@ -9288,7 +9288,7 @@
 			resolved = def;
 		}
 	
-		if ( plural !== undefined && $.isPlainObject( resolved ) ) {
+		if ( plural !== undefined && jQuery.isPlainObject( resolved ) ) {
 			resolved = resolved[ plural ] !== undefined ?
 				resolved[ plural ] :
 				resolved._;
@@ -9483,7 +9483,7 @@
 	 */
 	DataTable.models.oColumn = {
 		/**
-		 * Column index. This could be worked out on-the-fly with $.inArray, but it
+		 * Column index. This could be worked out on-the-fly with jQuery.inArray, but it
 		 * is faster to just hold it as a variable
 		 *  @type integer
 		 *  @default null
@@ -9750,8 +9750,8 @@
 		 *
 		 *  @example
 		 *    // Using a 2D array data source
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "data": [
 		 *          ['Trident', 'Internet Explorer 4.0', 'Win 95+', 4, 'X'],
 		 *          ['Trident', 'Internet Explorer 5.0', 'Win 95+', 5, 'C'],
@@ -9768,8 +9768,8 @@
 		 *
 		 *  @example
 		 *    // Using an array of objects as a data source (`data`)
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "data": [
 		 *          {
 		 *            "engine":   "Trident",
@@ -9813,15 +9813,15 @@
 		 *
 		 *  @example
 		 *    // Sort by 3rd column first, and then 4th column
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "order": [[2,'asc'], [3,'desc']]
 		 *      } );
 		 *    } );
 		 *
 		 *    // No initial sorting
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "order": []
 		 *      } );
 		 *    } );
@@ -9843,8 +9843,8 @@
 		 *  @name DataTable.defaults.orderFixed
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "orderFixed": [[0,'asc']]
 		 *      } );
 		 *    } )
@@ -9933,14 +9933,14 @@
 		 * @example
 		 *   // Get JSON data from a file via Ajax.
 		 *   // Note DataTables expects data in the form `{ data: [ ...data... ] }` by default).
-		 *   $('#example').dataTable( {
+		 *   jQuery('#example').dataTable( {
 		 *     "ajax": "data.json"
 		 *   } );
 		 *
 		 * @example
 		 *   // Get JSON data from a file via Ajax, using `dataSrc` to change
 		 *   // `data` to `tableData` (i.e. `{ tableData: [ ...data... ] }`)
-		 *   $('#example').dataTable( {
+		 *   jQuery('#example').dataTable( {
 		 *     "ajax": {
 		 *       "url": "data.json",
 		 *       "dataSrc": "tableData"
@@ -9950,7 +9950,7 @@
 		 * @example
 		 *   // Get JSON data from a file via Ajax, using `dataSrc` to read data
 		 *   // from a plain array rather than an array in an object
-		 *   $('#example').dataTable( {
+		 *   jQuery('#example').dataTable( {
 		 *     "ajax": {
 		 *       "url": "data.json",
 		 *       "dataSrc": ""
@@ -9961,7 +9961,7 @@
 		 *   // Manipulate the data returned from the server - add a link to data
 		 *   // (note this can, should, be done using `render` for the column - this
 		 *   // is just a simple example of how the data can be manipulated).
-		 *   $('#example').dataTable( {
+		 *   jQuery('#example').dataTable( {
 		 *     "ajax": {
 		 *       "url": "data.json",
 		 *       "dataSrc": function ( json ) {
@@ -9975,12 +9975,12 @@
 		 *
 		 * @example
 		 *   // Add data to the request
-		 *   $('#example').dataTable( {
+		 *   jQuery('#example').dataTable( {
 		 *     "ajax": {
 		 *       "url": "data.json",
 		 *       "data": function ( d ) {
 		 *         return {
-		 *           "extra_search": $('#extra').val()
+		 *           "extra_search": jQuery('#extra').val()
 		 *         };
 		 *       }
 		 *     }
@@ -9988,7 +9988,7 @@
 		 *
 		 * @example
 		 *   // Send request as POST
-		 *   $('#example').dataTable( {
+		 *   jQuery('#example').dataTable( {
 		 *     "ajax": {
 		 *       "url": "data.json",
 		 *       "type": "POST"
@@ -9998,7 +9998,7 @@
 		 * @example
 		 *   // Get the data from localStorage (could interface with a form for
 		 *   // adding, editing and removing rows).
-		 *   $('#example').dataTable( {
+		 *   jQuery('#example').dataTable( {
 		 *     "ajax": function (data, callback, settings) {
 		 *       callback(
 		 *         JSON.parse( localStorage.getItem('dataTablesData') )
@@ -10026,8 +10026,8 @@
 		 *  @name DataTable.defaults.lengthMenu
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
 		 *      } );
 		 *    } );
@@ -10084,8 +10084,8 @@
 		 *  @name DataTable.defaults.searchCols
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "searchCols": [
 		 *          null,
 		 *          { "search": "My filter" },
@@ -10110,8 +10110,8 @@
 		 *  @name DataTable.defaults.stripeClasses
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stripeClasses": [ 'strip1', 'strip2', 'strip3' ]
 		 *      } );
 		 *    } )
@@ -10130,8 +10130,8 @@
 		 *  @name DataTable.defaults.autoWidth
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "autoWidth": false
 		 *      } );
 		 *    } );
@@ -10152,8 +10152,8 @@
 		 *  @name DataTable.defaults.deferRender
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "ajax": "sources/arrays.txt",
 		 *        "deferRender": true
 		 *      } );
@@ -10174,14 +10174,14 @@
 		 *  @name DataTable.defaults.destroy
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "srollY": "200px",
 		 *        "paginate": false
 		 *      } );
 		 *
 		 *      // Some time later....
-		 *      $('#example').dataTable( {
+		 *      jQuery('#example').dataTable( {
 		 *        "filter": false,
 		 *        "destroy": true
 		 *      } );
@@ -10205,8 +10205,8 @@
 		 *  @name DataTable.defaults.searching
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "searching": false
 		 *      } );
 		 *    } );
@@ -10225,8 +10225,8 @@
 		 *  @name DataTable.defaults.info
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "info": false
 		 *      } );
 		 *    } );
@@ -10245,8 +10245,8 @@
 		 *  @name DataTable.defaults.jQueryUI
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "jQueryUI": true
 		 *      } );
 		 *    } );
@@ -10264,8 +10264,8 @@
 		 *  @name DataTable.defaults.lengthChange
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "lengthChange": false
 		 *      } );
 		 *    } );
@@ -10282,8 +10282,8 @@
 		 *  @name DataTable.defaults.paging
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "paging": false
 		 *      } );
 		 *    } );
@@ -10303,8 +10303,8 @@
 		 *  @name DataTable.defaults.processing
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "processing": true
 		 *      } );
 		 *    } );
@@ -10327,14 +10327,14 @@
 		 *  @name DataTable.defaults.retrieve
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
+		 *    jQuery(document).ready( function() {
 		 *      initTable();
 		 *      tableActions();
 		 *    } );
 		 *
 		 *    function initTable ()
 		 *    {
-		 *      return $('#example').dataTable( {
+		 *      return jQuery('#example').dataTable( {
 		 *        "scrollY": "200px",
 		 *        "paginate": false,
 		 *        "retrieve": true
@@ -10364,8 +10364,8 @@
 		 *  @name DataTable.defaults.scrollCollapse
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "scrollY": "200",
 		 *        "scrollCollapse": true
 		 *      } );
@@ -10386,8 +10386,8 @@
 		 *  @name DataTable.defaults.serverSide
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "serverSide": true,
 		 *        "ajax": "xhr.php"
 		 *      } );
@@ -10406,8 +10406,8 @@
 		 *  @name DataTable.defaults.ordering
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "ordering": false
 		 *      } );
 		 *    } );
@@ -10426,8 +10426,8 @@
 		 *
 		 *  @example
 		 *    // Disable multiple column sorting ability
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "orderMulti": false
 		 *      } );
 		 *    } );
@@ -10446,8 +10446,8 @@
 		 *  @name DataTable.defaults.orderCellsTop
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "orderCellsTop": true
 		 *      } );
 		 *    } );
@@ -10468,8 +10468,8 @@
 		 *  @name DataTable.defaults.orderClasses
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "orderClasses": false
 		 *      } );
 		 *    } );
@@ -10493,8 +10493,8 @@
 		 *  @name DataTable.defaults.stateSave
 		 *
 		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function () {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateSave": true
 		 *      } );
 		 *    } );
@@ -10515,13 +10515,13 @@
 		 *  @name DataTable.defaults.createdRow
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "createdRow": function( row, data, dataIndex ) {
 		 *          // Bold the grade for all 'A' grade browsers
 		 *          if ( data[4] == "A" )
 		 *          {
-		 *            $('td:eq(4)', row).html( '<b>A</b>' );
+		 *            jQuery('td:eq(4)', row).html( '<b>A</b>' );
 		 *          }
 		 *        }
 		 *      } );
@@ -10540,8 +10540,8 @@
 		 *  @name DataTable.defaults.drawCallback
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "drawCallback": function( settings ) {
 		 *          alert( 'DataTables has redrawn the table' );
 		 *        }
@@ -10568,8 +10568,8 @@
 		 *  @name DataTable.defaults.footerCallback
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "footerCallback": function( tfoot, data, start, end, display ) {
 		 *          tfoot.getElementsByTagName('th')[0].innerHTML = "Starting index is "+start;
 		 *        }
@@ -10596,8 +10596,8 @@
 		 *  @example
 		 *    // Format a number using a single quote for the separator (note that
 		 *    // this can also be done with the language.thousands option)
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "formatNumber": function ( toFormat ) {
 		 *          return toFormat.toString().replace(
 		 *            /\B(?=(\d{3})+(?!\d))/g, "'"
@@ -10632,8 +10632,8 @@
 		 *  @name DataTable.defaults.headerCallback
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "fheaderCallback": function( head, data, start, end, display ) {
 		 *          head.getElementsByTagName('th')[0].innerHTML = "Displaying "+(end-start)+" records";
 		 *        }
@@ -10664,7 +10664,7 @@
 		 *  @name DataTable.defaults.infoCallback
 		 *
 		 *  @example
-		 *    $('#example').dataTable( {
+		 *    jQuery('#example').dataTable( {
 		 *      "infoCallback": function( settings, start, end, max, total, pre ) {
 		 *        return start +" to "+ end;
 		 *      }
@@ -10687,8 +10687,8 @@
 		 *  @name DataTable.defaults.initComplete
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "initComplete": function(settings, json) {
 		 *          alert( 'DataTables has finished its initialisation.' );
 		 *        }
@@ -10711,10 +10711,10 @@
 		 *  @name DataTable.defaults.preDrawCallback
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "preDrawCallback": function( settings ) {
-		 *          if ( $('#test').val() == 1 ) {
+		 *          if ( jQuery('#test').val() == 1 ) {
 		 *            return false;
 		 *          }
 		 *        }
@@ -10739,12 +10739,12 @@
 		 *  @name DataTable.defaults.rowCallback
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "rowCallback": function( row, data, displayIndex, displayIndexFull ) {
 		 *          // Bold the grade for all 'A' grade browsers
 		 *          if ( data[4] == "A" ) {
-		 *            $('td:eq(4)', row).html( '<b>A</b>' );
+		 *            jQuery('td:eq(4)', row).html( '<b>A</b>' );
 		 *          }
 		 *        }
 		 *      } );
@@ -10819,15 +10819,15 @@
 		 *  @name DataTable.defaults.stateLoadCallback
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateSave": true,
 		 *        "stateLoadCallback": function (settings) {
 		 *          var o;
 		 *
 		 *          // Send an Ajax request to the server to get the data. Note that
 		 *          // this is a synchronous request.
-		 *          $.ajax( {
+		 *          jQuery.ajax( {
 		 *            "url": "/state_load",
 		 *            "async": false,
 		 *            "dataType": "json",
@@ -10867,8 +10867,8 @@
 		 *
 		 *  @example
 		 *    // Remove a saved filter, so filtering is never loaded
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateSave": true,
 		 *        "stateLoadParams": function (settings, data) {
 		 *          data.oSearch.sSearch = "";
@@ -10878,8 +10878,8 @@
 		 *
 		 *  @example
 		 *    // Disallow state loading by returning false
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateSave": true,
 		 *        "stateLoadParams": function (settings, data) {
 		 *          return false;
@@ -10902,8 +10902,8 @@
 		 *
 		 *  @example
 		 *    // Show an alert with the filtering value that was saved
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateSave": true,
 		 *        "stateLoaded": function (settings, data) {
 		 *          alert( 'Saved filter was: '+data.oSearch.sSearch );
@@ -10927,12 +10927,12 @@
 		 *  @name DataTable.defaults.stateSaveCallback
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateSave": true,
 		 *        "stateSaveCallback": function (settings, data) {
 		 *          // Send an Ajax request to the server with the state object
-		 *          $.ajax( {
+		 *          jQuery.ajax( {
 		 *            "url": "/state_save",
 		 *            "data": data,
 		 *            "dataType": "json",
@@ -10968,8 +10968,8 @@
 		 *
 		 *  @example
 		 *    // Remove a saved filter, so filtering is never saved
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateSave": true,
 		 *        "stateSaveParams": function (settings, data) {
 		 *          data.oSearch.sSearch = "";
@@ -10991,8 +10991,8 @@
 		 *  @name DataTable.defaults.stateDuration
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "stateDuration": 60*60*24; // 1 day
 		 *      } );
 		 *    } )
@@ -11020,8 +11020,8 @@
 		 *
 		 *  @example
 		 *    // 57 records available in the table, no filtering applied
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "serverSide": true,
 		 *        "ajax": "scripts/server_processing.php",
 		 *        "deferLoading": 57
@@ -11030,8 +11030,8 @@
 		 *
 		 *  @example
 		 *    // 57 records after filtering, 100 without filtering (an initial filter applied)
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "serverSide": true,
 		 *        "ajax": "scripts/server_processing.php",
 		 *        "deferLoading": [ 57, 100 ],
@@ -11055,8 +11055,8 @@
 		 *  @name DataTable.defaults.pageLength
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "pageLength": 50
 		 *      } );
 		 *    } )
@@ -11076,8 +11076,8 @@
 		 *  @name DataTable.defaults.displayStart
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "displayStart": 20
 		 *      } );
 		 *    } )
@@ -11099,8 +11099,8 @@
 		 *  @name DataTable.defaults.tabIndex
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "tabIndex": 1
 		 *      } );
 		 *    } );
@@ -11146,8 +11146,8 @@
 				 *  @name DataTable.defaults.language.aria.sortAscending
 				 *
 				 *  @example
-				 *    $(document).ready( function() {
-				 *      $('#example').dataTable( {
+				 *    jQuery(document).ready( function() {
+				 *      jQuery('#example').dataTable( {
 				 *        "language": {
 				 *          "aria": {
 				 *            "sortAscending": " - click/return to sort ascending"
@@ -11169,8 +11169,8 @@
 				 *  @name DataTable.defaults.language.aria.sortDescending
 				 *
 				 *  @example
-				 *    $(document).ready( function() {
-				 *      $('#example').dataTable( {
+				 *    jQuery(document).ready( function() {
+				 *      jQuery('#example').dataTable( {
 				 *        "language": {
 				 *          "aria": {
 				 *            "sortDescending": " - click/return to sort descending"
@@ -11199,8 +11199,8 @@
 				 *  @name DataTable.defaults.language.paginate.first
 				 *
 				 *  @example
-				 *    $(document).ready( function() {
-				 *      $('#example').dataTable( {
+				 *    jQuery(document).ready( function() {
+				 *      jQuery('#example').dataTable( {
 				 *        "language": {
 				 *          "paginate": {
 				 *            "first": "First page"
@@ -11222,8 +11222,8 @@
 				 *  @name DataTable.defaults.language.paginate.last
 				 *
 				 *  @example
-				 *    $(document).ready( function() {
-				 *      $('#example').dataTable( {
+				 *    jQuery(document).ready( function() {
+				 *      jQuery('#example').dataTable( {
 				 *        "language": {
 				 *          "paginate": {
 				 *            "last": "Last page"
@@ -11245,8 +11245,8 @@
 				 *  @name DataTable.defaults.language.paginate.next
 				 *
 				 *  @example
-				 *    $(document).ready( function() {
-				 *      $('#example').dataTable( {
+				 *    jQuery(document).ready( function() {
+				 *      jQuery('#example').dataTable( {
 				 *        "language": {
 				 *          "paginate": {
 				 *            "next": "Next page"
@@ -11268,8 +11268,8 @@
 				 *  @name DataTable.defaults.language.paginate.previous
 				 *
 				 *  @example
-				 *    $(document).ready( function() {
-				 *      $('#example').dataTable( {
+				 *    jQuery(document).ready( function() {
+				 *      jQuery('#example').dataTable( {
 				 *        "language": {
 				 *          "paginate": {
 				 *            "previous": "Previous page"
@@ -11293,8 +11293,8 @@
 			 *  @name DataTable.defaults.language.emptyTable
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "emptyTable": "No data available in table"
 			 *        }
@@ -11325,8 +11325,8 @@
 			 *  @name DataTable.defaults.language.info
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "info": "Showing page _PAGE_ of _PAGES_"
 			 *        }
@@ -11346,8 +11346,8 @@
 			 *  @name DataTable.defaults.language.infoEmpty
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "infoEmpty": "No entries to show"
 			 *        }
@@ -11368,8 +11368,8 @@
 			 *  @name DataTable.defaults.language.infoFiltered
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "infoFiltered": " - filtering from _MAX_ records"
 			 *        }
@@ -11391,8 +11391,8 @@
 			 *  @name DataTable.defaults.language.infoPostFix
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "infoPostFix": "All records shown are derived from real information."
 			 *        }
@@ -11421,8 +11421,8 @@
 			 *  @name DataTable.defaults.language.decimal
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "decimal": ","
 			 *          "thousands": "."
@@ -11445,8 +11445,8 @@
 			 *  @name DataTable.defaults.language.thousands
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "thousands": "'"
 			 *        }
@@ -11469,8 +11469,8 @@
 			 *
 			 *  @example
 			 *    // Language change only
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "lengthMenu": "Display _MENU_ records"
 			 *        }
@@ -11479,8 +11479,8 @@
 			 *
 			 *  @example
 			 *    // Language and options change
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "lengthMenu": 'Display <select>'+
 			 *            '<option value="10">10</option>'+
@@ -11510,8 +11510,8 @@
 			 *  @name DataTable.defaults.language.loadingRecords
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "loadingRecords": "Please wait - loading..."
 			 *        }
@@ -11531,8 +11531,8 @@
 			 *  @name DataTable.defaults.language.processing
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "processing": "DataTables is currently busy"
 			 *        }
@@ -11556,8 +11556,8 @@
 			 *
 			 *  @example
 			 *    // Input text box will be appended at the end automatically
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "search": "Filter records:"
 			 *        }
@@ -11566,8 +11566,8 @@
 			 *
 			 *  @example
 			 *    // Specify where the filter should appear
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "search": "Apply filter _INPUT_ to table"
 			 *        }
@@ -11602,8 +11602,8 @@
 			 *  @name DataTable.defaults.language.url
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "url": "http://www.sprymedia.co.uk/dataTables/lang.txt"
 			 *        }
@@ -11624,8 +11624,8 @@
 			 *  @name DataTable.defaults.language.zeroRecords
 			 *
 			 *  @example
-			 *    $(document).ready( function() {
-			 *      $('#example').dataTable( {
+			 *    jQuery(document).ready( function() {
+			 *      jQuery('#example').dataTable( {
 			 *        "language": {
 			 *          "zeroRecords": "No records to display"
 			 *        }
@@ -11651,13 +11651,13 @@
 		 *  @name DataTable.defaults.search
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "search": {"search": "Initial search"}
 		 *      } );
 		 *    } )
 		 */
-		"oSearch": $.extend( {}, DataTable.models.oSearch ),
+		"oSearch": jQuery.extend( {}, DataTable.models.oSearch ),
 	
 	
 		/**
@@ -11745,8 +11745,8 @@
 		 *  @name DataTable.defaults.dom
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "dom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&gt;'
 		 *      } );
 		 *    } );
@@ -11765,8 +11765,8 @@
 		 *  @name DataTable.defaults.searchDelay
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "searchDelay": 200
 		 *      } );
 		 *    } )
@@ -11792,8 +11792,8 @@
 		 *  @name DataTable.defaults.pagingType
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "pagingType": "full_numbers"
 		 *      } );
 		 *    } )
@@ -11816,8 +11816,8 @@
 		 *  @name DataTable.defaults.scrollX
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "scrollX": true,
 		 *        "scrollCollapse": true
 		 *      } );
@@ -11840,8 +11840,8 @@
 		 *  @name DataTable.defaults.scrollXInner
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "scrollX": "100%",
 		 *        "scrollXInner": "110%"
 		 *      } );
@@ -11864,8 +11864,8 @@
 		 *  @name DataTable.defaults.scrollY
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "scrollY": "200px",
 		 *        "paginate": false
 		 *      } );
@@ -11949,8 +11949,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "orderData": [ 0, 1 ], "targets": [ 0 ] },
 		 *          { "orderData": [ 1, 0 ], "targets": [ 1 ] },
@@ -11961,8 +11961,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "orderData": [ 0, 1 ] },
 		 *          { "orderData": [ 1, 0 ] },
@@ -11989,8 +11989,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "orderSequence": [ "asc" ], "targets": [ 1 ] },
 		 *          { "orderSequence": [ "desc", "asc", "asc" ], "targets": [ 2 ] },
@@ -12001,8 +12001,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          null,
 		 *          { "orderSequence": [ "asc" ] },
@@ -12026,8 +12026,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "searchable": false, "targets": [ 0 ] }
 		 *        ] } );
@@ -12035,8 +12035,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "searchable": false },
 		 *          null,
@@ -12059,8 +12059,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "orderable": false, "targets": [ 0 ] }
 		 *        ] } );
@@ -12068,8 +12068,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "orderable": false },
 		 *          null,
@@ -12092,8 +12092,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "visible": false, "targets": [ 0 ] }
 		 *        ] } );
@@ -12101,8 +12101,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "visible": false },
 		 *          null,
@@ -12131,13 +12131,13 @@
 		 *  @dtopt Columns
 		 *
 		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [3],
 		 *          "createdCell": function (td, cellData, rowData, row, col) {
 		 *            if ( cellData == "1.7" ) {
-		 *              $(td).css('color', 'blue')
+		 *              jQuery(td).css('color', 'blue')
 		 *            }
 		 *          }
 		 *        } ]
@@ -12234,8 +12234,8 @@
 		 *    //      "version": {value},
 		 *    //      "grade": {value}
 		 *    //   }
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "ajaxSource": "sources/objects.txt",
 		 *        "columns": [
 		 *          { "data": "engine" },
@@ -12260,8 +12260,8 @@
 		 *    //         {value}, {value}
 		 *    //      ]
 		 *    //   }
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "ajaxSource": "sources/deep.txt",
 		 *        "columns": [
 		 *          { "data": "engine" },
@@ -12276,16 +12276,16 @@
 		 *  @example
 		 *    // Using `data` as a function to provide different information for
 		 *    // sorting, filtering and display. In this case, currency (price)
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [ 0 ],
 		 *          "data": function ( source, type, val ) {
 		 *            if (type === 'set') {
 		 *              source.price = val;
 		 *              // Store the computed dislay and filter values for efficiency
-		 *              source.price_display = val=="" ? "" : "$"+numberFormat(val);
-		 *              source.price_filter  = val=="" ? "" : "$"+numberFormat(val)+" "+val;
+		 *              source.price_display = val=="" ? "" : "jQuery"+numberFormat(val);
+		 *              source.price_filter  = val=="" ? "" : "jQuery"+numberFormat(val)+" "+val;
 		 *              return;
 		 *            }
 		 *            else if (type === 'display') {
@@ -12303,8 +12303,8 @@
 		 *
 		 *  @example
 		 *    // Using default content
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [ 0 ],
 		 *          "data": null,
@@ -12315,8 +12315,8 @@
 		 *
 		 *  @example
 		 *    // Using array notation - outputting a list from an array
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [ 0 ],
 		 *          "data": "name[, ]"
@@ -12386,8 +12386,8 @@
 		 *
 		 *  @example
 		 *    // Create a comma separated list from an array of objects
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "ajaxSource": "sources/deep.txt",
 		 *        "columns": [
 		 *          { "data": "engine" },
@@ -12402,8 +12402,8 @@
 		 *
 		 *  @example
 		 *    // Execute a function to obtain data
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [ 0 ],
 		 *          "data": null, // Use the full data source object for the renderer's source
@@ -12419,8 +12419,8 @@
 		 *    // Here the `phone` integer is used for sorting and type detection, while `phone_filter`
 		 *    // (which has both forms) is used for filtering for if a user inputs either format, while
 		 *    // the formatted phone number is the one that is shown in the table.
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [ 0 ],
 		 *          "data": null, // Use the full data source object for the renderer's source
@@ -12435,8 +12435,8 @@
 		 *
 		 *  @example
 		 *    // Use as a function to create a link from the data source
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [ 0 ],
 		 *          "data": "download_link",
@@ -12462,8 +12462,8 @@
 		 *
 		 *  @example
 		 *    // Make the first column use TH cells
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [ {
 		 *          "targets": [ 0 ],
 		 *          "cellType": "th"
@@ -12484,8 +12484,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "class": "my_class", "targets": [ 0 ] }
 		 *        ]
@@ -12494,8 +12494,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "class": "my_class" },
 		 *          null,
@@ -12526,8 +12526,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          null,
 		 *          null,
@@ -12554,8 +12554,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          {
 		 *            "data": null,
@@ -12568,8 +12568,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          null,
 		 *          null,
@@ -12600,8 +12600,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "name": "engine", "targets": [ 0 ] },
 		 *          { "name": "browser", "targets": [ 1 ] },
@@ -12614,8 +12614,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "name": "engine" },
 		 *          { "name": "browser" },
@@ -12642,8 +12642,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "orderDataType": "dom-text", "targets": [ 2, 3 ] },
 		 *          { "type": "numeric", "targets": [ 3 ] },
@@ -12655,8 +12655,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          null,
 		 *          null,
@@ -12682,8 +12682,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "title": "My column title", "targets": [ 0 ] }
 		 *        ]
@@ -12692,8 +12692,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "title": "My column title" },
 		 *          null,
@@ -12723,8 +12723,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "type": "html", "targets": [ 0 ] }
 		 *        ]
@@ -12733,8 +12733,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "type": "html" },
 		 *          null,
@@ -12761,8 +12761,8 @@
 		 *
 		 *  @example
 		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columnDefs": [
 		 *          { "width": "20%", "targets": [ 0 ] }
 		 *        ]
@@ -12771,8 +12771,8 @@
 		 *
 		 *  @example
 		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
+		 *    jQuery(document).ready( function() {
+		 *      jQuery('#example').dataTable( {
 		 *        "columns": [
 		 *          { "width": "20%" },
 		 *          null,
@@ -12796,7 +12796,7 @@
 	 * table options. DataTables does not have a single instance for each DataTable
 	 * with the settings attached to that instance, but rather instances of the
 	 * DataTable "class" are created on-the-fly as needed (typically by a
-	 * $().dataTable() call) and the settings object is then applied to that
+	 * jQuery().dataTable() call) and the settings object is then applied to that
 	 * instance.
 	 *
 	 * Note that this object is related to {@link DataTable.defaults} but this
@@ -12805,7 +12805,7 @@
 	 * through the initialisation options.
 	 *  @namespace
 	 *  @todo Really should attach the settings object to individual instances so we
-	 *    don't need to create new instances on each $().dataTable() call (if the
+	 *    don't need to create new instances on each jQuery().dataTable() call (if the
 	 *    table already exists). It would also save passing oSettings around and
 	 *    into every single function. However, this is a very significant
 	 *    architecture change for DataTables and will almost certainly break
@@ -13804,7 +13804,7 @@
 		 *  @type array
 		 *
 		 *  @example
-		 *    $.fn.dataTable.ext.features.push( {
+		 *    jQuery.fn.dataTable.ext.features.push( {
 		 *      "fnInit": function( oSettings ) {
 		 *        return new TableTools( { "oDTSettings": oSettings } );
 		 *      },
@@ -13850,7 +13850,7 @@
 		 *    // The following example shows custom search being applied to the
 		 *    // fourth column (i.e. the data[3] index) based on two input values
 		 *    // from the end-user, matching the data in a certain range.
-		 *    $.fn.dataTable.ext.search.push(
+		 *    jQuery.fn.dataTable.ext.search.push(
 		 *      function( settings, data, dataIndex ) {
 		 *        var min = document.getElementById('min').value * 1;
 		 *        var max = document.getElementById('max').value * 1;
@@ -13978,7 +13978,7 @@
 		 *
 		 *  @example
 		 *    // Show previous, next and current page buttons only
-		 *    $.fn.dataTableExt.oPagination.current = function ( page, pages ) {
+		 *    jQuery.fn.dataTableExt.oPagination.current = function ( page, pages ) {
 		 *      return [ 'previous', page, 'next' ];
 		 *    };
 		 */
@@ -14024,10 +14024,10 @@
 		 *
 		 *  @example
 		 *    // Ordering using `input` node values
-		 *    $.fn.dataTable.ext.order['dom-text'] = function  ( settings, col )
+		 *    jQuery.fn.dataTable.ext.order['dom-text'] = function  ( settings, col )
 		 *    {
 		 *      return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
-		 *        return $('input', td).val();
+		 *        return jQuery('input', td).val();
 		 *      } );
 		 *    }
 		 */
@@ -14070,15 +14070,15 @@
 			 *
 			 *  @example
 			 *    // Currency type detection plug-in:
-			 *    $.fn.dataTable.ext.type.detect.push(
+			 *    jQuery.fn.dataTable.ext.type.detect.push(
 			 *      function ( data, settings ) {
 			 *        // Check the numeric part
-			 *        if ( ! $.isNumeric( data.substring(1) ) ) {
+			 *        if ( ! jQuery.isNumeric( data.substring(1) ) ) {
 			 *          return null;
 			 *        }
 			 *
 			 *        // Check prefixed by currency
-			 *        if ( data.charAt(0) == '$' || data.charAt(0) == '&pound;' ) {
+			 *        if ( data.charAt(0) == 'jQuery' || data.charAt(0) == '&pound;' ) {
 			 *          return 'currency';
 			 *        }
 			 *        return null;
@@ -14120,7 +14120,7 @@
 			 *  @default {}
 			 *
 			 *  @example
-			 *    $.fn.dataTable.ext.type.search['title-numeric'] = function ( d ) {
+			 *    jQuery.fn.dataTable.ext.type.search['title-numeric'] = function ( d ) {
 			 *      return d.replace(/\n/g," ").replace( /<.*?>/g, "" );
 			 *    }
 			 */
@@ -14173,7 +14173,7 @@
 			 *
 			 *  @example
 			 *    // Numeric ordering of formatted numbers with a pre-formatter
-			 *    $.extend( $.fn.dataTable.ext.type.order, {
+			 *    jQuery.extend( jQuery.fn.dataTable.ext.type.order, {
 			 *      "string-pre": function(x) {
 			 *        a = (a === "-" || a === "") ? 0 : a.replace( /[^\d\-\.]/g, "" );
 			 *        return parseFloat( a );
@@ -14182,7 +14182,7 @@
 			 *
 			 *  @example
 			 *    // Case-sensitive string ordering, with no pre-formatting method
-			 *    $.extend( $.fn.dataTable.ext.order, {
+			 *    jQuery.extend( jQuery.fn.dataTable.ext.order, {
 			 *      "string-case-asc": function(x,y) {
 			 *        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 			 *      },
@@ -14246,7 +14246,7 @@
 	//
 	// Backwards compatibility. Alias to pre 1.10 Hungarian notation counter parts
 	//
-	$.extend( _ext, {
+	jQuery.extend( _ext, {
 		afnFiltering: _ext.search,
 		aTypes:       _ext.type.detect,
 		ofnSearch:    _ext.type.search,
@@ -14259,7 +14259,7 @@
 	} );
 	
 	
-	$.extend( DataTable.ext.classes, {
+	jQuery.extend( DataTable.ext.classes, {
 		"sTable": "dataTable",
 		"sNoFooter": "no-footer",
 	
@@ -14336,7 +14336,7 @@
 	var _sortIcon     = _empty + 'css_right ui-icon ui-icon-';
 	var _headerFooter = _empty + 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix';
 	
-	$.extend( DataTable.ext.oJUIClasses, DataTable.ext.classes, {
+	jQuery.extend( DataTable.ext.oJUIClasses, DataTable.ext.classes, {
 		/* Full numbers paging buttons */
 		"sPageButton":         "fg-button ui-button "+_stateDefault,
 		"sPageButtonActive":   "ui-state-disabled",
@@ -14411,7 +14411,7 @@
 	}
 	
 	
-	$.extend( extPagination, {
+	jQuery.extend( extPagination, {
 		simple: function ( page, pages ) {
 			return [ 'previous', 'next' ];
 		},
@@ -14440,7 +14440,7 @@
 	} );
 	
 	
-	$.extend( true, DataTable.ext.renderer, {
+	jQuery.extend( true, DataTable.ext.renderer, {
 		pageButton: {
 			_: function ( settings, host, idx, buttons, page, pages ) {
 				var classes = settings.oClasses;
@@ -14457,8 +14457,8 @@
 					for ( i=0, ien=buttons.length ; i<ien ; i++ ) {
 						button = buttons[i];
 	
-						if ( $.isArray( button ) ) {
-							var inner = $( '<'+(button.DT_el || 'div')+'/>' )
+						if ( jQuery.isArray( button ) ) {
+							var inner = jQuery( '<'+(button.DT_el || 'div')+'/>' )
 								.appendTo( container );
 							attach( inner, button );
 						}
@@ -14503,7 +14503,7 @@
 							}
 	
 							if ( btnDisplay !== null ) {
-								node = $('<a>', {
+								node = jQuery('<a>', {
 										'class': classes.sPageButton+' '+btnClass,
 										'aria-controls': settings.sTableId,
 										'aria-label': aria[ button ],
@@ -14536,14 +14536,14 @@
 					// elements, focus is lost on the select button which is bad for
 					// accessibility. So we want to restore focus once the draw has
 					// completed
-					activeEl = $(host).find(document.activeElement).data('dt-idx');
+					activeEl = jQuery(host).find(document.activeElement).data('dt-idx');
 				}
 				catch (e) {}
 	
-				attach( $(host).empty(), buttons );
+				attach( jQuery(host).empty(), buttons );
 	
 				if ( activeEl ) {
-					$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+					jQuery(host).find( '[data-dt-idx='+activeEl+']' ).focus();
 				}
 			}
 		}
@@ -14553,7 +14553,7 @@
 	
 	// Built in type detection. See model.ext.aTypes for information about
 	// what is required from this methods.
-	$.extend( DataTable.ext.type.detect, [
+	jQuery.extend( DataTable.ext.type.detect, [
 		// Plain numbers - first since V8 detects some plain numbers as dates
 		// e.g. Date.parse('55') (but not all, e.g. Date.parse('22')...).
 		function ( d, settings )
@@ -14566,7 +14566,7 @@
 		function ( d, settings )
 		{
 			// V8 will remove any unknown characters at the start and end of the
-			// expression, leading to false matches such as `$245.12` or `10%` being
+			// expression, leading to false matches such as `jQuery245.12` or `10%` being
 			// a valid date. See forum thread 18941 for detail.
 			if ( d && !(d instanceof Date) && ( ! _re_date_start.test(d) || ! _re_date_end.test(d) ) ) {
 				return null;
@@ -14614,7 +14614,7 @@
 	// place is
 	
 	
-	$.extend( DataTable.ext.type.search, {
+	jQuery.extend( DataTable.ext.type.search, {
 		html: function ( data ) {
 			return _empty(data) ?
 				data :
@@ -14666,7 +14666,7 @@
 	// in a function to provide an easy ability for the language options to add
 	// additional methods if a non-period decimal place is used.
 	function _addNumericSort ( decimalPlace ) {
-		$.each(
+		jQuery.each(
 			{
 				// Plain numbers
 				"num": function ( d ) {
@@ -14702,7 +14702,7 @@
 	
 	
 	// Default sort methods
-	$.extend( _ext.type.order, {
+	jQuery.extend( _ext.type.order, {
 		// Dates
 		"date-pre": function ( d ) {
 			return Date.parse( d ) || 0;
@@ -14746,7 +14746,7 @@
 	_addNumericSort( '' );
 	
 	
-	$.extend( true, DataTable.ext.renderer, {
+	jQuery.extend( true, DataTable.ext.renderer, {
 		header: {
 			_: function ( settings, cell, column, classes ) {
 				// No additional mark-up required
@@ -14754,7 +14754,7 @@
 				// `DT` namespace will allow the event to be removed automatically
 				// on destroy, while the `dt` namespaced event is the one we are
 				// listening for
-				$(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting, columns ) {
+				jQuery(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting, columns ) {
 					if ( settings !== ctx ) { // need to check this this is the host
 						return;               // table, not a nested one
 					}
@@ -14776,16 +14776,16 @@
 			},
 	
 			jqueryui: function ( settings, cell, column, classes ) {
-				$('<div/>')
+				jQuery('<div/>')
 					.addClass( classes.sSortJUIWrapper )
 					.append( cell.contents() )
-					.append( $('<span/>')
+					.append( jQuery('<span/>')
 						.addClass( classes.sSortIcon+' '+column.sSortingClassJUI )
 					)
 					.appendTo( cell );
 	
 				// Attach a sort listener to update on sort
-				$(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting, columns ) {
+				jQuery(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting, columns ) {
 					if ( settings !== ctx ) {
 						return;
 					}
@@ -14847,7 +14847,7 @@
 	 *   // Column definition using the number renderer
 	 *   {
 	 *     data: "salary",
-	 *     render: $.fn.dataTable.render.number( '\'', '.', 0, '$' )
+	 *     render: jQuery.fn.dataTable.render.number( '\'', '.', 0, 'jQuery' )
 	 *   }
 	 *
 	 * @namespace
@@ -14928,7 +14928,7 @@
 	 * between versions.
 	 *  @namespace
 	 */
-	$.extend( DataTable.ext.internal, {
+	jQuery.extend( DataTable.ext.internal, {
 		_fnExternApiFunc: _fnExternApiFunc,
 		_fnBuildAjax: _fnBuildAjax,
 		_fnAjaxUpdate: _fnAjaxUpdate,
@@ -15024,25 +15024,25 @@
 	
 
 	// jQuery access
-	$.fn.dataTable = DataTable;
+	jQuery.fn.dataTable = DataTable;
 
 	// Provide access to the host jQuery object (circular reference)
-	DataTable.$ = $;
+	DataTable.jQuery = jQuery;
 
 	// Legacy aliases
-	$.fn.dataTableSettings = DataTable.settings;
-	$.fn.dataTableExt = DataTable.ext;
+	jQuery.fn.dataTableSettings = DataTable.settings;
+	jQuery.fn.dataTableExt = DataTable.ext;
 
 	// With a capital `D` we return a DataTables API instance rather than a
 	// jQuery object
-	$.fn.DataTable = function ( opts ) {
-		return $(this).dataTable( opts ).api();
+	jQuery.fn.DataTable = function ( opts ) {
+		return jQuery(this).dataTable( opts ).api();
 	};
 
-	// All properties that are available to $.fn.dataTable should also be
-	// available on $.fn.DataTable
-	$.each( DataTable, function ( prop, val ) {
-		$.fn.DataTable[ prop ] = val;
+	// All properties that are available to jQuery.fn.dataTable should also be
+	// available on jQuery.fn.DataTable
+	jQuery.each( DataTable, function ( prop, val ) {
+		jQuery.fn.DataTable[ prop ] = val;
 	} );
 
 
@@ -15156,13 +15156,13 @@
 	 *
 	 *  @example
 	 *     // Use a custom property returned from the server in another DOM element
-	 *     $('#table').dataTable().on('xhr.dt', function (e, settings, json) {
-	 *       $('#status').html( json.status );
+	 *     jQuery('#table').dataTable().on('xhr.dt', function (e, settings, json) {
+	 *       jQuery('#status').html( json.status );
 	 *     } );
 	 *
 	 *  @example
 	 *     // Pre-process the data returned from the server
-	 *     $('#table').dataTable().on('xhr.dt', function (e, settings, json) {
+	 *     jQuery('#table').dataTable().on('xhr.dt', function (e, settings, json) {
 	 *       for ( var i=0, ien=json.aaData.length ; i<ien ; i++ ) {
 	 *         json.aaData[i].sum = json.aaData[i].one + json.aaData[i].two;
 	 *       }
@@ -15208,5 +15208,5 @@
 	 *  @param {bool} vis `false` if column now hidden, or `true` if visible
 	 */
 
-	return $.fn.dataTable;
+	return jQuery.fn.dataTable;
 }));
