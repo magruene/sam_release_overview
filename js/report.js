@@ -35,7 +35,6 @@ function prepareTable() {
 }
 
 function prepareTableRow(team, epic, sumForEpic) {
-    debugger;
     var epicKey = epic.key;
     jQuery("#myTable tbody").append("<tr id='" + epicKey + "'></tr>");
     var tableRow = jQuery("#" + epicKey);
@@ -73,7 +72,7 @@ function prepareTableRow(team, epic, sumForEpic) {
     });
     tableRow.append("<td>" + epic.fields.customfield_17650 + "</td>");
 
-    if(rows && jQuery("#myTable tBody tr").length === rows) {
+    if (rows && jQuery("#myTable tBody tr").length === rows) {
         prepareTable();
         gadget.resize();
     }
@@ -88,12 +87,6 @@ function updateEpicState(epic, newState) {
     };
     jQuery.ajax({
         url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none",
-        crossDomain: true,
-        headers: {
-            "X-Atlassian-Token": "no-check",
-            "X-AUSERNAME": "taagrma3",
-            "Cookie": "JSESSIONID=1E9D832CFCCD0DAD3D4D28D161A45FA3; atlassian.xsrf.token=A0G2-HDW2-Z1MJ-TM9B|1dbe6729426934d333c50fc0cac87853a9840fce|lin"
-        },
         type: "POST",
         data: JSON.stringify(data),
         contentType: 'application/json',
