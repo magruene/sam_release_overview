@@ -86,7 +86,7 @@ function updateEpicState(epic, newState) {
         "fieldsToForcePresent": "customfield_17554"
     };
     jQuery.ajax({
-        url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none,
+        url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none",
         headers: {
             "X-Atlassian-Token": "no-check"
         },
