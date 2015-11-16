@@ -127,7 +127,16 @@ function fetchRelevantEpicInformations(issues) {
         });
 
         jQuery.each(sortable, function (index, epic) {
+            var getIssuesForEpicsUrl = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql='Epic Link' in (" + epic.key + ") and status != Closed";
 
+            return jQuery.ajax({
+                url: getIssuesForEpicsUrl,
+                contentType: 'application/json',
+                dataType: "json",
+                success: function (data) {
+                    return calculateRemainingEstimateForMileStone(currentTeam, epic, data.issues);
+                }
+            });
         });
     });
 }
