@@ -82,8 +82,8 @@ function updateEpicState(epic, newState) {
     var data = new FormData();
     data.append("customfield_17554", newState);
     data.append("issueId", epic.id);
-    data.append("singleFieldEdit", true);
-    data.append("fieldsToForcePresent", customfield_17554);
+    data.append("singleFieldEdit", "true");
+    data.append("fieldsToForcePresent", "customfield_17554");
     jQuery.ajax({
         url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none",
         headers: {
