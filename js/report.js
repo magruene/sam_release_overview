@@ -111,11 +111,11 @@ function fetchRelevantEpicInformations(issues) {
         return issue.fields.customfield_14850.value;
     });
 
-
+    debugger;
     jQuery.each(_.keys(groupedIssuesByTeam), function (index, currentTeam) {
         epicsPerTeam[currentTeam] = {};
         var issueGroup = groupedIssuesByTeam[currentTeam];
-
+        debugger;
         var sortable = [];
         for (var epic in issueGroup) {
             sortable.push(issueGroup[epic]);
