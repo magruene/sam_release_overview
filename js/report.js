@@ -4,6 +4,7 @@ var teams = ["Skipper", "Catta", "Yankee", "Private", "Rico", "Kowalski"],
     statusIndicatorBaseUrl = "http://jira.swisscom.com/download/resources/de.polscheit.jira.plugins.traffic-light_status:resources/images/status_{status}18.png",
     table,
     rows,
+    doTablePreparation,
     onJira;
 
 //if not on jira, we need to initialize this.
@@ -11,12 +12,6 @@ var teams = ["Skipper", "Catta", "Yankee", "Private", "Rico", "Kowalski"],
 
 function init(newBaseEpicFilter) {
     baseEpicFilter = newBaseEpicFilter;
-    jQuery(document).ajaxStop(function () {
-        if (rows && jQuery("#myTable tBody tr").length === rows) {
-            prepareTable();
-            gadget.resize();
-        }
-    });
     startReportGeneration();
 }
 
@@ -77,6 +72,11 @@ function prepareTableRow(team, epic, sumForEpic) {
         updateEpicState(epic, newState);
     });
     tableRow.append("<td>" + epic.fields.customfield_17650 + "</td>");
+
+    if(rows && jQuery("#myTable tBody tr").length === rows) {
+        prepareTable();
+        gadget.resize();
+    }
 }
 
 function updateEpicState(epic, newState) {
