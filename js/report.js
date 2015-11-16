@@ -10,16 +10,16 @@ var teams = ["Skipper", "Catta", "Yankee", "Private", "Rico", "Kowalski"],
 
 function init(newBaseEpicFilter) {
     baseEpicFilter = newBaseEpicFilter;
-
+    jQuery(document).ajaxStop(function () {
+        prepareTable();
+        gadget.resize();
+    });
     startReportGeneration();
 }
 
 function startReportGeneration() {
     resetTable();
-    jQuery(document).ajaxStop(function () {
-        debugger;
-        prepareTable();
-    });
+
     var getAllEpicsForTeams = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter;
     return ajaxCall(getAllEpicsForTeams, fetchRelevantEpicInformations);
 }
@@ -102,7 +102,7 @@ function resetTable() {
     if (table) {
         table.destroy();
     }
-    jQuery("tbody").empty();
+    jQuery("#myTable tbody").empty();
 }
 
 function fetchRelevantEpicInformations(issues) {
