@@ -18,7 +18,6 @@ function init(newBaseEpicFilter) {
 }
 
 function startReportGeneration() {
-    resetTable();
 
     var getAllEpicsForTeams = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter;
     ajaxCall(getAllEpicsForTeams, fetchRelevantEpicInformations);
@@ -33,7 +32,7 @@ function prepareTable() {
         "order": [[0, "asc"]],
         "iDisplayLength": 50
     });
-   
+
 }
 
 function prepareTableRow(team, epic, sumForEpic) {
