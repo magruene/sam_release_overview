@@ -18,9 +18,10 @@ function init(newBaseEpicFilter) {
 }
 
 function startReportGeneration() {
+    resetTable();
 
     var getAllEpicsForTeams = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter;
-    ajaxCall(getAllEpicsForTeams, fetchRelevantEpicInformations);
+    return ajaxCall(getAllEpicsForTeams, fetchRelevantEpicInformations);
 }
 
 function prepareTable() {
@@ -111,33 +112,7 @@ function fetchRelevantEpicInformations(issues) {
     });
 
 
-    jQuery.each(_.keys(groupedIssuesByTeam), function (index, currentTeam) {
-        epicsPerTeam[currentTeam] = {};
-        var issueGroup = groupedIssuesByTeam[currentTeam];
-
-        var sortable = [];
-        for (var epic in issueGroup) {
-            sortable.push(issueGroup[epic]);
-        }
-        sortable.sort(function (a, b) {
-            if (a.key < b.key) return 1;
-            if (a.key > b.key) return -1;
-            return 0;
-        });
-
-        jQuery.each(sortable, function (index, epic) {
-            var getIssuesForEpicsUrl = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql='Epic Link' in (" + epic.key + ") and status != Closed";
-
-            jQuery.ajax({
-                url: getIssuesForEpicsUrl,
-                contentType: 'application/json',
-                dataType: "json",
-                success: function (data) {
-                    return calculateRemainingEstimateForMileStone(currentTeam, epic, data.issues);
-                }
-            });
-        });
-    });
+    
 }
 
 function calculateRemainingEstimateForMileStone(team, epic, issues) {
