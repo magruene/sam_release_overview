@@ -17,7 +17,7 @@ function init(newBaseEpicFilter) {
 function startReportGeneration() {
     resetTable();
     jQuery(document).ajaxStop(function () {
-        jQuery(this).unbind("ajaxStop");
+        debugger;
         prepareTable();
     });
     var getAllEpicsForTeams = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter;
