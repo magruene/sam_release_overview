@@ -41,10 +41,6 @@
 }(function (jQuery, window, document, undefined) {
     'use strict';
     var DataTable = jQuery.fn.dataTable;
-    while (DataTable === undefined) {
-        DataTable = jQuery.fn.dataTable;
-        console.log("Still undefined");
-    }
 
     /* Set the defaults for DataTables initialisation */
     jQuery.extend(true, DataTable.defaults, {
