@@ -3,6 +3,7 @@ var teams = ["Skipper", "Catta", "Yankee", "Private", "Rico", "Kowalski"],
     baseEpicFilter,
     statusIndicatorBaseUrl = "http://jira.swisscom.com/download/resources/de.polscheit.jira.plugins.traffic-light_status:resources/images/status_{status}18.png",
     table,
+    rows,
     onJira;
 
 //if not on jira, we need to initialize this.
@@ -11,8 +12,10 @@ var teams = ["Skipper", "Catta", "Yankee", "Private", "Rico", "Kowalski"],
 function init(newBaseEpicFilter) {
     baseEpicFilter = newBaseEpicFilter;
     jQuery(document).ajaxStop(function () {
-        prepareTable();
-        gadget.resize();
+        if (rows && jQuery("#myTable tBody tr").length === rows) {
+            prepareTable();
+            gadget.resize();
+        }
     });
     startReportGeneration();
 }
@@ -107,7 +110,7 @@ function resetTable() {
 }
 
 function fetchRelevantEpicInformations(issues) {
-
+    rows = issues.length;
     var groupedIssuesByTeam = _.groupBy(issues, function (issue) {
         return issue.fields.customfield_14850.value;
     });
