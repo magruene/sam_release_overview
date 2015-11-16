@@ -37,6 +37,7 @@ function prepareTable() {
 }
 
 function prepareTableRow(team, epic, sumForEpic) {
+    debugger;
     var epicKey = epic.key;
     jQuery("#myTable tbody").append("<tr id='" + epicKey + "'></tr>");
     var tableRow = jQuery("#" + epicKey);
