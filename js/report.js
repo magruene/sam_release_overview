@@ -33,9 +33,7 @@ function prepareTable() {
         "order": [[0, "asc"]],
         "iDisplayLength": 50
     });
-    if (gadget) {
-        gadget.resize();
-    }
+   
 }
 
 function prepareTableRow(team, epic, sumForEpic) {
