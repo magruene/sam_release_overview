@@ -112,7 +112,24 @@ function fetchRelevantEpicInformations(issues) {
     });
 
 
-    
+    jQuery.each(_.keys(groupedIssuesByTeam), function (index, currentTeam) {
+        epicsPerTeam[currentTeam] = {};
+        var issueGroup = groupedIssuesByTeam[currentTeam];
+
+        var sortable = [];
+        for (var epic in issueGroup) {
+            sortable.push(issueGroup[epic]);
+        }
+        sortable.sort(function (a, b) {
+            if (a.key < b.key) return 1;
+            if (a.key > b.key) return -1;
+            return 0;
+        });
+
+        jQuery.each(sortable, function (index, epic) {
+
+        });
+    });
 }
 
 function calculateRemainingEstimateForMileStone(team, epic, issues) {
