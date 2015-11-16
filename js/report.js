@@ -79,19 +79,18 @@ function prepareTableRow(team, epic, sumForEpic) {
 }
 
 function updateEpicState(epic, newState) {
-    var data = {
-        "customfield_17554": newState,
-        "issueId": epic.id,
-        "singleFieldEdit": "true",
-        "fieldsToForcePresent": "customfield_17554"
-    };
+    var data = new FormData();
+    data.append("customfield_17554", newState);
+    data.append("issueId", epic.id);
+    data.append("singleFieldEdit", true);
+    data.append("fieldsToForcePresent", customfield_17554);
     jQuery.ajax({
         url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none",
         headers: {
             "X-Atlassian-Token": "no-check"
         },
         type: "POST",
-        data: JSON.stringify(data)
+        data: data
     });
 }
 
