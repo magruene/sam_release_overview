@@ -86,11 +86,12 @@ function updateEpicState(epic, newState) {
         "fieldsToForcePresent": "customfield_17554"
     };
     jQuery.ajax({
-        url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none&atl_token=" + getCookieValue("atlassian.xsrf.token"),
+        url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none,
+        headers: {
+            "X-Atlassian-Token": "no-check"
+        },
         type: "POST",
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        dataType: "json"
+        data: JSON.stringify(data)
     });
 }
 
