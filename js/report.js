@@ -155,7 +155,7 @@ function calculateRemainingEstimateForMileStone(team, epic, issues) {
     var sumAll = 0,
         sumRemaining = 0;
     jQuery.each(issues, function (index, issue) {
-        if (issue.status.name !== "Closed") {
+        if (issue.fields.status.name !== "Closed") {
             sumRemaining += issue.fields.timeoriginalestimate;
         }
 
