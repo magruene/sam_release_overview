@@ -1,6 +1,6 @@
 var epicsPerTeam = {},
     baseEpicFilter,
-    table
+    table,
     statusIndicatorBaseUrl = "http://jira.swisscom.com/download/resources/de.polscheit.jira.plugins.traffic-light_status:resources/images/status_{status}18.png",
     rows;
 
