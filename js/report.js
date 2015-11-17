@@ -76,7 +76,7 @@ function prepareTableRow(team, epic, sumForEpic) {
         }
         updateEpicState(epic, newState);
     });
-    tableRow.append("<td>" + epic.fields.customfield_17650 === null ? "" : epic.fields.customfield_17650 + "</td>"); //Report detail
+    tableRow.append("<td>" + (epic.fields.customfield_17650 === null ? '' : epic.fields.customfield_17650) + "</td>"); //Report detail
 
     if (rows && jQuery(tableBody.find("tr")).length === rows) {
         prepareTable();
