@@ -81,14 +81,14 @@ function prepareTableRow(team, epic, sumForEpic) {
     jQuery('#report_detail_' + epic.key).editable({
         type: 'text',
         pk: jQuery(tableBody.find("tr")).length,
-        url: "http://jira.swisscom.com/rest/api/2/issue" + epic.key,
+        url: "http://jira.swisscom.com/rest/api/2/issue/" + epic.key,
         ajaxOptions: {
             type: "PUT",
             contentType: 'application/json',
             dataType: "json",
-            data: JSON.stringify("{{'fields':{'customfield_17650':'" + jQuery('#username').val() + "'}}}")
+            data: JSON.stringify("{{'fields':{'customfield_17650':'" + jQuery('#report_detail_' + epic.key).val() + "'}}}")
         },
-        title: 'Enter username'
+        title: 'Update report detail:'
     });
 
     if (rows && jQuery(tableBody.find("tr")).length === rows) {
