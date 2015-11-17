@@ -85,15 +85,14 @@ function updateEpicState(epic, newState) {
     data.append("singleFieldEdit", "true");
     data.append("fieldsToForcePresent", "customfield_17554");
     jQuery.ajax({
-        url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none",
+        url: "http://jira.swisscom.com/secure/AjaxIssueAction.jspa?decorator=none&customfield_17554=" + newState + "&issueId=" + epic.id + "&singleFieldEdit=true&fieldsToForcePresent=customfield_17554",
         headers: {
             "X-Atlassian-Token": "no-check"
         },
         processData: false,
         mimeType: 'multipart/form-data',
         contentType: 'multipart/form-data',
-        type: "POST",
-        data: data
+        type: "POST"
     });
 }
 
