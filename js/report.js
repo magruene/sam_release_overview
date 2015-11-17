@@ -83,7 +83,7 @@ function prepareTableRow(team, epic, sumForEpic) {
         pk: jQuery(tableBody.find("tr")).length,
         url: "http://jira.swisscom.com/rest/api/2/issue/" + epic.key,
         params: function (params) {
-            return JSON.stringify("{{'fields':{'customfield_17650':'" + params.value + "'}}}")
+            return {'fields': {'customfield_17650': '" + params.value + "'}}
         },
         ajaxOptions: {
             type: "PUT",
