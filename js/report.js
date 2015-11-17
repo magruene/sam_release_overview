@@ -54,10 +54,10 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
         labelUl.append("<li><a class='lozenge' href = 'http://jira.swisscom.com/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=labels=" + label + " title='" + label + "'><span>" + label + "</span></a></li>");
     });
 
-    var percentageComplete = sumRemaining / sumAll;
+    var percentageComplete = 100 - (sumRemaining / sumAll) * 100;
 
 
-    tableRow.append("<td><div title='" + (percentageComplete * 100) + "%' class='progress'><div class='progress-bar' style='width: " + (percentageComplete * 100) + "%'><span class='sr-only'></span></div></div></td>");
+    tableRow.append("<td><div title='" + percentageComplete + "%' class='progress'><div class='progress-bar' style='width: " + percentageComplete + "%'><span class='sr-only'></span></div></div></td>");
 
     tableRow.append("<td><img id='status_" + epicKey + "' src='" + statusIndicatorBaseUrl.replace("{status}", epic.fields.customfield_17554) + "'/></td>"); //Report state
     jQuery("#status_" + epicKey).click(epic, function (ev) {
