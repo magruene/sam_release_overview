@@ -91,6 +91,7 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
 
     jQuery('#report_detail_' + epic.key).editable({
         type: 'textarea',
+        placement: "left",
         pk: jQuery(tableBody.find("tr")).length,
         url: "http://jira.swisscom.com/rest/api/2/issue/" + epic.key,
         params: function (params) {
