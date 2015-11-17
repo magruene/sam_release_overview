@@ -1,5 +1,6 @@
 var epicsPerTeam = {},
     baseEpicFilter,
+    table
     statusIndicatorBaseUrl = "http://jira.swisscom.com/download/resources/de.polscheit.jira.plugins.traffic-light_status:resources/images/status_{status}18.png",
     rows;
 
@@ -9,15 +10,29 @@ function init(newBaseEpicFilter) {
 }
 
 function startReportGeneration() {
+    resetTable();
+
     var getAllEpicsForTeams = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter;
     return ajaxCall(getAllEpicsForTeams, fetchRelevantEpicInformations);
 }
 
 function prepareTable() {
-    jQuery('#myTable').DataTable({
+    if (jQuery.fn.dataTable.isDataTable('#myTable')) {
+        table.destroy();
+    }
+
+    table = jQuery('#myTable').DataTable({
         "order": [[0, "asc"]],
         "iDisplayLength": 50
     });
+}
+
+function resetTable() {
+    epicsPerTeam = {};
+    if (table) {
+        table.destroy();
+    }
+    jQuery("#myTable tbody").empty();
 }
 
 function prepareTableRow(team, epic, sumForEpic) {
