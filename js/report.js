@@ -89,6 +89,8 @@ function updateEpicState(epic, newState) {
         headers: {
             "X-Atlassian-Token": "no-check"
         },
+        processData: false,
+        contentType: false,
         type: "POST",
         data: data
     });
