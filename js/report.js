@@ -90,7 +90,7 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
     tableRow.append("<td><a href='#' id='report_detail_" + epic.key + "'>" + (epic.fields.customfield_17650 === null ? '' : epic.fields.customfield_17650) + "</a></td>"); //Report detail
 
     jQuery('#report_detail_' + epic.key).editable({
-        type: 'text',
+        type: 'textarea',
         pk: jQuery(tableBody.find("tr")).length,
         url: "http://jira.swisscom.com/rest/api/2/issue/" + epic.key,
         params: function (params) {
