@@ -128,7 +128,11 @@ function updateEpicState(epic, newState) {
 function fetchRelevantEpicInformations(issues) {
     rows = issues.length;
     var groupedIssuesByTeam = _.groupBy(issues, function (issue) {
-        return issue.fields.customfield_14850.value;
+        var team = issue.fields.customfield_14850;
+        if (team === null) {
+            return "NotYetDefined";
+        }
+        return team.value;
     });
 
     jQuery.each(_.keys(groupedIssuesByTeam), function (index, currentTeam) {
