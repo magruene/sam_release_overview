@@ -23,12 +23,12 @@ function prepareTable() {
 
     table = jQuery('#myTable').DataTable({
         "order": [[0, "asc"]],
+        "searching": false,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         "iDisplayLength": 15
     });
 
     jQuery('#myTable').on('draw.dt', function () {
-        console.log('Redraw occurred at: ' + new Date().getTime());
         gadget.resize();
     });
 
