@@ -76,7 +76,20 @@ function prepareTableRow(team, epic, sumForEpic) {
         }
         updateEpicState(epic, newState);
     });
-    tableRow.append("<td>" + (epic.fields.customfield_17650 === null ? '' : epic.fields.customfield_17650) + "</td>"); //Report detail
+    tableRow.append("<td><a href='#' id='report_detail_" + epic.key + "'>" + (epic.fields.customfield_17650 === null ? '' : epic.fields.customfield_17650) + "</a></td>"); //Report detail
+
+    jQuery('#report_detail_' + epic.key).editable({
+        type: 'text',
+        pk: jQuery(tableBody.find("tr")).length,
+        ajaxOptions: {
+            url: "http://jira.swisscom.com/rest/api/2/issue" + epic.key,
+            type: "PUT",
+            contentType: 'application/json',
+            dataType: "json",
+            data: JSON.stringify("{{'fields':{'customfield_17650':'" + jQuery('#username').val() + "'}}}")
+        },
+        title: 'Enter username'
+    });
 
     if (rows && jQuery(tableBody.find("tr")).length === rows) {
         prepareTable();
