@@ -81,8 +81,8 @@ function prepareTableRow(team, epic, sumForEpic) {
     jQuery('#report_detail_' + epic.key).editable({
         type: 'text',
         pk: jQuery(tableBody.find("tr")).length,
+        url: "http://jira.swisscom.com/rest/api/2/issue" + epic.key,
         ajaxOptions: {
-            url: "http://jira.swisscom.com/rest/api/2/issue" + epic.key,
             type: "PUT",
             contentType: 'application/json',
             dataType: "json",
