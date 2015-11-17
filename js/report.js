@@ -90,7 +90,8 @@ function updateEpicState(epic, newState) {
             "X-Atlassian-Token": "no-check"
         },
         processData: false,
-        contentType: false,
+        mimeType: 'multipart/form-data',
+        contentType: 'multipart/form-data',
         type: "POST",
         data: data
     });
