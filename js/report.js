@@ -28,8 +28,10 @@ function prepareTable() {
     });
 
     jQuery('#myTable').on('draw.dt', function () {
+        console.log('Redraw occurred at: ' + new Date().getTime());
         gadget.resize();
     });
+
 }
 
 function resetTable() {
@@ -104,6 +106,7 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
 
     if (rows && jQuery(tableBody.find("tr")).length === rows) {
         prepareTable();
+        gadget.resize();
     }
 }
 
