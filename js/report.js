@@ -23,7 +23,12 @@ function prepareTable() {
 
     table = jQuery('#myTable').DataTable({
         "order": [[0, "asc"]],
-        "iDisplayLength": 50
+        "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
+        "iDisplayLength": 15
+    });
+
+    jQuery('#myTable').on('draw.dt', function () {
+        gadget.resize();
     });
 }
 
@@ -55,6 +60,7 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
     });
 
     var percentageComplete = 100 - (sumRemaining / sumAll) * 100;
+    percentageComplete = Math.round(percentageComplete * 100) / 100;
 
 
     tableRow.append("<td><div title='" + percentageComplete + "%' class='progress'><div class='progress-bar' style='width: " + percentageComplete + "%'><span class='sr-only'></span></div></div></td>");
@@ -98,7 +104,6 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
 
     if (rows && jQuery(tableBody.find("tr")).length === rows) {
         prepareTable();
-        gadget.resize();
     }
 }
 
