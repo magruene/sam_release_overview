@@ -35,7 +35,7 @@ function resetTable() {
     jQuery("#myTable tbody").empty();
 }
 
-function prepareTableRow(team, epic, sumForEpic) {
+function prepareTableRow(team, epic, sumAll, sumRemaining) {
     var epicKey = epic.key;
     var tableBody = jQuery("#myTable tbody");
     tableBody.append("<tr id='" + epicKey + "'></tr>");
@@ -54,7 +54,10 @@ function prepareTableRow(team, epic, sumForEpic) {
         labelUl.append("<li><a class='lozenge' href = 'http://jira.swisscom.com/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=labels=" + label + " title='" + label + "'><span>" + label + "</span></a></li>");
     });
 
-    tableRow.append("<td>" + Math.round((sumForEpic / 28800) * 100) / 100 + "</td>");
+    var percentageComplete = sumRemaining / sumAll;
+
+
+    tableRow.append("<td><div class='progress'><div class='progress-bar' style='width: " + percentageComplete + "%'><span class='sr-only'></span></div></div></td>");
 
     tableRow.append("<td><img id='status_" + epicKey + "' src='" + statusIndicatorBaseUrl.replace("{status}", epic.fields.customfield_17554) + "'/></td>"); //Report state
     jQuery("#status_" + epicKey).click(epic, function (ev) {
@@ -133,7 +136,7 @@ function fetchRelevantEpicInformations(issues) {
         });
 
         jQuery.each(sortable, function (index, epic) {
-            var getIssuesForEpicsUrl = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql='Epic Link' in (" + epic.key + ") and status != Closed";
+            var getIssuesForEpicsUrl = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql='Epic Link' in (" + epic.key + ")";
 
             return jQuery.ajax({
                 url: getIssuesForEpicsUrl,
@@ -149,11 +152,16 @@ function fetchRelevantEpicInformations(issues) {
 
 function calculateRemainingEstimateForMileStone(team, epic, issues) {
 
-    var sum = 0;
+    var sumAll = 0,
+        sumRemaining = 0;
     jQuery.each(issues, function (index, issue) {
-        sum += issue.fields.timeoriginalestimate;
+        if (issue.status.name !== "Closed") {
+            sumRemaining += issue.fields.timeoriginalestimate;
+        }
+
+        sumAll += issue.fields.timeoriginalestimate;
     });
-    prepareTableRow(team, epic, sum);
+    prepareTableRow(team, epic, sumAll, sumRemaining);
 }
 
 function ajaxCall(url, successFunction) {
