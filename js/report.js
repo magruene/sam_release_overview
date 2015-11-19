@@ -1,50 +1,61 @@
 var epicsPerTeam = {},
     baseEpicFilter,
-    table,
     statusIndicatorBaseUrl = "http://jira.swisscom.com/download/resources/de.polscheit.jira.plugins.traffic-light_status:resources/images/status_{status}18.png",
     rows;
 
-function init(newBaseEpicFilter) {
+function init(newBaseEpicFilter, newTableId) {
     baseEpicFilter = newBaseEpicFilter;
-    startReportGeneration();
+    startReportGeneration(newTableId);
 }
 
-function startReportGeneration() {
-    resetTable();
+function startReportGeneration(tableId) {
+    initTable();
+    epicsPerTeam = {};
 
-    var getAllEpicsForTeams = "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter;
-    return ajaxCall(getAllEpicsForTeams, fetchRelevantEpicInformations);
+    return jQuery.ajax({
+        url: "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter,
+        contentType: 'application/json',
+        dataType: "json",
+        success: function (data) {
+            fetchRelevantEpicInformations(tableId, data.issues);
+        }
+    });
 }
 
-function prepareTable() {
-    if (jQuery.fn.dataTable.isDataTable('#myTable')) {
-        table.destroy();
-    }
-
-    table = jQuery('#myTable').DataTable({
+function prepareTable(tableId) {
+    jQuery('#' + tableId).DataTable({
         "order": [[0, "asc"]],
         "searching": false,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         "iDisplayLength": 15
     });
 
-    jQuery('#myTable').on('draw.dt', function () {
+    jQuery('#' + tableId).on('draw.dt', function () {
         gadget.resize();
     });
-
 }
 
-function resetTable() {
-    epicsPerTeam = {};
-    if (table) {
-        table.destroy();
-    }
-    jQuery("#myTable tbody").empty();
+function initTable() {
+    var tableHead = jQuery('#' + tableId + " thead");
+    addTableHeader(tableHead, 5, "Team");
+    addTableHeader(tableHead, 5, "Status");
+    addTableHeader(tableHead, 5, "Key");
+    addTableHeader(tableHead, 20, "Summary");
+    addTableHeader(tableHead, 10, "SD");
+    addTableHeader(tableHead, 10, "SPOC");
+    addTableHeader(tableHead, 5, "Labels");
+    addTableHeader(tableHead, 10, "Progress");
+    addTableHeader(tableHead, 5, "Report State");
+    addTableHeader(tableHead, 25, "Report Detail");
 }
 
-function prepareTableRow(team, epic, sumAll, sumRemaining) {
+function addTableHeader(tableHead, width, label) {
+    tableHead.append('<th style="width: ' + width + '%">' + label + '</th>');
+}
+
+function prepareTableRow(tableId, team, epic, sumAll, sumRemaining) {
     var epicKey = epic.key;
-    var tableBody = jQuery("#myTable tbody");
+    var tableBody = jQuery("#" + tableId + " tbody");
     tableBody.append("<tr id='" + epicKey + "'></tr>");
     var tableRow = jQuery("#" + epicKey);
     tableRow.append("<td>" + team + "</td>"); //team
@@ -87,7 +98,7 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
         }
         updateEpicState(epic, newState);
     });
-    tableRow.append("<td><a href='#' id='report_detail_" + epic.key + "'>" + (epic.fields.customfield_17650 === null ? '' : epic.fields.customfield_17650) + "</a></td>"); //Report detail
+    tableRow.append("<td><a href='#' id='report_detail_" + epic.key + "'>" + percentageComplete + "% " + (epic.fields.customfield_17650 === null ? '' : epic.fields.customfield_17650) + "</a></td>"); //Report detail
 
     jQuery('#report_detail_' + epic.key).editable({
         type: 'textarea',
@@ -106,7 +117,7 @@ function prepareTableRow(team, epic, sumAll, sumRemaining) {
     });
 
     if (rows && jQuery(tableBody.find("tr")).length === rows) {
-        prepareTable();
+        prepareTable(tableId);
         gadget.resize();
     }
 }
@@ -125,7 +136,7 @@ function updateEpicState(epic, newState) {
     });
 }
 
-function fetchRelevantEpicInformations(issues) {
+function fetchRelevantEpicInformations(tableId, issues) {
     rows = issues.length;
     var groupedIssuesByTeam = _.groupBy(issues, function (issue) {
         var team = issue.fields.customfield_14850;
@@ -156,15 +167,14 @@ function fetchRelevantEpicInformations(issues) {
                 contentType: 'application/json',
                 dataType: "json",
                 success: function (data) {
-                    return calculateRemainingEstimateForMileStone(currentTeam, epic, data.issues);
+                    return calculateRemainingEstimateForMileStone(tableId, currentTeam, epic, data.issues);
                 }
             });
         });
     });
 }
 
-function calculateRemainingEstimateForMileStone(team, epic, issues) {
-
+function calculateRemainingEstimateForMileStone(tableId, team, epic, issues) {
     var sumAll = 0,
         sumRemaining = 0;
     jQuery.each(issues, function (index, issue) {
@@ -174,18 +184,7 @@ function calculateRemainingEstimateForMileStone(team, epic, issues) {
 
         sumAll += issue.fields.timeoriginalestimate;
     });
-    prepareTableRow(team, epic, sumAll, sumRemaining);
-}
-
-function ajaxCall(url, successFunction) {
-    return jQuery.ajax({
-        url: url,
-        contentType: 'application/json',
-        dataType: "json",
-        success: function (data) {
-            successFunction(data.issues);
-        }
-    });
+    prepareTableRow(tableId, team, epic, sumAll, sumRemaining);
 }
 
 var Report = {};
