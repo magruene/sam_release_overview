@@ -33,7 +33,7 @@ function Report(baseEpicFilter, tableId) {
     }
 
     function initTable() {
-        var tableHead = jQuery('#' + tableId + " thead");
+        var tableHead = jQuery('#' + tableId + " thead tr");
         addTableHeader(tableHead, 5, "Team");
         addTableHeader(tableHead, 5, "Status");
         addTableHeader(tableHead, 5, "Key");
