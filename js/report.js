@@ -77,7 +77,7 @@ function Report(baseEpicFilter, tableId) {
         var tableRow = jQuery("#" + epicKey);
         tableRow.append("<td>" + team + "</td>"); //team
 
-        tableRow.append('<td><span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green aui-lozenge-subtle">' + epic.fields.status.name + '</span></td>');
+        tableRow.append('<td><span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-yellow aui-lozenge-subtle">' + epic.fields.status.name + '</span></td>');
 
         tableRow.append("<td><a href='http://jira.swisscom.com/browse/" + epicKey + "'>" + epicKey + "</a></td>"); //epic key (SAM-***)
         tableRow.append("<td><a href='http://jira.swisscom.com/browse/" + epicKey + "'>" + epic.fields.summary + "</a></td>"); // epic summary
