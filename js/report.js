@@ -91,11 +91,10 @@ function Report(baseEpicFilter, tableId) {
             labelUl.append("<li><a class='lozenge' href = 'http://jira.swisscom.com/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=labels=" + label + " title='" + label + "'><span>" + label + "</span></a></li>");
         });
 
-        var percentageComplete = 100 - (sumRemaining / sumAll) * 100;
-        percentageComplete = Math.round(percentageComplete * 100) / 100;
-
-        if (percentageComplete === NaN) {
-            percentageComplete = 0;
+        var percentageComplete = 0;
+        if (sumAll > 0) {
+            percentageComplete = 100 - (sumRemaining / sumAll) * 100;
+            percentageComplete = Math.round(percentageComplete * 100) / 100;
         }
 
         tableRow.append("<td><div title='" + percentageComplete + "%' class='progress'><div class='progress-bar' style='width: " + percentageComplete + "%'><span>" + percentageComplete + "%</span></div></div></td>");
