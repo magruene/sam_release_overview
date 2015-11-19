@@ -11,7 +11,7 @@ function init(newBaseEpicFilter, newTableId) {
         contentType: 'application/json',
         dataType: "json",
         success: function (data) {
-            fetchRelevantEpicInformations(tableId, data.issues);
+            fetchRelevantEpicInformations(newTableId, data.issues);
         }
     });
 }
