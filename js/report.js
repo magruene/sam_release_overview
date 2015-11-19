@@ -36,14 +36,14 @@ function Report(baseEpicFilter, tableId) {
         var tableHead = jQuery('#' + tableId + " thead tr");
         addTableHeader(tableHead, 5, "Team");
         addTableHeader(tableHead, 5, "Status");
-        addTableHeader(tableHead, 5, "Key");
+        addTableHeader(tableHead, 7, "Key");
         addTableHeader(tableHead, 20, "Summary");
         addTableHeader(tableHead, 10, "SD");
         addTableHeader(tableHead, 10, "SPOC");
         addTableHeader(tableHead, 5, "Labels");
         addTableHeader(tableHead, 10, "Progress");
         addTableHeader(tableHead, 5, "Report State");
-        addTableHeader(tableHead, 25, "Report Detail");
+        addTableHeader(tableHead, 23, "Report Detail");
     }
 
     function addTableHeader(tableHead, width, label) {
