@@ -1,19 +1,13 @@
 var epicsPerTeam = {},
-    baseEpicFilter,
     statusIndicatorBaseUrl = "http://jira.swisscom.com/download/resources/de.polscheit.jira.plugins.traffic-light_status:resources/images/status_{status}18.png",
     rows;
 
 function init(newBaseEpicFilter, newTableId) {
-    baseEpicFilter = newBaseEpicFilter;
-    startReportGeneration(newTableId);
-}
-
-function startReportGeneration(tableId) {
-    initTable();
+    initTable(newTableId);
     epicsPerTeam = {};
 
     return jQuery.ajax({
-        url: "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + baseEpicFilter,
+        url: "http://jira.swisscom.com/rest/api/2/search?maxResults=500&jql=filter=" + newBaseEpicFilter,
         contentType: 'application/json',
         dataType: "json",
         success: function (data) {
