@@ -88,7 +88,7 @@ function Report(baseEpicFilter, tableId) {
         var labels = tableRow.append("<td class='labels'><div class='labels-wrap value'><ul id='" + epicKey + "_labels' class='labels'></div></td>"); //Labels on Epic
         var labelUl = jQuery(labels.find("#" + epicKey + "_labels"));
         jQuery.each(epic.fields.labels, function (index, label) {
-            labelUl.append("<li><a class='lozenge' href = 'http://jira.swisscom.com/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=labels=" + label + " title='" + label + "'><span>" + label + "</span></a></li>");
+            labelUl.append("<li><a class='lozenge' href='http://jira.swisscom.com/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=labels=" + label + "' title='" + label + "'><span>" + label + "</span></a></li>");
         });
 
         var percentageComplete = 0;
