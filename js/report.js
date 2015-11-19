@@ -1,6 +1,6 @@
 var statusIndicatorBaseUrl = "http://jira.swisscom.com/download/resources/de.polscheit.jira.plugins.traffic-light_status:resources/images/status_{status}18.png";
 
-function Report(tableId, baseEpicFilter) {
+function Report(baseEpicFilter, tableId) {
     var tableId = tableId;
     var baseEpicFilter = baseEpicFilter;
     var rows;
