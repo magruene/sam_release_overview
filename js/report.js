@@ -98,7 +98,7 @@ function Report(baseEpicFilter, tableId) {
             percentageComplete = 0;
         }
 
-        tableRow.append("<td><div title='" + percentageComplete + "%' class='progress'><div class='progress-bar' style='width: " + percentageComplete + "%'></div><span>" + percentageComplete + "%</span></div></td>");
+        tableRow.append("<td><div title='" + percentageComplete + "%' class='progress'><div class='progress-bar' style='width: " + percentageComplete + "%'><span>" + percentageComplete + "%</span></div></div></td>");
 
         tableRow.append("<td><img id='status_" + epicKey + "' src='" + statusIndicatorBaseUrl.replace("{status}", epic.fields.customfield_17554) + "'/></td>"); //Report state
         jQuery("#status_" + epicKey).click(epic, function (ev) {
