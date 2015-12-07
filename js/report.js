@@ -182,7 +182,7 @@ function Report(baseEpicFilter, tableId) {
         var sumAll = 0,
             sumRemaining = 0;
         jQuery.each(issues, function (index, issue) {
-            if (issue.fields.status.name !== "Closed" && issue.fields.status.name !== "R4Review") {
+            if (!jQuery.inArray("Blocker", issue.fields.labels) && issue.fields.status.name !== "Closed" && issue.fields.status.name !== "R4Review") {
                 sumRemaining += issue.fields.timeoriginalestimate;
             }
 
