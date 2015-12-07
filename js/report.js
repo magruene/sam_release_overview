@@ -185,8 +185,9 @@ function Report(baseEpicFilter, tableId) {
             if (jQuery.inArray("Blocker", issue.fields.labels) == -1 && issue.fields.status.name !== "Closed" && issue.fields.status.name !== "R4Review") {
                 sumRemaining += issue.fields.timeoriginalestimate;
             }
-
-            sumAll += issue.fields.timeoriginalestimate;
+            if (jQuery.inArray("Blocker", issue.fields.labels) == -1) {
+                sumAll += issue.fields.timeoriginalestimate;
+            }
         });
         prepareTableRow(team, epic, sumAll, sumRemaining);
     }
